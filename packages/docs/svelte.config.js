@@ -8,7 +8,9 @@ const config = {
     extensions: ['.svelte', '.md'],
     preprocess: [vitePreprocess()],
     kit: {
-        adapter: adapter(),
+        adapter: adapter({
+            pages: 'public',
+        }),
     },
 };
 
