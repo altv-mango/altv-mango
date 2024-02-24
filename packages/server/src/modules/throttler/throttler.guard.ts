@@ -3,7 +3,7 @@ import { THROTTLER_LIMIT, THROTTLER_OPTIONS, THROTTLER_SKIP, THROTTLER_STORAGE, 
 import { createHash } from 'crypto';
 import type { ExecutionContext, Guard } from '../../interfaces';
 import type { ThrottlerStorageService } from './services';
-import { isFunction, TooManyRequests, type OnModuleInit, type Reflector, ErrorMessage, Injectable, Inject } from '@altv-mango/shared';
+import { isFunction, TooManyRequests, type OnModuleInit, type Reflector, ErrorMessage, Injectable, Inject } from '@altv-mango/core';
 
 @Injectable()
 export class ThrottlerGuard implements Guard, OnModuleInit {

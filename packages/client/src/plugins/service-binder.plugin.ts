@@ -1,6 +1,6 @@
 import { Container, inject, injectable } from 'inversify';
-import { GLOBAL_APP_CONTAINER, INTERNAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/shared/app';
-import { EVENT_SERVICE, RPC_SERVICE } from '@altv-mango/shared';
+import { GLOBAL_APP_CONTAINER, INTERNAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/core/app';
+import { EVENT_SERVICE, RPC_SERVICE } from '@altv-mango/core';
 import { ClientEventService, ClientRPCService, ClientWebViewService, WebViewListService } from '../services';
 import { WEBVIEW_LIST_SERVICE, WEBVIEW_SERVICE } from '../constants';
 

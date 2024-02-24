@@ -1,5 +1,5 @@
 import '@abraham/reflection';
-import { AppBuilder, AppEnviroment, createAppBuilder as $createAppBuilder } from '@altv-mango/shared/app';
+import { AppBuilder, AppEnviroment, createAppBuilder as $createAppBuilder } from '@altv-mango/core/app';
 import { ADD_WEBVIEW } from './constants';
 import { EventMediatorPlugin, RpcPlugin, ServiceBinderPlugin, WebViewPlugin } from './plugins';
 import * as altClient from '@altv/client';

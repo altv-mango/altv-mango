@@ -1,15 +1,11 @@
 {
     "name": "@altv-mango/client",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
         "url": "https://github.com/altv-mango/altv-mango",
         "directory": "packages/client"
-    },
-    "publishConfig": {
-        "access": "public",
-        "registry": "https://npm.pkg.github.com"
     },
     "license": "MIT",
     "author": "5exyGuy (Aurėjus Remeika)",
@@ -19,14 +15,14 @@
         "dist"
     ],
     "scripts": {
-        "build": "tsup --minify",
+        "build": "tsup",
+        "dev": "tsup --watch",
         "typecheck": "tsc --noEmit",
-        "types": "tsup --dts-only",
-        "dev": "tsup --watch"
+        "types": "tsup --dts-only"
     },
     "dependencies": {
         "@abraham/reflection": "^0.12.0",
-        "@altv-mango/shared": "workspace:^",
+        "@altv-mango/core": "workspace:^",
         "inversify": "^6.0.2",
         "zod": "^3.22.4"
     },
@@ -37,5 +33,9 @@
         "@types/node": "^20.11.19",
         "tsup": "^8.0.2",
         "typescript": "^5.3.3"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
     }
 }

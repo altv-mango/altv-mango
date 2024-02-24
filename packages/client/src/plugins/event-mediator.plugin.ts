@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import type { MangoPlugin } from '@altv-mango/shared/app';
-import { EVENT_SERVICE } from '@altv-mango/shared';
+import type { MangoPlugin } from '@altv-mango/core/app';
+import { EVENT_SERVICE } from '@altv-mango/core';
 import type { ClientEventService, ClientWebViewService } from '../services';
 import { WEBVIEW_SERVICE } from '../constants';
 

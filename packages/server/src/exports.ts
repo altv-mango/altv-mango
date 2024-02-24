@@ -100,4 +100,4 @@ export {
     isSymbol,
     isUndefined,
     isNumber,
-} from '@altv-mango/shared';
+} from '@altv-mango/core';

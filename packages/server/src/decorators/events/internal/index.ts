@@ -1,4 +1,4 @@
-import { OnInternal, OnceInternal } from '@altv-mango/shared';
+import { OnInternal, OnceInternal } from '@altv-mango/core';
 import { INTERNAL_EVENTS } from '../../../constants';
 
 export function OnScriptRPC() {

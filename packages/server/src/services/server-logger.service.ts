@@ -1,7 +1,7 @@
 import { log, logDebug, logError, logWarning } from '@altv/server';
 import { injectable } from 'inversify';
-import { MANGO_LOG_PREFIX } from '@altv-mango/shared/app';
-import type { LoggerService } from '@altv-mango/shared';
+import { MANGO_LOG_PREFIX } from '@altv-mango/core/app';
+import type { LoggerService } from '@altv-mango/core';
 
 @injectable()
 export class ClientLoggerService implements LoggerService {

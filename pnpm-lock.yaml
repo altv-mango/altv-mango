@@ -20,9 +20,9 @@ importers:
       '@abraham/reflection':
         specifier: ^0.12.0
         version: 0.12.0
-      '@altv-mango/shared':
+      '@altv-mango/core':
         specifier: workspace:^
-        version: link:../shared
+        version: link:../core
       inversify:
         specifier: ^6.0.2
         version: 6.0.2
@@ -39,6 +39,49 @@ importers:
       '@altv/shared':
         specifier: ^0.0.13
         version: 0.0.13
+      '@types/node':
+        specifier: ^20.11.19
+        version: 20.11.19
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(@microsoft/api-extractor@7.40.6)(@swc/core@1.4.2)(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/core:
+    dependencies:
+      '@abraham/reflection':
+        specifier: ^0.12.0
+        version: 0.12.0
+      '@altv/client':
+        specifier: ^0.0.29
+        version: 0.0.29
+      '@altv/server':
+        specifier: ^0.0.35
+        version: 0.0.35
+      '@altv/shared':
+        specifier: ^0.0.13
+        version: 0.0.13
+      chalk:
+        specifier: ^5.3.0
+        version: 5.3.0
+      inversify:
+        specifier: ^6.0.2
+        version: 6.0.2
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@microsoft/api-extractor':
+        specifier: ^7.40.6
+        version: 7.40.6(@types/node@20.11.19)
+      '@swc/cli':
+        specifier: ^0.3.9
+        version: 0.3.9(@swc/core@1.4.2)
+      '@swc/core':
+        specifier: ^1.4.2
+        version: 1.4.2
       '@types/node':
         specifier: ^20.11.19
         version: 20.11.19
@@ -90,9 +133,9 @@ importers:
       '@abraham/reflection':
         specifier: ^0.12.0
         version: 0.12.0
-      '@altv-mango/shared':
+      '@altv-mango/core':
         specifier: workspace:^
-        version: link:../shared
+        version: link:../core
       '@altv/server':
         specifier: ^0.0.35
         version: 0.0.35
@@ -106,49 +149,6 @@ importers:
       '@altv/shared':
         specifier: ^0.0.13
         version: 0.0.13
-      '@types/node':
-        specifier: ^20.11.19
-        version: 20.11.19
-      tsup:
-        specifier: ^8.0.2
-        version: 8.0.2(@microsoft/api-extractor@7.40.6)(@swc/core@1.4.2)(typescript@5.3.3)
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
-  packages/shared:
-    dependencies:
-      '@abraham/reflection':
-        specifier: ^0.12.0
-        version: 0.12.0
-      '@altv/client':
-        specifier: ^0.0.29
-        version: 0.0.29
-      '@altv/server':
-        specifier: ^0.0.35
-        version: 0.0.35
-      '@altv/shared':
-        specifier: ^0.0.13
-        version: 0.0.13
-      chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
-      inversify:
-        specifier: ^6.0.2
-        version: 6.0.2
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@microsoft/api-extractor':
-        specifier: ^7.40.6
-        version: 7.40.6(@types/node@20.11.19)
-      '@swc/cli':
-        specifier: ^0.3.9
-        version: 0.3.9(@swc/core@1.4.2)
-      '@swc/core':
-        specifier: ^1.4.2
-        version: 1.4.2
       '@types/node':
         specifier: ^20.11.19
         version: 20.11.19
@@ -161,9 +161,9 @@ importers:
 
   packages/webview:
     devDependencies:
-      '@altv-mango/shared':
+      '@altv-mango/core':
         specifier: workspace:^
-        version: link:../shared
+        version: link:../core
       '@altv/shared':
         specifier: ^0.0.13
         version: 0.0.13

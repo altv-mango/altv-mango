@@ -1,5 +1,5 @@
-import { CoreMetadataKey, type PipelineMetadata, type RPCMetadata } from '@altv-mango/shared/app';
-import { ErrorMessage, isNil, isString } from '@altv-mango/shared';
+import { CoreMetadataKey, type PipelineMetadata, type RPCMetadata } from '@altv-mango/core/app';
+import { ErrorMessage, isNil, isString } from '@altv-mango/core';
 
 export function OnServerRequest(name?: string) {
     return <MethodDecorator>((target: Object, method: string) => {

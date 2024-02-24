@@ -1,4 +1,4 @@
-import type { RPCCallOptions, RPCResult, ScriptRPCHandler } from '@altv-mango/shared';
+import type { RPCCallOptions, RPCResult, ScriptRPCHandler } from '@altv-mango/core';
 import * as altShared from '@altv/shared';
 
 export interface RPCService {

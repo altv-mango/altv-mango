@@ -1,4 +1,4 @@
-import { Global, Module, type DynamicModule, type Provider, type FactoryProvider } from '@altv-mango/shared';
+import { Global, Module, type DynamicModule, type Provider, type FactoryProvider } from '@altv-mango/core';
 import { THROTTLER_OPTIONS, THROTTLER_STORAGE } from './throttler.constants';
 import type { ThrottlerAsyncOptions, ThrottlerModuleOptions, ThrottlerOptionsFactory } from './interfaces';
 import { ThrottlerStorageService } from './services/throttler-storage.service';

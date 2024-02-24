@@ -1,5 +1,5 @@
 import '@abraham/reflection';
-import { createAppBuilder as $createAppBuilder, AppBuilder, AppEnviroment } from '@altv-mango/shared/app';
+import { createAppBuilder as $createAppBuilder, AppBuilder, AppEnviroment } from '@altv-mango/core/app';
 import { RPCPlugin, ServiceBinderPlugin } from './plugins';
 import type { ErrorFilter, Guard, Interceptor } from './interfaces';
 

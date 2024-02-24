@@ -23,7 +23,7 @@
         "experimentalDecorators": true,
         "strictPropertyInitialization": false,
         "verbatimModuleSyntax": true,
-        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@altv-mango"],
+        "typeRoots": ["./node_modules/@types", "./node_modules/@altv"],
         "stripInternal": true
     },
     "include": ["./src/**/*.ts"],

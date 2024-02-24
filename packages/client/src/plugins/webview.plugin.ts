@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import type { MangoPlugin } from '@altv-mango/shared/app';
+import type { MangoPlugin } from '@altv-mango/core/app';
 import { ADD_WEBVIEW, WEBVIEW_SERVICE } from '../constants';
 import type { _WebViewCreateOptionsDrawable, _WebViewCreateOptionsOverlay } from '@altv/client';
 import type { ClientWebViewService } from '../services';

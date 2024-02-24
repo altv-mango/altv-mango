@@ -4,11 +4,11 @@
     "license": "MIT",
     "author": "5exyGuy (Aurėjus Remeika)",
     "scripts": {
-        "build": "turbo run build --filter=@altv-mango/*",
+        "build": "turbo run build --filter=@altv-mango/* --filter=!@altv-mango/docs",
         "build-test": "turbo run build --filter=@resource/*",
         "dev": "turbo run dev --filter=@altv-mango/*",
         "dev-test": "turbo run dev --filter=@resource/*",
-        "publish": "pnpm publish --access public --filter \"@altv-mango/shared\" --filter \"@altv-mango/server\" --filter \"@altv-mango/client\" --filter \"@altv-mango/webview\"",
+        "publish": "pnpm publish --access public --filter \"@altv-mango/core\" --filter \"@altv-mango/server\" --filter \"@altv-mango/client\" --filter \"@altv-mango/webview\"",
         "server:linux": "cd scripts && server-linux.sh",
         "server:win32": "cd scripts && server-win32.bat",
         "start": "cd server && altv-server",

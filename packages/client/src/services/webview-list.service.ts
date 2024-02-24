@@ -1,7 +1,7 @@
 import type { WebView } from '@altv/client';
 import { inject, injectable } from 'inversify';
-import { InternalLoggerService } from '@altv-mango/shared/app';
-import { ErrorMessage } from '@altv-mango/shared';
+import { InternalLoggerService } from '@altv-mango/core/app';
+import { ErrorMessage } from '@altv-mango/core';
 
 @injectable()
 export class WebViewListService {

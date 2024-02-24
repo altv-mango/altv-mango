@@ -1,4 +1,4 @@
-import { Injectable, type OnAppShutdown } from '@altv-mango/shared';
+import { Injectable, type OnAppShutdown } from '@altv-mango/core';
 import type { ThrottlerStorageOptions } from '../interfaces';
 import type { Player } from '@altv/server';
 

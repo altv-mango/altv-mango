@@ -1,7 +1,12 @@
-import { WebViewEventService, WebViewRPCService } from './services';
-import { InternalLoggerService } from '@altv-mango/shared/app';
-import { isNil, RPCResultStatus, type RPCResult, RPC_RESULT_HANDLER_NOT_FOUND, MangoError, RPC_RESULT_UNKNOWN } from '@altv-mango/shared';
+/// <reference types="@altv-mango/core" />
+
+import { InternalLoggerService, WebViewEventService, WebViewRPCService } from './services';
+import { isNil } from '@altv-mango/core/utils';
+import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/constants';
 import type { EventService, RPCService } from './interfaces';
+import { RPCResultStatus } from '@altv-mango/core/enums';
+import type { RPCResult } from '@altv-mango/core/interfaces';
+import { MangoError } from '@altv-mango/core/errors';
 
 export function initMango() {
     if (!isNil(window.mango)) {

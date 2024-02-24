@@ -1,22 +1,20 @@
 import type { EventService, ScriptEventHandler } from '../interfaces';
-import * as altShared from '@altv/shared';
+import type { Events } from '@altv/shared';
 
 export class WebViewEventService implements EventService {
     private readonly $localHandlers: Map<string, Set<ScriptEventHandler>> = new Map();
     private readonly $remoteHandlers: Map<string, Set<ScriptEventHandler>> = new Map();
 
-    public on<E extends keyof altShared.Events.CustomWebViewToWebViewEvent>(
+    public on<E extends keyof Events.CustomWebViewToWebViewEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomWebViewToWebViewEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomWebViewToWebViewEvent[E]>,
+        callback: (body: Parameters<Events.CustomWebViewToWebViewEvent[E]>[0]) => ReturnType<Events.CustomWebViewToWebViewEvent[E]>,
     ): ScriptEventHandler;
     public on<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomWebViewToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
     public on<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomWebViewToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler {
         const eventHandler: ScriptEventHandler = {
@@ -37,18 +35,16 @@ export class WebViewEventService implements EventService {
         return eventHandler;
     }
 
-    public once<E extends keyof altShared.Events.CustomWebViewToWebViewEvent>(
+    public once<E extends keyof Events.CustomWebViewToWebViewEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomWebViewToWebViewEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomWebViewToWebViewEvent[E]>,
+        callback: (body: Parameters<Events.CustomWebViewToWebViewEvent[E]>[0]) => ReturnType<Events.CustomWebViewToWebViewEvent[E]>,
     ): ScriptEventHandler;
     public once<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomWebViewToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
     public once<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomWebViewToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler {
         const eventHandler = {
@@ -69,12 +65,12 @@ export class WebViewEventService implements EventService {
         return <ScriptEventHandler>eventHandler;
     }
 
-    public emit<E extends keyof altShared.Events.CustomWebViewToWebViewEvent>(
+    public emit<E extends keyof Events.CustomWebViewToWebViewEvent>(
         eventName: E,
-        body?: Parameters<altShared.Events.CustomWebViewToWebViewEvent[E]>[0],
+        body?: Parameters<Events.CustomWebViewToWebViewEvent[E]>[0],
     ): void;
-    public emit<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToWebViewEvent>, body?: unknown): void;
-    public emit<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToWebViewEvent>, body?: unknown): void {
+    public emit<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToWebViewEvent>, body?: unknown): void;
+    public emit<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToWebViewEvent>, body?: unknown): void {
         const listeners = this.$localHandlers.get(eventName);
         listeners?.forEach((scriptEventHandler) => {
             scriptEventHandler.handler(body);
@@ -83,18 +79,16 @@ export class WebViewEventService implements EventService {
         });
     }
 
-    public onPlayer<E extends keyof altShared.Events.CustomClientToWebViewEvent>(
+    public onPlayer<E extends keyof Events.CustomClientToWebViewEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomClientToWebViewEvent[E]>,
+        callback: (body: Parameters<Events.CustomClientToWebViewEvent[E]>[0]) => ReturnType<Events.CustomClientToWebViewEvent[E]>,
     ): ScriptEventHandler;
     public onPlayer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomClientToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
     public onPlayer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomClientToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler {
         const wrapper = (...args: any[]) => callback(args[0]);
@@ -117,18 +111,16 @@ export class WebViewEventService implements EventService {
         return eventHandler;
     }
 
-    public oncePlayer<E extends keyof altShared.Events.CustomClientToWebViewEvent>(
+    public oncePlayer<E extends keyof Events.CustomClientToWebViewEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomClientToWebViewEvent[E]>,
+        callback: (body: Parameters<Events.CustomClientToWebViewEvent[E]>[0]) => ReturnType<Events.CustomClientToWebViewEvent[E]>,
     ): ScriptEventHandler;
     public oncePlayer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomClientToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
     public oncePlayer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomClientToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler {
         const wrapper = (...args: any[]) => callback(args[0]);
@@ -151,55 +143,51 @@ export class WebViewEventService implements EventService {
         return eventHandler;
     }
 
-    public emitPlayer<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
+    public emitPlayer<E extends keyof Events.CustomWebViewToClientEvent>(
         eventName: E,
-        body?: Parameters<altShared.Events.CustomWebViewToClientEvent[E]>[0],
+        body?: Parameters<Events.CustomWebViewToClientEvent[E]>[0],
     ): void;
-    public emitPlayer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, body?: unknown): void;
-    public emitPlayer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>, body?: unknown): void {
+    public emitPlayer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToClientEvent>, body?: unknown): void;
+    public emitPlayer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToClientEvent>, body?: unknown): void {
         window.alt.emit(eventName, body);
     }
 
-    public onServer<E extends keyof altShared.Events.CustomServerToWebViewEvent>(
+    public onServer<E extends keyof Events.CustomServerToWebViewEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomServerToWebViewEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomServerToWebViewEvent[E]>,
+        callback: (body: Parameters<Events.CustomServerToWebViewEvent[E]>[0]) => ReturnType<Events.CustomServerToWebViewEvent[E]>,
     ): ScriptEventHandler;
     public onServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomServerToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
     public onServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomServerToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler {
         return this.onPlayer(<string>`WEBVIEW::ON_SERVER_${eventName}`, <any>callback);
     }
 
-    public onceServer<E extends keyof altShared.Events.CustomServerToWebViewEvent>(
+    public onceServer<E extends keyof Events.CustomServerToWebViewEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomServerToWebViewEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomServerToWebViewEvent[E]>,
+        callback: (body: Parameters<Events.CustomServerToWebViewEvent[E]>[0]) => ReturnType<Events.CustomServerToWebViewEvent[E]>,
     ): ScriptEventHandler;
     public onceServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomServerToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
     public onceServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
+        eventName: Exclude<E, keyof Events.CustomServerToWebViewEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ): ScriptEventHandler {
         return this.oncePlayer(<string>`WEBVIEW::ON_SERVER_${eventName}`, <any>callback);
     }
 
-    public emitServer<E extends keyof altShared.Events.CustomWebViewToServerEvent>(
+    public emitServer<E extends keyof Events.CustomWebViewToServerEvent>(
         eventName: E,
-        body?: Parameters<altShared.Events.CustomWebViewToServerEvent[E]>[0],
+        body?: Parameters<Events.CustomWebViewToServerEvent[E]>[0],
     ): void;
-    public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>, body?: unknown): void;
-    public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>, body?: unknown): void {
+    public emitServer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToServerEvent>, body?: unknown): void;
+    public emitServer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToServerEvent>, body?: unknown): void {
         window.alt.emit('WEBVIEW::EMIT_SERVER', {
             eventName,
             payload: body,

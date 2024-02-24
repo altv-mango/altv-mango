@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import type { MangoPlugin } from '@altv-mango/shared/app';
+import type { MangoPlugin } from '@altv-mango/core/app';
 import {
     EVENT_SERVICE,
     MangoError,
@@ -8,7 +8,7 @@ import {
     RPC_SERVICE,
     RPCResultStatus,
     type RPCResult,
-} from '@altv-mango/shared';
+} from '@altv-mango/core';
 import type { ClientEventService, ClientRPCService } from '../services';
 
 @injectable()

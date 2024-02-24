@@ -2,8 +2,8 @@ import { WebView, type _WebViewCreateOptionsDrawable, type _WebViewCreateOptions
 import { inject, injectable } from 'inversify';
 import { WEBVIEW_LIST_SERVICE } from '../constants';
 import type { WebViewListService } from './webview-list.service';
-import { InternalLoggerService } from '@altv-mango/shared/app';
-import { ErrorMessage, isNumber, isString } from '@altv-mango/shared';
+import { InternalLoggerService } from '@altv-mango/core/app';
+import { ErrorMessage, isNumber, isString } from '@altv-mango/core';
 import type { WebViewService } from '../interfaces';
 
 @injectable()

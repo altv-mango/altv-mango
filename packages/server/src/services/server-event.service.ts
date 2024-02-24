@@ -1,4 +1,4 @@
-import { BaseEventService } from '@altv-mango/shared/app';
+import { BaseEventService } from '@altv-mango/core/app';
 import { injectable } from 'inversify';
 import { INTERNAL_EVENTS } from '../constants';
 import type { EventService } from '../interfaces';

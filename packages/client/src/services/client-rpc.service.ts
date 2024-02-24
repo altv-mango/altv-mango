@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { BaseRPCService, EventDestination, type RPCPayload } from '@altv-mango/shared/app';
+import { BaseRPCService, EventDestination, type RPCPayload } from '@altv-mango/core/app';
 import {
     ErrorMessage,
     EVENT_SERVICE,
@@ -8,7 +8,7 @@ import {
     type RPCCallOptions,
     type RPCResult,
     type ScriptRPCHandler,
-} from '@altv-mango/shared';
+} from '@altv-mango/core';
 import type { RPCService } from '../interfaces';
 import type { ClientEventService } from './client-event.service';
 import * as altShared from '@altv/shared';

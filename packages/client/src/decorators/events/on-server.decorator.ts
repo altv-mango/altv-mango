@@ -1,5 +1,5 @@
-import { CoreMetadataKey, type EventMetadata, type PipelineMetadata } from '@altv-mango/shared/app';
-import { ErrorMessage, isNil, isString } from '@altv-mango/shared';
+import { CoreMetadataKey, type EventMetadata, type PipelineMetadata } from '@altv-mango/core/app';
+import { ErrorMessage, isNil, isString } from '@altv-mango/core';
 
 export function OnServer(name?: string) {
     return <MethodDecorator>((target: Object, method: string) => {

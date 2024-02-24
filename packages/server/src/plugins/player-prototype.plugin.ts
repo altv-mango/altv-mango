@@ -1,7 +1,7 @@
 import { Container, inject, injectable } from 'inversify';
 import type { RPCService } from '../interfaces';
-import { RPC_SERVICE, type RPCCallOptions } from '@altv-mango/shared';
-import { GLOBAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/shared/app';
+import { RPC_SERVICE, type RPCCallOptions } from '@altv-mango/core';
+import { GLOBAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/core/app';
 import * as altServer from '@altv/server';
 
 @injectable()
