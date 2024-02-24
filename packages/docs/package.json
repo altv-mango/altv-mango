@@ -4,7 +4,7 @@
     "license": "MIT",
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build": "vite build && npx svelte-sitemap --domain https://altv-mango.vercel.app/ --out-dir public",
         "dev": "vite dev"
     },
     "devDependencies": {
