@@ -1,6 +1,6 @@
 {
     "name": "@altv-mango/server",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
@@ -22,7 +22,7 @@
         "build": "tsup --minify",
         "typecheck": "tsc --noEmit",
         "types": "tsup --dts-only",
-        "watch": "tsup --watch"
+        "dev": "tsup --watch"
     },
     "dependencies": {
         "@abraham/reflection": "^0.12.0",
