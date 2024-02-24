@@ -1,6 +1,5 @@
 import type { RPCPayload } from './app';
 import type { RPCCallOptions, RPCResult } from './interfaces';
-import * as altServer from '@altv/server';
 
 declare module '@altv/shared' {
     export namespace RPC {
@@ -36,24 +35,5 @@ declare module '@altv/shared' {
         export interface CustomPlayerToServerEvent {
             'RPC::CALL_SERVER': (body: RPCPayload) => Promise<void>;
         }
-    }
-}
-
-declare module '@altv/server' {
-    export interface Player {
-        emitWebView<E extends string>(id: string | number, eventName: E, body?: unknown): void;
-        call<E extends string, U extends altServer.Player>(
-            player: U,
-            rpcName: E,
-            body?: unknown,
-            options?: RPCCallOptions,
-        ): Promise<RPCResult>;
-        callWebView<E extends string, U extends altServer.Player>(
-            player: U,
-            id: string | number,
-            rpcName: E,
-            body?: unknown,
-            options?: RPCCallOptions,
-        ): Promise<RPCResult>;
     }
 }
