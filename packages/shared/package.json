@@ -1,0 +1,55 @@
+{
+    "name": "@altv-mango/shared",
+    "version": "1.0.1",
+    "homepage": "https://altv-mango.vercel.app",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/5exyGuy/altv-mango",
+        "directory": "packages/shared"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
+    },
+    "license": "MIT",
+    "author": "5exyGuy (Aurėjus Remeika)",
+    "type": "module",
+    "exports": {
+        ".": {
+            "default": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./app": {
+            "default": "./dist/app/index.js",
+            "types": "./dist/app/index.d.ts"
+        }
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup --minify",
+        "typecheck": "tsc --noEmit",
+        "types": "tsup --dts-only",
+        "watch": "tsup --watch"
+    },
+    "dependencies": {
+        "@abraham/reflection": "^0.12.0",
+        "@altv/client": "^0.0.29",
+        "@altv/server": "^0.0.35",
+        "@altv/shared": "^0.0.13",
+        "chalk": "^5.3.0",
+        "inversify": "^6.0.2",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@microsoft/api-extractor": "^7.40.6",
+        "@swc/cli": "^0.3.9",
+        "@swc/core": "^1.4.2",
+        "@types/node": "^20.11.19",
+        "tsup": "^8.0.2",
+        "typescript": "^5.3.3"
+    }
+}

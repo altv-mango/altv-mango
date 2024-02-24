@@ -1,0 +1,4 @@
+export const LOGGER_SERVICE = 'LOGGER_SERVICE';
+export const EVENT_SERVICE = 'EVENT_SERVICE';
+export const RPC_SERVICE = 'RPC_SERVICE';
+export const MODULE_CONTAINER = 'MODULE_CONTAINER';

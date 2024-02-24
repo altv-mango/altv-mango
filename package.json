@@ -1,0 +1,23 @@
+{
+    "name": "altv-apollo",
+    "private": true,
+    "license": "MIT",
+    "author": "5exyGuy (Aurėjus Remeika)",
+    "scripts": {
+        "build": "turbo run build --filter=@altv-mango/*",
+        "build-test": "turbo run build --filter=@resource/*",
+        "dev": "turbo run dev --filter=@altv-mango/*",
+        "dev-test": "turbo run dev --filter=@resource/*",
+        "publish": "pnpm publish --access public --filter \"@altv-mango/shared\" --filter \"@altv-mango/server\" --filter \"@altv-mango/client\" --filter \"@altv-mango/webview\"",
+        "server:linux": "cd scripts && server-linux.sh",
+        "server:win32": "cd scripts && server-win32.bat",
+        "start": "cd server && altv-server",
+        "typecheck": "turbo run typecheck --filter=@altv-mango/*",
+        "typecheck-test": "turbo run typecheck --filter=@resource/*",
+        "types": "turbo run types --filter=@altv-mango/*"
+    },
+    "devDependencies": {
+        "altv-pkg": "^2.7.5",
+        "turbo": "^1.12.4"
+    }
+}
