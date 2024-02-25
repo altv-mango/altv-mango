@@ -1,6 +1,6 @@
 {
     "name": "@altv-mango/core",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
@@ -36,20 +36,20 @@
             "types": "./dist/app/module/index.d.ts"
         },
         "./app/module-tree": {
-            "default": "./dist/app/module/index.js",
-            "types": "./dist/app/module/index.d.ts"
+            "default": "./dist/app/module-tree/index.js",
+            "types": "./dist/app/module-tree/index.d.ts"
         },
         "./app/pipeline": {
-            "default": "./dist/app/module/index.js",
-            "types": "./dist/app/module/index.d.ts"
+            "default": "./dist/app/pipeline/index.js",
+            "types": "./dist/app/pipeline/index.d.ts"
         },
         "./app/services": {
-            "default": "./dist/app/module/index.js",
-            "types": "./dist/app/module/index.d.ts"
+            "default": "./dist/app/services/index.js",
+            "types": "./dist/app/services/index.d.ts"
         },
         "./app/utils": {
-            "default": "./dist/app/module/index.js",
-            "types": "./dist/app/module/index.d.ts"
+            "default": "./dist/app/utils/index.js",
+            "types": "./dist/app/utils/index.d.ts"
         },
         "./constants": {
             "default": "./dist/constants/index.js",
