@@ -1,19 +1,18 @@
 {
-    "name": "@resource/client",
-    "private": true,
-    "author": "5exyGuy (Aurėjus Remeika)",
+    "name": "@altv-resource/client",
     "type": "module",
     "scripts": {
         "build": "tsup",
-        "watch": "tsup --watch"
+        "dev": "tsup --watch"
+    },
+    "dependencies": {
+        "@altv/client": "^0.0.29"
     },
     "devDependencies": {
         "@abraham/reflection": "^0.12.0",
         "@altv-mango/client": "workspace:^",
-        "@altv/client": "^0.0.29",
         "@swc/cli": "^0.3.9",
         "@swc/core": "^1.4.2",
-        "@types/node": "^20.11.19",
         "tsup": "^8.0.2",
         "typescript": "^5.3.3"
     }

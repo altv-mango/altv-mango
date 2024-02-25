@@ -7,7 +7,7 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node",
+        "moduleResolution": "Bundler",
         "allowUnusedLabels": false,
         "allowUnreachableCode": false,
         "exactOptionalPropertyTypes": true,
@@ -24,7 +24,7 @@
         "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
         "verbatimModuleSyntax": true,
-        "typeRoots": ["./node_modules/@types"],
+        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@altv-mango"],
         "paths": {
             "@shared/*": ["../shared/src/*"],
             "@shared": ["../shared/src"]

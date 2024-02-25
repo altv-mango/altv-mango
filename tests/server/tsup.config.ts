@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup';
+import packageJson from './package.json';
 
 export default defineConfig({
     entry: ['src/index.ts'],
@@ -9,7 +10,7 @@ export default defineConfig({
     dts: false,
     format: 'esm',
     bundle: true,
-    external: ['@altv/server'],
-    noExternal: ['@abraham/reflection', '@altv-mango/server'],
-    minify: false,
+    minify: true,
+    external: Object.keys(packageJson.dependencies),
+    noExternal: Object.keys(packageJson.devDependencies),
 });
