@@ -77,6 +77,9 @@ export function initMango() {
     const mango = { event, rpc };
 
     window.mango = mango;
+
+    logger.log([], 'Initialized');
+
     return mango;
 }
 
