@@ -98,7 +98,7 @@ export class WebViewEventService implements EventService {
                 eventHandler.valid = false;
                 const handlers = this.$remoteHandlers.get(eventName);
                 handlers?.delete(eventHandler);
-                window.alt.off(eventName, wrapper);
+                window.alt?.off(eventName, wrapper);
             },
             eventName,
             handler: wrapper,
@@ -107,7 +107,7 @@ export class WebViewEventService implements EventService {
             remote: true,
             valid: true,
         };
-        window.alt.on(eventName, wrapper);
+        window.alt?.on(eventName, wrapper);
         return eventHandler;
     }
 
@@ -130,7 +130,7 @@ export class WebViewEventService implements EventService {
                 eventHandler.valid = false;
                 const handlers = this.$remoteHandlers.get(eventName);
                 handlers?.delete(eventHandler);
-                window.alt.off(eventName, wrapper);
+                window.alt?.off(eventName, wrapper);
             },
             eventName,
             handler: wrapper,
@@ -139,7 +139,7 @@ export class WebViewEventService implements EventService {
             remote: true,
             valid: true,
         };
-        window.alt.once(eventName, wrapper);
+        window.alt?.once(eventName, wrapper);
         return eventHandler;
     }
 
@@ -149,7 +149,7 @@ export class WebViewEventService implements EventService {
     ): void;
     public emitPlayer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToClientEvent>, body?: unknown): void;
     public emitPlayer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToClientEvent>, body?: unknown): void {
-        window.alt.emit(eventName, body);
+        window.alt?.emit(eventName, body);
     }
 
     public onServer<E extends keyof Events.CustomServerToWebViewEvent>(
@@ -188,7 +188,7 @@ export class WebViewEventService implements EventService {
     ): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToServerEvent>, body?: unknown): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof Events.CustomWebViewToServerEvent>, body?: unknown): void {
-        window.alt.emit('WEBVIEW::EMIT_SERVER', {
+        window.alt?.emit('WEBVIEW::EMIT_SERVER', {
             eventName,
             payload: body,
         });
