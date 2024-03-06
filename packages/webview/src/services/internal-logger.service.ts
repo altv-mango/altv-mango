@@ -1,14 +1,17 @@
 export class InternalLoggerService {
-    public log(prefixes: string[], message: string) {
-        const prefixString = prefixes.length > 0 ? `[${prefixes.join('][')}]` : '';
-        console.log(`[${this.getTime()}] [🥭Mango]${prefixString} ${message}`);
+    public log(message: string) {
+        console.log(`[🥭Mango][Log] ${message}`);
     }
 
     public error(message: string) {
-        this.log(['Error'], message);
+        console.error(`[🥭Mango][Error] ${message}`);
     }
 
-    private getTime() {
-        return new Date().toLocaleTimeString('en-US', { hour12: false });
+    public warn(message: string) {
+        console.warn(`[🥭Mango][Warn] ${message}`);
+    }
+
+    public debug(message: string) {
+        console.debug(`[🥭Mango][Debug] ${message}`);
     }
 }

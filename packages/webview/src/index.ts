@@ -78,7 +78,7 @@ export function initMango() {
 
     window.mango = mango;
 
-    logger.log(['WebView'], 'Initialized');
+    logger.log('WebView initialized');
 
     return mango;
 }

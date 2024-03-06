@@ -20,7 +20,7 @@ class ClientAppBuilder extends AppBuilder<Guard, Interceptor, ErrorFilter> {
         if (this.internalAppContainer.isBound(ADD_WEBVIEW)) {
             this.internalAppContainer.rebind(ADD_WEBVIEW).toConstantValue([...addWebViews, { id, options }]);
         } else {
-            this.internalAppContainer.bind(ADD_WEBVIEW).toConstantValue([[{ id, options }]]);
+            this.internalAppContainer.bind(ADD_WEBVIEW).toConstantValue([{ id, options }]);
         }
     }
 
