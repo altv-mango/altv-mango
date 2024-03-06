@@ -6,8 +6,8 @@ import {
     GLOBAL_GUARDS,
     GLOBAL_INTERCEPTORS,
     GLOBAL_PIPES,
-    EXTERNAL_PLUGINS,
     ENABLE_SHUTDOWN_HOOKS,
+    PLUGINS,
     // LOG_ERROR_STACKTRACE,
 } from './constants';
 import type { Newable } from '../types';
@@ -47,8 +47,8 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
 
     public usePlugins(...plugins: Newable<MangoPlugin>[]) {
         plugins.forEach((p) => this.internalAppContainer.bind(p).toSelf().inSingletonScope());
-        const internalPlugins = this.internalAppContainer.get<Newable<MangoPlugin>[]>(EXTERNAL_PLUGINS);
-        this.internalAppContainer.rebind(EXTERNAL_PLUGINS).toConstantValue([...internalPlugins, ...plugins]);
+        const internalPlugins = this.internalAppContainer.get<Newable<MangoPlugin>[]>(PLUGINS);
+        this.internalAppContainer.rebind(PLUGINS).toConstantValue([...internalPlugins, ...plugins]);
         return this;
     }
 

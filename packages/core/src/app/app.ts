@@ -2,7 +2,7 @@ import { Container, inject, injectable } from 'inversify';
 import { ModuleDependencyBinder, ModuleTreeScanner } from './module-tree';
 import { Module } from './module/module';
 import type { Newable } from '../types';
-import { EXTERNAL_PLUGINS, INTERNAL_APP_CONTAINER } from './constants';
+import { INTERNAL_APP_CONTAINER, PLUGINS } from './constants';
 import { AppRuntime } from './module-tree';
 import type { MangoPlugin } from './interfaces/core/mango-plugin.interface';
 import { InternalLoggerService } from './services';
@@ -30,7 +30,7 @@ export class App {
     /**
      * @internal
      */
-    @inject(EXTERNAL_PLUGINS) private readonly plugins: Newable<MangoPlugin>[];
+    @inject(PLUGINS) private readonly plugins: Newable<MangoPlugin>[];
     /**
      * @internal
      */

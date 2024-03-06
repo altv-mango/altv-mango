@@ -6,11 +6,10 @@ import {
     INTERNAL_APP_CONTAINER,
     APP_ENVIROMENT,
     GLOBAL_APP_CONTAINER,
-    INTERNAL_PLUGINS,
-    EXTERNAL_PLUGINS,
     MANGO_REQUEST_FACTORY,
     MANGO_RESPONSE_FACTORY,
     EXECUTION_CONTEXT_FACTORY,
+    PLUGINS,
 } from './constants';
 import type { Newable } from '../types';
 import type { MangoPlugin } from './interfaces';
@@ -105,8 +104,7 @@ export async function createAppBuilder<T extends AppBuilder>({
         if (!pluginInstance.beforeCreate) continue;
         await pluginInstance.beforeCreate();
     }
-    internalAppContainer.bind(INTERNAL_PLUGINS).toConstantValue(plugins);
-    internalAppContainer.bind(EXTERNAL_PLUGINS).toConstantValue([]);
+    internalAppContainer.bind(PLUGINS).toConstantValue(plugins);
 
     return internalAppContainer.get(appBuilderInherit);
 }
