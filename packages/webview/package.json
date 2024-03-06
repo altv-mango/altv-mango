@@ -1,6 +1,6 @@
 {
     "name": "@altv-mango/webview",
-    "version": "1.2.17",
+    "version": "1.2.18",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@altv-mango/core": "workspace:^",
-        "@altv/shared": "^0.0.13",
+        "@altv/shared": "^0.0.14",
         "@altv/types-webview": "^16.2.1"
     },
     "devDependencies": {
