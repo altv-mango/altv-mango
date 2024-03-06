@@ -1,0 +1,20 @@
+{
+    "name": "@altv-resource/server",
+    "type": "module",
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch"
+    },
+    "dependencies": {
+        "@abraham/reflection": "^0.12.0",
+        "@altv-mango/server": "workspace:^",
+        "@altv/server": "^0.0.36"
+    },
+    "devDependencies": {
+        "@swc/cli": "^0.3.10",
+        "@swc/core": "^1.4.2",
+        "@types/node": "^20.11.24",
+        "tsup": "^8.0.2",
+        "typescript": "^5.3.3"
+    }
+}

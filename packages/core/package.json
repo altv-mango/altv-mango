@@ -1,0 +1,130 @@
+{
+    "name": "@altv-mango/core",
+    "version": "1.2.17",
+    "homepage": "https://altv-mango.vercel.app",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/altv-mango/altv-mango",
+        "directory": "packages/shared"
+    },
+    "license": "MIT",
+    "author": "5exyGuy (Aurėjus Remeika)",
+    "type": "module",
+    "exports": {
+        ".": {
+            "default": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./app": {
+            "default": "./dist/app/index.js",
+            "types": "./dist/app/index.d.ts"
+        },
+        "./app/constants": {
+            "default": "./dist/app/constants/index.js",
+            "types": "./dist/app/constants/index.d.ts"
+        },
+        "./app/controller": {
+            "default": "./dist/app/controller/index.js",
+            "types": "./dist/app/controller/index.d.ts"
+        },
+        "./app/enums": {
+            "default": "./dist/app/enums/index.js",
+            "types": "./dist/app/enums/index.d.ts"
+        },
+        "./app/interfaces": {
+            "default": "./dist/app/interfaces/index.js",
+            "types": "./dist/app/interfaces/index.d.ts"
+        },
+        "./app/module": {
+            "default": "./dist/app/module/index.js",
+            "types": "./dist/app/module/index.d.ts"
+        },
+        "./app/module-tree": {
+            "default": "./dist/app/module-tree/index.js",
+            "types": "./dist/app/module-tree/index.d.ts"
+        },
+        "./app/pipeline": {
+            "default": "./dist/app/pipeline/index.js",
+            "types": "./dist/app/pipeline/index.d.ts"
+        },
+        "./app/services": {
+            "default": "./dist/app/services/index.js",
+            "types": "./dist/app/services/index.d.ts"
+        },
+        "./app/utils": {
+            "default": "./dist/app/utils/index.js",
+            "types": "./dist/app/utils/index.d.ts"
+        },
+        "./constants": {
+            "default": "./dist/constants/index.js",
+            "types": "./dist/constants/index.d.ts"
+        },
+        "./decorators": {
+            "default": "./dist/decorators/index.js",
+            "types": "./dist/decorators/index.d.ts"
+        },
+        "./enums": {
+            "default": "./dist/enums/index.js",
+            "types": "./dist/enums/index.d.ts"
+        },
+        "./errors": {
+            "default": "./dist/errors/index.js",
+            "types": "./dist/errors/index.d.ts"
+        },
+        "./interfaces": {
+            "default": "./dist/interfaces/index.js",
+            "types": "./dist/interfaces/index.d.ts"
+        },
+        "./pipes": {
+            "default": "./dist/pipes/index.js",
+            "types": "./dist/pipes/index.d.ts"
+        },
+        "./schemas": {
+            "default": "./dist/schemas/index.js",
+            "types": "./dist/schemas/index.d.ts"
+        },
+        "./services": {
+            "default": "./dist/services/index.js",
+            "types": "./dist/services/index.d.ts"
+        },
+        "./types": {
+            "default": "./dist/types/index.js",
+            "types": "./dist/types/index.d.ts"
+        },
+        "./utils": {
+            "default": "./dist/utils/index.js",
+            "types": "./dist/utils/index.d.ts"
+        }
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "typecheck": "tsc --noEmit",
+        "types": "tsup --dts-only"
+    },
+    "dependencies": {
+        "@abraham/reflection": "^0.12.0",
+        "@altv/client": "^0.0.29",
+        "@altv/server": "^0.0.35",
+        "@altv/shared": "^0.0.13",
+        "inversify": "^6.0.2",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@microsoft/api-extractor": "^7.40.6",
+        "@swc/cli": "^0.3.9",
+        "@swc/core": "^1.4.2",
+        "@types/node": "^20.11.19",
+        "tsup": "^8.0.2",
+        "typescript": "^5.3.3"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    }
+}

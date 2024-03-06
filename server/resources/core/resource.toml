@@ -1,0 +1,8 @@
+type = "jsv2"
+main = "server/dist/index.js"
+client-main = "client/dist/index.js"
+client-files = [
+    "client/dist/*",
+    "ui/dist/*"
+]
+deps = []
