@@ -1,16 +1,19 @@
 import { inject, injectable } from 'inversify';
 import { type MangoPlugin, type RPCPayload, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
-import { EVENT_SERVICE, RPC_SERVICE, RPCResultStatus, type RPCResult, MangoError } from '@altv-mango/core';
+import { EVENT_SERVICE, RPC_SERVICE, RPCResultStatus, type RPCResult, MangoError, LOGGER_SERVICE } from '@altv-mango/core';
 import { WEBVIEW_SERVICE } from '../constants';
-import type { ClientEventService, ClientRPCService, ClientWebViewService } from '../services';
+import type { ClientEventService, ClientLoggerService, ClientRPCService, ClientWebViewService } from '../services';
 
 @injectable()
-export class RpcPlugin implements MangoPlugin {
+export class RPCPlugin implements MangoPlugin {
     @inject(EVENT_SERVICE) private readonly eventService: ClientEventService;
     @inject(WEBVIEW_SERVICE) private readonly webViewService: ClientWebViewService;
     @inject(RPC_SERVICE) private readonly rpcService: ClientRPCService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: ClientLoggerService;
 
-    public beforeStart() {
+    public beforeLoad() {
+        const time = Date.now();
+
         this.eventService.onServer('RPC::CALL_CLIENT', async (body) => {
             const rpcHandler = this.rpcService.$serverHandlers.get(body.rpcName);
             if (!rpcHandler) {
@@ -41,26 +44,25 @@ export class RpcPlugin implements MangoPlugin {
             }
         });
         this.webViewService.$onCreate((webViewId, webView) => {
-            webView.on('RPC::CALL_CLIENT', async (...params: unknown[]) => {
+            webView.on('RPC::CALL_CLIENT', async (body) => {
                 if (!webView.valid) return;
 
-                const payload = <RPCPayload>params[0];
-                const rpcHandler = this.rpcService.$webViewHandlers.get(`${webViewId}::${payload.rpcName}`);
+                const rpcHandler = this.rpcService.$webViewHandlers.get(`${webViewId}::${body.rpcName}`);
                 if (!rpcHandler) {
-                    webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
+                    webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
                     return;
                 }
 
                 try {
-                    const result = await rpcHandler.handler(payload);
-                    webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, {
+                    const result = await rpcHandler.handler(body);
+                    webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, <RPCResult>{
                         success: true,
                         status: RPCResultStatus.Success,
-                        data: result,
+                        body: result,
                     });
                 } catch (error) {
                     if (error instanceof MangoError) {
-                        webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, {
+                        webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, {
                             success: false,
                             status: error.status,
                             error: { message: error.message, details: error.details },
@@ -68,14 +70,15 @@ export class RpcPlugin implements MangoPlugin {
                         return;
                     }
 
-                    webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, RPC_RESULT_UNKNOWN);
+                    webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_UNKNOWN);
                 }
             });
 
-            webView.on('RPC::CALL_SERVER', async (...params: unknown[]) => {
-                const data = <RPCPayload>params[0];
-                this.eventService.emitServer('RPC::CALL_SERVER', <RPCPayload>{ ...data, webViewId });
+            webView.on('RPC::CALL_SERVER', (body) => {
+                this.eventService.emitServer('RPC::CALL_SERVER', <RPCPayload>{ ...body, webViewId });
             });
         });
+
+        this.loggerService.log(`~lw~RPC handlers registered ~lk~(${Date.now() - time}ms)`);
     }
 }

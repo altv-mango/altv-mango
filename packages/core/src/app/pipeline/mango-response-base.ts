@@ -1,14 +1,14 @@
 import { inject, injectable } from 'inversify';
-import type { RPCError } from '../../interfaces';
-import { InternalLoggerService } from '../services';
+import type { LoggerService, RPCError } from '../../interfaces';
 import type { MangoResponse } from '../interfaces';
 import { ErrorMessage } from '../../enums';
+import { LOGGER_SERVICE } from '../../constants';
 
 @injectable()
 export class MangoResponseBase implements MangoResponse {
-    @inject(InternalLoggerService) private readonly $loggerService: InternalLoggerService;
-    public $sendListeners: Set<(data: unknown) => void>;
-    public $errorListeners: Set<(error: RPCError) => void>;
+    @inject(LOGGER_SERVICE) private readonly $loggerService: LoggerService;
+    public $sendListeners: Set<(data: unknown) => void> = new Set();
+    public $errorListeners: Set<(error: RPCError) => void> = new Set();
     public $isSent: boolean = false;
 
     public send<TData = unknown>(data?: TData) {

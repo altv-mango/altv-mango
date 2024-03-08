@@ -1,17 +1,17 @@
-import type { DynamicModule } from '../../interfaces';
+import type { DynamicModule, LoggerService } from '../../interfaces';
 import type { Newable } from '../../types';
 import { Controller, ControllerMetadataReader } from '../controller';
 import { Module, ModuleMetadataReader } from '../module';
 import { inject, injectable } from 'inversify';
-import { InternalLoggerService } from '../services';
 import { ErrorMessage } from '../../enums';
 import { Tree, TreeNode } from '../utils';
+import { LOGGER_SERVICE } from '../../constants';
 
 @injectable()
 export class ModuleTreeScanner {
     @inject(ModuleMetadataReader) private readonly moduleMetadataReader: ModuleMetadataReader;
     @inject(ControllerMetadataReader) private readonly controllerMetadataReader: ControllerMetadataReader;
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public async scan(classRef: Newable | DynamicModule | Promise<DynamicModule>) {
         const startTime = Date.now();
@@ -21,10 +21,7 @@ export class ModuleTreeScanner {
         const module = new Module();
         module.metadata = moduleMetadata;
         // Log module info
-        this.loggerService.log(
-            ['~lm~Scan', `~lb~${module.metadata.classRef.name}`],
-            `~lw~Module scanned ~lk~(${Date.now() - startTime}ms)`,
-        );
+        this.loggerService.log(`~lw~Module ~lb~${module.metadata.classRef.name} ~lw~scanned ~lk~(${Date.now() - startTime}ms)`);
         // Scan controllers in module
         await this.scanControllers(module);
         // Scan controllers in module
@@ -59,10 +56,7 @@ export class ModuleTreeScanner {
         module.metadata = moduleMetadata;
         module.parent = parentNode.value;
         // Log module info
-        this.loggerService.log(
-            ['~lm~Scan', `~lb~${module.metadata.classRef.name}`],
-            `~lw~Module scanned ~lk~(${Date.now() - startTime}ms)`,
-        );
+        this.loggerService.log(`~lw~Module ~lb~${module.metadata.classRef.name} ~lw~scanned ~lk~(${Date.now() - startTime}ms)`);
         // Scan controllers in module
         await this.scanControllers(module);
         // Check if there is a circular dependency
@@ -86,14 +80,14 @@ export class ModuleTreeScanner {
             controller.owner = module;
             module.controllers.push(controller);
 
-            this.loggerService.log(['~lm~Scan', `~lc~${classRef.name}`], `~lw~Controller scanned ~lk~(${Date.now() - startTime}ms)`);
+            this.loggerService.log(`~lw~Controller ~lc~${classRef.name} ~lw~scanned ~lk~(${Date.now() - startTime}ms)`);
         }
     }
 
     private async checkCircularDependency(parentModule: Module, module: Module) {
         // Check if parent module is imported in module
         if (module.metadata.imports.includes(parentModule.metadata.classRef)) {
-            this.loggerService.error('An error occurred while scanning the module tree.');
+            // this.loggerService.error('An error occurred while scanning the module tree.');
             throw new Error(ErrorMessage.CircularDependencyDetected);
         }
     }

@@ -1,6 +1,6 @@
 import { Container, inject, injectable } from 'inversify';
 import type { ErrorFilter, Guard, Interceptor, InternalRPCService } from '../interfaces';
-import { RPC_SERVICE } from '../../constants';
+import { LOGGER_SERVICE, RPC_SERVICE } from '../../constants';
 import {
     APP_ENVIROMENT,
     EXECUTION_CONTEXT_FACTORY,
@@ -11,13 +11,13 @@ import {
 import type { Newable } from '../../types';
 import { isFunction, isNil, isObject } from '../../utils';
 import { PipelineHandler } from './pipeline.handler';
-import type { ControllerMetadata, RPCMetadata } from '../interfaces';
+import type { RPCMetadata } from '../interfaces';
 import { AppEnviroment, ExecutionContextType } from '../enums';
 import { ExecutionContextBase, type MangoRequestBase, type MangoResponseBase } from '../pipeline';
-import type { Player } from '@altv/server';
-import { InternalLoggerService } from '../services';
+import * as altServer from '@altv/server';
 import { ErrorMessage } from '../../enums';
-import type { Pipe } from '../../interfaces';
+import type { LoggerService, Pipe } from '../../interfaces';
+import type { Controller } from './controller';
 
 @injectable()
 export class ControllerRPCHandler {
@@ -25,8 +25,8 @@ export class ControllerRPCHandler {
     @inject(RPC_SERVICE) private readonly rpcService: InternalRPCService;
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
-    @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (data: unknown, player?: Player) => MangoRequestBase;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
+    @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (data: unknown, player?: altServer.Player) => MangoRequestBase;
     @inject(MANGO_RESPONSE_FACTORY) private readonly createMangoResponse: () => MangoResponseBase;
     @inject(EXECUTION_CONTEXT_FACTORY) private readonly createExecutionContext: (
         type: ExecutionContextType,
@@ -41,7 +41,7 @@ export class ControllerRPCHandler {
         interceptors: (Newable<Interceptor> | Interceptor)[],
         pipes: (Newable<Pipe> | Pipe)[],
         mappedErrorFilters: [any | 'MANGO_ANY_ERROR', Newable<ErrorFilter> | ErrorFilter][],
-        controller: ControllerMetadata,
+        controller: Controller,
         rpc: RPCMetadata,
     ) {
         if (rpc.type === 'onRequest') {
@@ -59,7 +59,7 @@ export class ControllerRPCHandler {
         } else if (rpc.type === 'onWebViewRequest') {
             return this.rpcService[rpc.type](rpc.webViewId!, rpc.name, async (...args: unknown[]) => {
                 const body = this.appEnv === AppEnviroment.Server ? args[1] : args[0];
-                const player = this.appEnv === AppEnviroment.Server ? <Player>args[0] : undefined;
+                const player = this.appEnv === AppEnviroment.Server ? <altServer.Player>args[0] : undefined;
                 return this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body, player);
             });
         }
@@ -73,10 +73,10 @@ export class ControllerRPCHandler {
         interceptors: (Newable<Interceptor> | Interceptor)[],
         pipes: (Newable<Pipe> | Pipe)[],
         mappedErrorFilters: [any | 'MANGO_ANY_ERROR', Newable<ErrorFilter> | ErrorFilter][],
-        controller: ControllerMetadata,
+        controller: Controller,
         rpc: RPCMetadata,
         body: unknown,
-        player?: Player,
+        player?: altServer.Player,
     ) {
         return new Promise(async (resolve) => {
             const request = this.createMangoRequest(
@@ -90,8 +90,8 @@ export class ControllerRPCHandler {
             response.$onError((error) => resolve(error));
             const executionContext = this.createExecutionContext(
                 ExecutionContextType.RPC,
-                controller.classRef,
-                controller.classRef.prototype[rpc.method],
+                controller.metadata.classRef,
+                controller.metadata.classRef.prototype[rpc.method],
                 request,
                 response,
             );
@@ -132,11 +132,14 @@ export class ControllerRPCHandler {
                         return undefined;
                     }),
                 );
-                const instance = this.globalAppContainer.get<{ [key: string]: Function }>(controller.classRef);
-                const result = await Promise.resolve(instance[rpc.method]!.apply(instance, params));
-                for (const postInterceptor of postInterceptors) await Promise.resolve(postInterceptor(result));
+                const result = await Promise.resolve(controller.instance[rpc.method]!(...params));
+                for (const postInterceptor of postInterceptors) {
+                    await Promise.resolve(postInterceptor(result));
+                }
 
-                if (!response.$isSent) response.send(result);
+                if (!response.$isSent) {
+                    response.send(result);
+                }
             } catch (error) {
                 const errorGroup = mappedErrorFilters.find(
                     ([errorType]) =>

@@ -3,14 +3,14 @@ import type { InjectionToken, Newable } from '../../types';
 import { CoreMetadataKey } from '../enums';
 import type { InjectableMetadata, ErrorFilter, Guard, Interceptor } from '../interfaces';
 import type { ModuleMetadata } from '../interfaces';
-import type { ClassProvider, DynamicModule, ModuleOptions, Pipe, Provider } from '../../interfaces';
+import type { ClassProvider, DynamicModule, LoggerService, ModuleOptions, Pipe, Provider } from '../../interfaces';
 import { isFunction, isNil, isString, isSymbol } from '../../utils';
-import { InternalLoggerService } from '../services';
 import { ErrorMessage } from '../../enums';
+import { LOGGER_SERVICE } from '../../constants';
 
 @injectable()
 export class ModuleMetadataReader {
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public async read(module: Newable | DynamicModule | Promise<DynamicModule>) {
         // Class reference

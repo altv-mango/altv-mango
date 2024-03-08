@@ -1,17 +1,16 @@
-import type { Provider } from '../../interfaces';
+import type { LoggerService, Provider } from '../../interfaces';
 import type { Newable } from '../../types';
 import { isObject } from '../../utils';
 import { GLOBAL_APP_CONTAINER } from '../constants';
 import { Module } from '../module';
 import { Container, inject, injectable } from 'inversify';
-import { InternalLoggerService } from '../services';
-import { MODULE_CONTAINER } from '../../constants';
+import { LOGGER_SERVICE, MODULE_CONTAINER } from '../../constants';
 import type { Tree } from '../utils';
 
 @injectable()
 export class ModuleDependencyBinder {
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public async bind(resolvedTree: Tree<Module>) {
         await resolvedTree.asyncTraverse(async (node) => {
@@ -50,8 +49,7 @@ export class ModuleDependencyBinder {
             }
 
             this.loggerService.log(
-                ['~lm~Bind', `~lb~${module.metadata.classRef.name}`],
-                `~lw~Module dependencies binded ~lk~(${Date.now() - startTime}ms)`,
+                `~lw~Module ~lb~${module.metadata.classRef.name} ~lw~dependencies binded ~lk~(${Date.now() - startTime}ms)`,
             );
         });
     }

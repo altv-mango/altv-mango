@@ -1,6 +1,6 @@
 {
     "name": "@altv-mango/core",
-    "version": "1.2.20",
+    "version": "1.2.21",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
@@ -109,8 +109,8 @@
     },
     "dependencies": {
         "@abraham/reflection": "^0.12.0",
-        "@altv/client": "^0.0.29",
-        "@altv/server": "^0.0.36",
+        "@altv/client": "^0.0.30",
+        "@altv/server": "^0.0.37",
         "@altv/shared": "^0.0.14",
         "inversify": "^6.0.2",
         "zod": "^3.22.4"
@@ -118,10 +118,10 @@
     "devDependencies": {
         "@microsoft/api-extractor": "^7.42.3",
         "@swc/cli": "^0.3.10",
-        "@swc/core": "^1.4.4",
-        "@types/node": "^20.11.24",
+        "@swc/core": "^1.4.6",
+        "@types/node": "^20.11.25",
         "tsup": "^8.0.2",
-        "typescript": "^5.3.3"
+        "typescript": "^5.4.2"
     },
     "publishConfig": {
         "access": "public",

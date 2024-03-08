@@ -1,14 +1,17 @@
 import { inject, injectable } from 'inversify';
-import type { MangoPlugin, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
-import { EVENT_SERVICE, MangoError, RPC_SERVICE, RPCResultStatus, type RPCResult } from '@altv-mango/core';
-import type { ClientEventService, ClientRPCService } from '../services';
+import { RPC_RESULT_HANDLER_NOT_FOUND, type MangoPlugin, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
+import { EVENT_SERVICE, MangoError, RPC_SERVICE, RPCResultStatus, type RPCResult, LOGGER_SERVICE } from '@altv-mango/core';
+import type { ServerEventService, ServerLoggerService, ServerRPCService } from '../services';
 
 @injectable()
 export class RPCPlugin implements MangoPlugin {
-    @inject(EVENT_SERVICE) private readonly eventService: ClientEventService;
-    @inject(RPC_SERVICE) private readonly rpcService: ClientRPCService;
+    @inject(EVENT_SERVICE) private readonly eventService: ServerEventService;
+    @inject(RPC_SERVICE) private readonly rpcService: ServerRPCService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: ServerLoggerService;
 
-    public beforeCreate() {
+    public beforeLoad() {
+        const time = Date.now();
+
         this.eventService.onPlayer('RPC::CALL_SERVER', async (player, body) => {
             if (!player.valid) return;
 
@@ -20,14 +23,13 @@ export class RPCPlugin implements MangoPlugin {
                     : undefined;
             if (!rpcHandler) {
                 if (body.source === 'webview') {
-                    this.eventService.emitWebViews(
-                        [player],
+                    player.emitWebView(
                         body.webViewId as string | number,
                         `RPC::RETURN_FROM_SERVER_${body.id}`,
                         RPC_RESULT_HANDLER_NOT_FOUND,
                     );
                 } else if (body.source === 'client') {
-                    this.eventService.emitPlayers([player], `RPC::RETURN_FROM_SERVER_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
+                    player.emitRaw(`RPC::RETURN_FROM_SERVER_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
                 }
                 return;
             }
@@ -40,14 +42,9 @@ export class RPCPlugin implements MangoPlugin {
                     body: handlerResult,
                 };
                 if (body.source === 'webview') {
-                    this.eventService.emitWebViews(
-                        [player],
-                        body.webViewId as string | number,
-                        `RPC::RETURN_FROM_SERVER_${body.id}`,
-                        rpcResult,
-                    );
+                    player.emitWebView(body.webViewId as string | number, `RPC::RETURN_FROM_SERVER_${body.id}`, rpcResult);
                 } else if (body.source === 'client') {
-                    this.eventService.emitPlayers([player], `RPC::RETURN_FROM_SERVER_${body.id}`, rpcResult);
+                    player.emitRaw(`RPC::RETURN_FROM_SERVER_${body.id}`, rpcResult);
                 }
             } catch (error) {
                 if (body.source === 'webview') {
@@ -57,19 +54,9 @@ export class RPCPlugin implements MangoPlugin {
                             status: error.status,
                             error: { message: error.message, details: error.details },
                         };
-                        this.eventService.emitWebViews(
-                            [player],
-                            body.webViewId as string | number,
-                            `RPC::RETURN_FROM_SERVER_${body.id}`,
-                            rpcResult,
-                        );
+                        player.emitWebView(body.webViewId as string | number, `RPC::RETURN_FROM_SERVER_${body.id}`, rpcResult);
                     } else {
-                        this.eventService.emitWebViews(
-                            [player],
-                            body.webViewId as string | number,
-                            `RPC::RETURN_FROM_SERVER_${body.id}`,
-                            RPC_RESULT_UNKNOWN,
-                        );
+                        player.emitWebView(body.webViewId as string | number, `RPC::RETURN_FROM_SERVER_${body.id}`, RPC_RESULT_UNKNOWN);
                     }
                 } else if (body.source === 'client') {
                     if (error instanceof MangoError) {
@@ -78,12 +65,14 @@ export class RPCPlugin implements MangoPlugin {
                             status: error.status,
                             error: { message: error.message, details: error.details },
                         };
-                        this.eventService.emitPlayers([player], `RPC::RETURN_FROM_SERVER_${body.id}`, rpcResult);
+                        player.emitRaw(`RPC::RETURN_FROM_SERVER_${body.id}`, rpcResult);
                     } else {
-                        this.eventService.emitPlayers([player], `RPC::RETURN_FROM_SERVER_${body.id}`, RPC_RESULT_UNKNOWN);
+                        player.emitRaw(`RPC::RETURN_FROM_SERVER_${body.id}`, RPC_RESULT_UNKNOWN);
                     }
                 }
             }
         });
+
+        this.loggerService.log(`~lw~RPC handlers registered ~lk~(${Date.now() - time}ms)`);
     }
 }

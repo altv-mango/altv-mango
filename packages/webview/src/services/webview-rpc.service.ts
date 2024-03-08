@@ -3,11 +3,11 @@ import { EventDestination } from '@altv-mango/core/app/enums';
 import type { RPCPayload } from '@altv-mango/core/app/interfaces';
 import type { RPCService } from '../interfaces';
 import type { WebViewEventService } from './webview-event.service';
-import type { InternalLoggerService } from './internal-logger.service';
 import * as altShared from '@altv/shared';
 import type { RPCCallOptions, RPCResult, ScriptRPCHandler } from '@altv-mango/core/interfaces';
 import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_TIMEOUT } from '@altv-mango/core/app/constants';
 import { ErrorMessage, RPCResultStatus } from '@altv-mango/core/enums';
+import type { WebViewLoggerService } from './webview-logger.service';
 
 export class WebViewRPCService implements RPCService {
     private readonly $TIMEOUT = 2000;
@@ -15,7 +15,7 @@ export class WebViewRPCService implements RPCService {
     public readonly $clientHandlers = new Map<string, ScriptRPCHandler>();
     public readonly $serverHandlers = new Map<string, ScriptRPCHandler>();
 
-    public constructor(private readonly $eventService: WebViewEventService, private readonly $loggerService: InternalLoggerService) {}
+    public constructor(private readonly $eventService: WebViewEventService, private readonly $loggerService: WebViewLoggerService) {}
 
     public async call<E extends keyof altShared.RPC.CustomWebViewRPC>(
         rpcName: E,
@@ -202,8 +202,8 @@ export class WebViewRPCService implements RPCService {
                 body,
             };
             destination === EventDestination.Server
-                ? this.$eventService.emitServer('RPC::CALL_SERVER', payload)
-                : this.$eventService.emitPlayer(`RPC::RETURN_FROM_CLIENT_${callId}`, payload);
+                ? this.$eventService.emitPlayer('RPC::CALL_SERVER', payload)
+                : this.$eventService.emitPlayer('RPC::CALL_CLIENT', payload);
 
             timeoutId = setTimeout(() => {
                 scriptEventHandler.destroy();

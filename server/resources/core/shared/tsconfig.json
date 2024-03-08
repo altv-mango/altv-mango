@@ -26,6 +26,6 @@
         "verbatimModuleSyntax": true,
         "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@altv-mango"]
     },
-    "include": ["./src/**/*.ts"],
-    "exclude": ["./node_modules", "./dist"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist"]
 }

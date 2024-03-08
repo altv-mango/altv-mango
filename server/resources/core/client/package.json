@@ -6,14 +6,14 @@
         "dev": "tsup --watch"
     },
     "dependencies": {
-        "@altv/client": "^0.0.29"
+        "@altv/client": "^0.0.30"
     },
     "devDependencies": {
         "@abraham/reflection": "^0.12.0",
         "@altv-mango/client": "workspace:^",
         "@swc/cli": "^0.3.10",
-        "@swc/core": "^1.4.4",
+        "@swc/core": "^1.4.6",
         "tsup": "^8.0.2",
-        "typescript": "^5.3.3"
+        "typescript": "^5.4.2"
     }
 }

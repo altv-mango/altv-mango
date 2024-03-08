@@ -1,4 +1,4 @@
-import { log, logDebug, logError, logWarning } from '@altv/server';
+import * as altServer from '@altv/server';
 import { injectable } from 'inversify';
 import { MANGO_LOG_PREFIX } from '@altv-mango/core/app';
 import type { LoggerService } from '@altv-mango/core';
@@ -6,18 +6,18 @@ import type { LoggerService } from '@altv-mango/core';
 @injectable()
 export class ServerLoggerService implements LoggerService {
     public log(...args: unknown[]): void {
-        log(`~w~[~y~${MANGO_LOG_PREFIX}~w~][~lb~Log~w~]`, ...args);
+        altServer.log(`~w~[~y~${MANGO_LOG_PREFIX}Server~w~][~lb~Log~w~]`, ...args);
     }
 
     public warn(...args: unknown[]): void {
-        logWarning(`~w~[~y~${MANGO_LOG_PREFIX}~w~][~ly~Warn~w~]`, ...args);
+        altServer.logWarning(`~w~[~y~${MANGO_LOG_PREFIX}Server~w~][~ly~Warn~w~]`, ...args);
     }
 
     public error(...args: unknown[]): void {
-        logError(`~w~[~y~${MANGO_LOG_PREFIX}~w~][~lr~Error~w~]`, ...args);
+        altServer.logError(`~w~[~y~${MANGO_LOG_PREFIX}Server~w~][~lr~Error~w~]`, ...args);
     }
 
     public debug(...args: unknown[]): void {
-        logDebug(`~w~[~y~${MANGO_LOG_PREFIX}~w~][~lc~Debug~w~]`, ...args);
+        altServer.logDebug(`~w~[~y~${MANGO_LOG_PREFIX}Server~w~][~lc~Debug~w~]`, ...args);
     }
 }

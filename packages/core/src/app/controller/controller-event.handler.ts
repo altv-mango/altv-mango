@@ -5,14 +5,13 @@ import { APP_ENVIROMENT, EXECUTION_CONTEXT_FACTORY, GLOBAL_APP_CONTAINER, MANGO_
 import { isFunction, isNil, isObject } from '../../utils';
 import { PipelineHandler } from './pipeline.handler';
 import type { EventMetadata } from '../interfaces';
-import { EVENT_SERVICE } from '../../constants';
+import { EVENT_SERVICE, LOGGER_SERVICE } from '../../constants';
 import type { Controller } from './controller';
 import { AppEnviroment, ExecutionContextType } from '../enums';
 import { ExecutionContextBase, type MangoRequestBase } from '../pipeline';
 import * as altServer from '@altv/server';
-import { InternalLoggerService } from '../services';
 import { ErrorMessage } from '../../enums';
-import type { Pipe } from '../../interfaces';
+import type { LoggerService, Pipe } from '../../interfaces';
 
 @injectable()
 export class ControllerEventHandler {
@@ -20,7 +19,7 @@ export class ControllerEventHandler {
     @inject(EVENT_SERVICE) private readonly eventService: InternalEventService;
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (body: unknown, player?: altServer.Player) => MangoRequestBase;
     @inject(EXECUTION_CONTEXT_FACTORY) private readonly createExecutionContext: (
         type: ExecutionContextType,

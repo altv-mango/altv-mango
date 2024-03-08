@@ -1,11 +1,11 @@
 /// <reference types="@altv-mango/core" />
 
-import { InternalLoggerService, WebViewEventService, WebViewRPCService } from './services';
+import { WebViewEventService, WebViewLoggerService, WebViewRPCService } from './services';
 import { isNil } from '@altv-mango/core/utils';
 import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app/constants';
 import type { EventService, RPCService } from './interfaces';
 import { RPCResultStatus } from '@altv-mango/core/enums';
-import type { RPCResult } from '@altv-mango/core/interfaces';
+import type { LoggerService, RPCResult } from '@altv-mango/core/interfaces';
 import { MangoError } from '@altv-mango/core/errors';
 
 export function initMango() {
@@ -14,7 +14,7 @@ export function initMango() {
     }
 
     const event = new WebViewEventService();
-    const logger = new InternalLoggerService();
+    const logger = new WebViewLoggerService();
     const rpc = new WebViewRPCService(event, logger);
 
     event.onServer('RPC::CALL_WEBVIEW', async (body) => {
@@ -74,7 +74,7 @@ export function initMango() {
         }
     });
 
-    const mango = { event, rpc };
+    const mango = { event, rpc, logger };
 
     window.mango = mango;
 
@@ -88,6 +88,7 @@ declare global {
         mango: {
             event: EventService;
             rpc: RPCService;
+            logger: LoggerService;
         };
     }
 }
