@@ -8,6 +8,10 @@ export function OnceWebView<E extends keyof altShared.Events.CustomWebViewToServ
 export function OnceWebView<E extends string>(
     id: string | number,
     eventName?: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>,
+): MethodDecorator;
+export function OnceWebView<E extends string>(
+    id: string | number,
+    eventName?: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>,
 ) {
     return $OnceWebView(id, eventName);
 }

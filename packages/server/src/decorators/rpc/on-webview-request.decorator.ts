@@ -5,6 +5,10 @@ export function OnWebViewRequest<E extends keyof altShared.RPC.CustomWebViewToSe
 export function OnWebViewRequest<E extends string>(
     id: string | number,
     rpcName?: Exclude<E, keyof altShared.RPC.CustomWebViewToServerRPC>,
+): MethodDecorator;
+export function OnWebViewRequest<E extends string>(
+    id: string | number,
+    rpcName?: Exclude<E, keyof altShared.RPC.CustomWebViewToServerRPC>,
 ) {
     return $OnWebViewRequest(id, rpcName);
 }
