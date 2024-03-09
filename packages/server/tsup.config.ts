@@ -5,7 +5,7 @@ export default defineConfig({
     entry: ['src/index.ts'],
     splitting: false,
     sourcemap: 'inline',
-    clean: true,
+    clean: false,
     format: 'esm',
     bundle: true,
     minify: false,

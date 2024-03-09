@@ -6,20 +6,18 @@ import {
     INTERNAL_APP_CONTAINER,
     APP_ENVIROMENT,
     GLOBAL_APP_CONTAINER,
-    INTERNAL_PLUGINS,
-    EXTERNAL_PLUGINS,
     MANGO_REQUEST_FACTORY,
     MANGO_RESPONSE_FACTORY,
     EXECUTION_CONTEXT_FACTORY,
+    PLUGINS,
 } from './constants';
 import type { Newable } from '../types';
 import type { MangoPlugin } from './interfaces';
 import { Controller, ControllerEventHandler, ControllerMetadataReader, ControllerRPCHandler, PipelineHandler } from './controller';
 import { ModuleMetadataReader } from './module';
 import type { AppEnviroment, ExecutionContextType } from './enums';
-import { InternalLoggerService } from './services';
 import { ExecutionContextBase, MangoRequestBase, MangoResponseBase } from './pipeline';
-import type { Player } from '@altv/server';
+import * as altServer from '@altv/server';
 import type { AppBuilder } from './app-builder';
 
 export async function createAppBuilder<T extends AppBuilder>({
@@ -62,7 +60,7 @@ export async function createAppBuilder<T extends AppBuilder>({
     // Mango Request and Response bindings
     internalAppContainer.bind(MangoRequestBase).toSelf().inTransientScope();
     internalAppContainer.bind(MANGO_REQUEST_FACTORY).toFactory((context) => {
-        return (body: unknown, player: Player) => {
+        return (body: unknown, player: altServer.Player) => {
             const request = context.container.get(MangoRequestBase);
             request.$body = body;
             request.$player = player;
@@ -94,10 +92,6 @@ export async function createAppBuilder<T extends AppBuilder>({
         };
     });
 
-    // Logger bindings
-    internalAppContainer.bind(InternalLoggerService).toSelf().inSingletonScope();
-    globalAppContainer.bind(InternalLoggerService).toSelf().inSingletonScope();
-
     // Plugins bindings
     for (const plugin of plugins) {
         internalAppContainer.bind(plugin).toSelf().inSingletonScope();
@@ -105,8 +99,7 @@ export async function createAppBuilder<T extends AppBuilder>({
         if (!pluginInstance.beforeCreate) continue;
         await pluginInstance.beforeCreate();
     }
-    internalAppContainer.bind(INTERNAL_PLUGINS).toConstantValue(plugins);
-    internalAppContainer.bind(EXTERNAL_PLUGINS).toConstantValue([]);
+    internalAppContainer.bind(PLUGINS).toConstantValue(plugins);
 
     return internalAppContainer.get(appBuilderInherit);
 }

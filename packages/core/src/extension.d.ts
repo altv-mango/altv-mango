@@ -32,5 +32,11 @@ declare module '@altv/shared' {
         export interface CustomPlayerToServerEvent {
             'RPC::CALL_SERVER': (body: RPCPayload) => Promise<void>;
         }
+
+        export interface CustomWebViewToClientEvent {
+            'RPC::CALL_CLIENT': (body: RPCPayload) => Promise<void>;
+            'RPC::CALL_SERVER': (body: RPCPayload) => void;
+            'WEBVIEW::EMIT_SERVER': (body: { eventName: string; payload: Record<string, unknown> }) => void;
+        }
     }
 }

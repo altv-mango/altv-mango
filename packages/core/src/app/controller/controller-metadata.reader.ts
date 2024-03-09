@@ -4,14 +4,14 @@ import type { Newable } from '../../types';
 import type { ControllerMetadata, EventMetadata, MethodParameter, RPCMetadata } from '../interfaces';
 import { AppEnviroment, CoreMetadataKey } from '../enums';
 import { APP_ENVIROMENT } from '../constants';
-import { InternalLoggerService } from '../services';
 import { ErrorMessage } from '../../enums';
-import type { Pipe } from '../../interfaces';
+import type { LoggerService, Pipe } from '../../interfaces';
+import { LOGGER_SERVICE } from '../../constants';
 
 @injectable()
 export class ControllerMetadataReader {
     @inject(APP_ENVIROMENT) private readonly appEnv: AppEnviroment;
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public async read(classRef: Newable) {
         const options =

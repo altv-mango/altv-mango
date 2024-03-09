@@ -2,12 +2,13 @@ import { Container, inject, injectable } from 'inversify';
 import { ModuleDependencyBinder, ModuleTreeScanner } from './module-tree';
 import { Module } from './module/module';
 import type { Newable } from '../types';
-import { EXTERNAL_PLUGINS, INTERNAL_APP_CONTAINER } from './constants';
+import { INTERNAL_APP_CONTAINER, PLUGINS } from './constants';
 import { AppRuntime } from './module-tree';
 import type { MangoPlugin } from './interfaces/core/mango-plugin.interface';
-import { InternalLoggerService } from './services';
 import { ErrorMessage } from '../enums';
 import type { Tree } from './utils';
+import { type LoggerService } from '../interfaces';
+import { LOGGER_SERVICE } from '../constants';
 
 @injectable()
 export class App {
@@ -19,6 +20,7 @@ export class App {
      * @internal
      */
     @inject(ModuleDependencyBinder) private readonly moduleDependencyBinder: ModuleDependencyBinder;
+
     /**
      * @internal
      */
@@ -30,11 +32,11 @@ export class App {
     /**
      * @internal
      */
-    @inject(EXTERNAL_PLUGINS) private readonly plugins: Newable<MangoPlugin>[];
+    @inject(PLUGINS) private readonly plugins: Newable<MangoPlugin>[];
     /**
      * @internal
      */
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     /**
      * @internal
      */
@@ -49,19 +51,26 @@ export class App {
             this.loggerService.error('Error occurred while starting the app.');
             throw new Error(ErrorMessage.AppAlreadyLoaded);
         }
-
+        this.loggerService.log('~lw~Starting app...');
         this.runPluginMethods('beforeStart');
-        this.loggerService.log(['~lm~Start'], '~lw~Starting app...');
 
-        this.loggerService.log(['~lm~Start'], '~lw~Scanning module tree...');
+        this.loggerService.log('~lw~Scanning module tree...');
+        this.runPluginMethods('beforeScan');
         this.moduleTree = await this.moduleTreeScanner.scan(rootModule);
-        this.loggerService.log(['~lm~Start'], '~lw~Binding module dependencies...');
+        this.runPluginMethods('afterScan');
+
+        this.loggerService.log('~lw~Binding module dependencies...');
+        this.runPluginMethods('beforeBind');
         await this.moduleDependencyBinder.bind(this.moduleTree);
-        this.loggerService.log(['~lm~Start'], '~lw~Loading app...');
+        this.runPluginMethods('afterBind');
+
+        this.loggerService.log('~lw~Loading app...');
+        this.runPluginMethods('beforeLoad');
         await this.appRuntime.boot(this.moduleTree);
         this.loaded = true;
+        this.runPluginMethods('afterLoad');
 
-        this.loggerService.log(['~lm~Start'], '~lw~App loaded');
+        this.loggerService.log('~lw~App loaded');
 
         this.runPluginMethods('afterStart');
     }
@@ -72,10 +81,10 @@ export class App {
             throw new Error(ErrorMessage.AppNotLoaded);
         }
         this.runPluginMethods('beforeStop');
-        this.loggerService.log(['~lm~Start'], '~lw~Stopping app...');
+        this.loggerService.log('~lw~Stopping app...');
         await this.appRuntime.shutdown(this.moduleTree);
         this.loaded = false;
-        this.loggerService.log(['~lm~Start'], '~lw~App stopped');
+        this.loggerService.log('~lw~App stopped');
         this.runPluginMethods('afterStop');
     }
 

@@ -8,13 +8,20 @@
     "dependencies": {
         "@abraham/reflection": "^0.12.0",
         "@altv-mango/server": "workspace:^",
-        "@altv/server": "^0.0.36"
+        "@altv/server": "^0.0.37",
+        "axios": "^1.6.7",
+        "dotenv": "^16.4.5",
+        "drizzle-orm": "^0.30.1",
+        "pg": "^8.11.3",
+        "postgres": "^3.4.3"
     },
     "devDependencies": {
         "@swc/cli": "^0.3.10",
-        "@swc/core": "^1.4.4",
-        "@types/node": "^20.11.24",
+        "@swc/core": "^1.4.6",
+        "@types/node": "^20.11.25",
+        "@types/pg": "^8.11.2",
+        "drizzle-kit": "^0.20.14",
         "tsup": "^8.0.2",
-        "typescript": "^5.3.3"
+        "typescript": "^5.4.2"
     }
 }

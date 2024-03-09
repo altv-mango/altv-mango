@@ -1,7 +1,7 @@
 import '@abraham/reflection';
 import { AppBuilder, AppEnviroment, createAppBuilder as $createAppBuilder } from '@altv-mango/core/app';
 import { ADD_WEBVIEW } from './constants';
-import { EventMediatorPlugin, RpcPlugin, ServiceBinderPlugin, WebViewPlugin } from './plugins';
+import { EventMediatorPlugin, RPCPlugin, ServiceBinderPlugin, WebViewPlugin } from './plugins';
 import * as altClient from '@altv/client';
 import type { ErrorFilter, Guard, Interceptor } from './interfaces';
 
@@ -20,7 +20,7 @@ class ClientAppBuilder extends AppBuilder<Guard, Interceptor, ErrorFilter> {
         if (this.internalAppContainer.isBound(ADD_WEBVIEW)) {
             this.internalAppContainer.rebind(ADD_WEBVIEW).toConstantValue([...addWebViews, { id, options }]);
         } else {
-            this.internalAppContainer.bind(ADD_WEBVIEW).toConstantValue([[{ id, options }]]);
+            this.internalAppContainer.bind(ADD_WEBVIEW).toConstantValue([{ id, options }]);
         }
     }
 
@@ -120,7 +120,7 @@ class ClientAppBuilder extends AppBuilder<Guard, Interceptor, ErrorFilter> {
 export async function createAppBuilder() {
     return await $createAppBuilder({
         enviroment: AppEnviroment.Client,
-        plugins: [ServiceBinderPlugin, EventMediatorPlugin, RpcPlugin, WebViewPlugin],
+        plugins: [ServiceBinderPlugin, EventMediatorPlugin, RPCPlugin, WebViewPlugin],
         appBuilderInherit: ClientAppBuilder,
     });
 }

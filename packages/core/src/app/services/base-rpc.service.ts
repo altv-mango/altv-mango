@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
-import type { RPCResult, RPCCallOptions, ScriptRPCHandler } from '../../interfaces';
+import type { RPCResult, RPCCallOptions, ScriptRPCHandler, LoggerService } from '../../interfaces';
 import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_TIMEOUT, RPC_RESULT_UNKNOWN } from '../../app/constants';
 import { ErrorMessage, RPCResultStatus } from '../../enums';
 import { MangoError } from '../../errors';
-import { InternalLoggerService } from './internal-logger.service';
+import { LOGGER_SERVICE } from '../../constants';
 
 @injectable()
 export class BaseRPCService<T extends Record<string, any>> {
-    @inject(InternalLoggerService) protected readonly $loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) protected readonly $loggerService: LoggerService;
     protected readonly $TIMEOUT = 2000;
     private readonly $localHandlers = new Map<string, ScriptRPCHandler>();
 

@@ -4,14 +4,14 @@ import type { Newable } from '../../types';
 import { GuardCancelError, GuardInvalidReturnError } from '../../errors';
 import { GLOBAL_APP_CONTAINER } from '../constants';
 import { isFunction, isNil, isObject } from '../../utils';
-import { InternalLoggerService } from '../services';
 import type { ExecutionContextBase } from '../pipeline';
 import { ErrorMessage } from '../../enums';
-import type { ArgumentMetadata, Pipe } from '../../interfaces';
+import type { ArgumentMetadata, LoggerService, Pipe } from '../../interfaces';
+import { LOGGER_SERVICE } from '../../constants';
 
 @injectable()
 export class PipelineHandler {
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(GLOBAL_APP_CONTAINER) private readonly globalContainer: Container;
 
     public async goTroughGuards(executionContext: ExecutionContextBase, guards: (Newable<Guard> | Guard)[]) {

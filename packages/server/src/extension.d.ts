@@ -8,12 +8,8 @@ declare module '@altv/server' {
 
     export interface Player {
         emitWebView<E extends string>(id: string | number, eventName: E, body?: unknown): void;
-        call<E extends string, U extends altServer.Player>(
-            rpcName: E,
-            body?: unknown,
-            options?: altShared.RPCCallOptions,
-        ): Promise<altShared.RPCResult>;
-        callWebView<E extends string, U extends altServer.Player>(
+        call<E extends string>(rpcName: E, body?: unknown, options?: altShared.RPCCallOptions): Promise<altShared.RPCResult>;
+        callWebView<E extends string>(
             id: string | number,
             rpcName: E,
             body?: unknown,

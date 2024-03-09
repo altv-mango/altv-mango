@@ -27,7 +27,7 @@ export default defineConfig({
     ],
     splitting: true,
     sourcemap: 'inline',
-    clean: true,
+    clean: false,
     format: 'esm',
     outDir: 'dist',
     bundle: true,

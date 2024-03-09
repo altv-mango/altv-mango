@@ -5,11 +5,10 @@ import type { ErrorFilter, Guard, Interceptor, InternalEventService } from '../i
 import { Module } from '../module';
 import { inject, injectable, optional } from 'inversify';
 import { Controller, ControllerEventHandler, ControllerRPCHandler } from '../controller';
-import { EVENT_SERVICE } from '../../constants';
+import { EVENT_SERVICE, LOGGER_SERVICE } from '../../constants';
 import { CoreMetadataKey } from '../enums';
-import { InternalLoggerService } from '../services';
 import { ErrorMessage } from '../../enums';
-import type { Pipe } from '../../interfaces';
+import type { LoggerService, Pipe } from '../../interfaces';
 import type { Tree } from '../utils';
 
 @injectable()
@@ -21,7 +20,7 @@ export class AppRuntime {
     @inject(GLOBAL_INTERCEPTORS) private readonly globalInterceptors: (Newable<Interceptor> | Interceptor)[];
     @inject(GLOBAL_PIPES) private readonly globalPipes: (Newable<Pipe> | Pipe)[];
     @inject(GLOBAL_ERROR_FILTERS) private readonly globalErrorFilters: (Newable<ErrorFilter> | ErrorFilter)[];
-    @inject(InternalLoggerService) private readonly loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(ENABLE_SHUTDOWN_HOOKS) @optional() private readonly enableShutdownHooks: boolean;
 
     public async boot(resolvedTree: Tree<Module>) {
@@ -38,10 +37,7 @@ export class AppRuntime {
             );
 
             // Log module loaded.
-            this.loggerService.log(
-                ['~lm~Boot', `~lb~${module.metadata.classRef.name}`],
-                `~lw~Module loaded ~lk~(${Date.now() - startTime}ms)`,
-            );
+            this.loggerService.log(`~lw~Module ~lb~${module.metadata.classRef.name} ~lw~loaded ~lk~(${Date.now() - startTime}ms)`);
         });
         this.runLifecycleMethods(resolvedTree, 'onModuleInit');
         this.runLifecycleMethods(resolvedTree, 'onAppBootstrap');
@@ -49,7 +45,13 @@ export class AppRuntime {
         // Register event and rpc listeners.
         resolvedTree.traverse((node) => {
             const module = node.value;
-            module.controllers.forEach((controller) => this.registerListeners(controller));
+            module.controllers.forEach((controller) => {
+                const time = Date.now();
+                this.registerListeners(controller);
+                this.loggerService.log(
+                    `~lw~Controller ~lc~${controller.metadata.classRef.name} ~lw~listeners registered ~lk~(${Date.now() - time}ms)`,
+                );
+            });
         });
     }
 
@@ -107,7 +109,7 @@ export class AppRuntime {
                 ...rpc.errorFilters,
             ]);
 
-            const handler = await this.rpcHandler.registerRPC(guards, interceptors, pipes, mappedErrorFilters, controller.metadata, rpc);
+            const handler = await this.rpcHandler.registerRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc);
             controller.rpcHandlers.push(handler);
         });
     }
