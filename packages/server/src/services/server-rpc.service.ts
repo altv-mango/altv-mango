@@ -21,7 +21,7 @@ import * as altServer from '@altv/server';
 import * as altShared from '@altv/shared';
 
 @injectable()
-export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerRPC> implements RPCService {
+export class ServerRPCService extends BaseRPCService<altServer.RPC.CustomServerRPC> implements RPCService {
     @inject(EVENT_SERVICE) private readonly $eventService: ServerEventService;
     public readonly $clientHandlers = new Map<string, ScriptRPCHandler>();
     public readonly $webViewHandlers = new Map<string, ScriptRPCHandler>();
