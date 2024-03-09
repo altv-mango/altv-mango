@@ -5,6 +5,10 @@ export function OnWebView<E extends keyof altShared.Events.CustomClientToWebView
 export function OnWebView<E extends string>(
     id: string | number,
     eventName?: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+): MethodDecorator;
+export function OnWebView<E extends string>(
+    id: string | number,
+    eventName?: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
 ) {
     return $OnWebView(id, eventName);
 }
