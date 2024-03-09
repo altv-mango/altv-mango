@@ -1,7 +1,6 @@
 // Decorators
 export * from './decorators';
 export { Body, Param, Req, Request, Res, Response } from '@altv-mango/core/decorators';
-export { On, Once, OnRequest, OnWebView, OnWebViewRequest, OnceWebView } from '@altv-mango/core/decorators';
 export { UsePipes } from '@altv-mango/core/decorators';
 export { Catch, Controller, Global, Inject, Injectable, Module, Optional, SetMetadata } from '@altv-mango/core/decorators';
 // Interfaces

@@ -23,9 +23,9 @@
         "experimentalDecorators": true,
         "strictPropertyInitialization": false,
         "verbatimModuleSyntax": true,
-        "typeRoots": ["./node_modules/@types", "./node_modules/@altv"],
+        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@altv-mango", "./types"],
         "stripInternal": true
     },
-    "include": ["./src/**/*.ts"],
-    "exclude": ["node_modules", "dist"]
+    "include": ["./src/**/*.ts", "./types/**/*.d.ts"],
+    "exclude": ["./node_modules", "./dist"]
 }

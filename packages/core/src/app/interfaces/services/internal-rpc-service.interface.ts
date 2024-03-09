@@ -1,28 +1,29 @@
 import type { RPCResult, RPCCallOptions, ScriptRPCHandler } from '../../../interfaces';
 import * as altShared from '@altv/shared';
 import * as altServer from '@altv/server';
+import * as altClient from '@altv/client';
 
 export interface InternalRPCService {
     $serverHandlers: Map<string, altShared.Events.ScriptEventHandler>;
     $webViewHandlers: Map<string, altShared.Events.ScriptEventHandler>;
     $clientHandlers: Map<string, altShared.Events.ScriptEventHandler>;
     // Client
-    call<E extends keyof altShared.RPC.CustomClientRPC>(
+    call<E extends keyof altClient.RPC.CustomClientRPC>(
         rpcName: E,
-        body?: Parameters<altShared.RPC.CustomClientRPC[E]>[0],
+        body?: Parameters<altClient.RPC.CustomClientRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altShared.RPC.CustomClientRPC[E]>>>;
+    ): Promise<RPCResult<ReturnType<altClient.RPC.CustomClientRPC[E]>>>;
     call<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomClientRPC>,
+        rpcName: Exclude<E, keyof altClient.RPC.CustomClientRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult<unknown>>;
-    onRequest<E extends keyof altShared.RPC.CustomClientRPC>(
+    onRequest<E extends keyof altClient.RPC.CustomClientRPC>(
         rpcName: E,
-        handler: (body: Parameters<altShared.RPC.CustomClientRPC[E]>[0]) => ReturnType<altShared.RPC.CustomClientRPC[E]>,
+        handler: (body: Parameters<altClient.RPC.CustomClientRPC[E]>[0]) => ReturnType<altClient.RPC.CustomClientRPC[E]>,
     ): ScriptRPCHandler;
     onRequest<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomClientRPC>,
+        rpcName: Exclude<E, keyof altClient.RPC.CustomClientRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     callServer<E extends keyof altShared.RPC.CustomClientToServerRPC>(
@@ -66,18 +67,18 @@ export interface InternalRPCService {
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     // Server
-    call<E extends keyof altShared.RPC.CustomServerRPC>(
+    call<E extends keyof altServer.RPC.CustomServerRPC>(
         rpcName: E,
-        body?: Parameters<altShared.RPC.CustomServerRPC[E]>[0],
+        body?: Parameters<altServer.RPC.CustomServerRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altShared.RPC.CustomServerRPC[E]>>>;
+    ): Promise<RPCResult<ReturnType<altServer.RPC.CustomServerRPC[E]>>>;
     call<E extends string>(rpcName: E, body?: unknown, options?: RPCCallOptions): Promise<RPCResult<unknown>>;
-    onRequest<E extends keyof altShared.RPC.CustomServerRPC>(
+    onRequest<E extends keyof altServer.RPC.CustomServerRPC>(
         rpcName: E,
-        handler: (body: Parameters<altShared.RPC.CustomServerRPC[E]>[0]) => ReturnType<altShared.RPC.CustomServerRPC[E]>,
+        handler: (body: Parameters<altServer.RPC.CustomServerRPC[E]>[0]) => ReturnType<altServer.RPC.CustomServerRPC[E]>,
     ): ScriptRPCHandler;
     onRequest<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomServerRPC>,
+        rpcName: Exclude<E, keyof altServer.RPC.CustomServerRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     callPlayer<E extends keyof altShared.RPC.CustomServerToClientRPC, U extends altServer.Player>(

@@ -21,7 +21,7 @@ import * as altServer from '@altv/server';
 import * as altShared from '@altv/shared';
 
 @injectable()
-export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerRPC> implements RPCService {
+export class ServerRPCService extends BaseRPCService<altServer.RPC.CustomServerRPC> implements RPCService {
     @inject(EVENT_SERVICE) private readonly $eventService: ServerEventService;
     public readonly $clientHandlers = new Map<string, ScriptRPCHandler>();
     public readonly $webViewHandlers = new Map<string, ScriptRPCHandler>();
@@ -34,13 +34,13 @@ export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerR
     ): Promise<RPCResult<ReturnType<altShared.RPC.CustomServerToClientRPC[E]>>>;
     public async callPlayer<E extends string, U extends altServer.Player>(
         player: U,
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomServerToClientRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult>;
     public async callPlayer<E extends string, U extends altServer.Player>(
         player: U,
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomServerToClientRPC>,
         body?: unknown,
         options: RPCCallOptions = { timeout: this.$TIMEOUT },
     ): Promise<RPCResult> {
@@ -55,11 +55,11 @@ export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerR
         ) => ReturnType<altShared.RPC.CustomClientToServerRPC[E]>,
     ): ScriptRPCHandler;
     public onPlayerRequest<E extends string, U extends altServer.Player>(
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomClientToServerRPC>,
         handler: (sender: U, body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     public onPlayerRequest<E extends string, U extends altServer.Player>(
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomClientToServerRPC>,
         handler: (sender: U, body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler {
         if (this.$clientHandlers.has(rpcName)) {
@@ -93,14 +93,14 @@ export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerR
     public async callWebView<E extends string, U extends altServer.Player>(
         player: U,
         id: string | number,
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomServerToWebViewRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult>;
     public async callWebView<E extends string, U extends altServer.Player>(
         player: U,
         id: string | number,
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomServerToWebViewRPC>,
         body?: unknown,
         options: RPCCallOptions = { timeout: this.$TIMEOUT },
     ): Promise<RPCResult> {
@@ -114,7 +114,7 @@ export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerR
     ): ScriptRPCHandler;
     public onWebViewRequest<E extends keyof altShared.RPC.CustomWebViewToServerRPC, U extends altServer.Player>(
         id: string | number,
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewToServerRPC>,
         handler: (
             player: U,
             body: Parameters<altShared.RPC.CustomWebViewToServerRPC[E]>[0],
@@ -122,7 +122,7 @@ export class ServerRPCService extends BaseRPCService<altShared.RPC.CustomServerR
     ): ScriptRPCHandler;
     public onWebViewRequest<E extends keyof altShared.RPC.CustomWebViewToServerRPC, U extends altServer.Player>(
         id: string | number,
-        rpcName: E,
+        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewToServerRPC>,
         handler: (
             player: U,
             body: Parameters<altShared.RPC.CustomWebViewToServerRPC[E]>[0],

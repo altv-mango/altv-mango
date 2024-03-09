@@ -3,11 +3,12 @@ import { EventDestination } from '@altv-mango/core/app/enums';
 import type { RPCPayload } from '@altv-mango/core/app/interfaces';
 import type { RPCService } from '../interfaces';
 import type { WebViewEventService } from './webview-event.service';
-import * as altShared from '@altv/shared';
 import type { RPCCallOptions, RPCResult, ScriptRPCHandler } from '@altv-mango/core/interfaces';
 import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_TIMEOUT } from '@altv-mango/core/app/constants';
 import { ErrorMessage, RPCResultStatus } from '@altv-mango/core/enums';
 import type { WebViewLoggerService } from './webview-logger.service';
+import * as altShared from '@altv/shared';
+import * as altWebView from '@altv/webview';
 
 export class WebViewRPCService implements RPCService {
     private readonly $TIMEOUT = 2000;
@@ -17,18 +18,18 @@ export class WebViewRPCService implements RPCService {
 
     public constructor(private readonly $eventService: WebViewEventService, private readonly $loggerService: WebViewLoggerService) {}
 
-    public async call<E extends keyof altShared.RPC.CustomWebViewRPC>(
+    public async call<E extends keyof altWebView.RPC.CustomWebViewRPC>(
         rpcName: E,
-        body?: Parameters<altShared.RPC.CustomWebViewRPC[E]>[0],
+        body?: Parameters<altWebView.RPC.CustomWebViewRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altShared.RPC.CustomWebViewRPC[E]>>>;
+    ): Promise<RPCResult<ReturnType<altWebView.RPC.CustomWebViewRPC[E]>>>;
     public async call<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewRPC>,
+        rpcName: Exclude<E, keyof altWebView.RPC.CustomWebViewRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult>;
     public async call<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewRPC>,
+        rpcName: Exclude<E, keyof altWebView.RPC.CustomWebViewRPC>,
         body?: unknown,
         options: RPCCallOptions = { timeout: this.$TIMEOUT },
     ): Promise<RPCResult> {
@@ -49,16 +50,16 @@ export class WebViewRPCService implements RPCService {
         });
     }
 
-    public onRequest<E extends keyof altShared.RPC.CustomWebViewRPC>(
+    public onRequest<E extends keyof altWebView.RPC.CustomWebViewRPC>(
         rpcName: E,
-        handler: (body: Parameters<altShared.RPC.CustomWebViewRPC[E]>[0]) => ReturnType<altShared.RPC.CustomWebViewRPC[E]>,
+        handler: (body: Parameters<altWebView.RPC.CustomWebViewRPC[E]>[0]) => ReturnType<altWebView.RPC.CustomWebViewRPC[E]>,
     ): ScriptRPCHandler;
     public onRequest<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewRPC>,
+        rpcName: Exclude<E, keyof altWebView.RPC.CustomWebViewRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     public onRequest<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewRPC>,
+        rpcName: Exclude<E, keyof altWebView.RPC.CustomWebViewRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler {
         if (this.$localHandlers.has(rpcName)) {

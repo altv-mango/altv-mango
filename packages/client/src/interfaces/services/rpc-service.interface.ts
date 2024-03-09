@@ -1,23 +1,24 @@
 import type { RPCCallOptions, RPCResult, ScriptRPCHandler } from '@altv-mango/core';
 import * as altShared from '@altv/shared';
+import * as altClient from '@altv/client';
 
 export interface RPCService {
-    call<E extends keyof altShared.RPC.CustomClientRPC>(
+    call<E extends keyof altClient.RPC.CustomClientRPC>(
         rpcName: E,
-        body?: Parameters<altShared.RPC.CustomClientRPC[E]>[0],
+        body?: Parameters<altClient.RPC.CustomClientRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altShared.RPC.CustomClientRPC[E]>>>;
+    ): Promise<RPCResult<ReturnType<altClient.RPC.CustomClientRPC[E]>>>;
     call<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomClientRPC>,
+        rpcName: Exclude<E, keyof altClient.RPC.CustomClientRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult<unknown>>;
-    onRequest<E extends keyof altShared.RPC.CustomClientRPC>(
+    onRequest<E extends keyof altClient.RPC.CustomClientRPC>(
         rpcName: E,
-        handler: (body: Parameters<altShared.RPC.CustomClientRPC[E]>[0]) => ReturnType<altShared.RPC.CustomClientRPC[E]>,
+        handler: (body: Parameters<altClient.RPC.CustomClientRPC[E]>[0]) => ReturnType<altClient.RPC.CustomClientRPC[E]>,
     ): ScriptRPCHandler;
     onRequest<E extends string>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomClientRPC>,
+        rpcName: Exclude<E, keyof altClient.RPC.CustomClientRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     callServer<E extends keyof altShared.RPC.CustomClientToServerRPC>(

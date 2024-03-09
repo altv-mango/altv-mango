@@ -164,9 +164,9 @@ importers:
       '@altv/shared':
         specifier: ^0.0.14
         version: 0.0.14
-      '@altv/types-webview':
-        specifier: ^16.2.1
-        version: 16.2.1
+      '@altv/webview':
+        specifier: ^0.0.6
+        version: 0.0.6(@altv/shared@0.0.14)
     devDependencies:
       tsup:
         specifier: ^8.0.2
@@ -486,8 +486,12 @@ packages:
     resolution: {integrity: sha512-QIhXNYTP3yKX1BZ9uhmonmQxl6Zmvh5W5EKjou9+VCZu+OY12Fkz1usQbwkN2LurVDHaID/60DAXJuccqv2/sA==}
     dev: false
 
-  /@altv/types-webview@16.2.1:
-    resolution: {integrity: sha512-JEk1+XR1ya+mYkKoF3/tLYfaHUKkL6A8gtckuuGuf4IPrKO80UVGYI+2LxvqMBKcF6aDGI3MOoD9DYV0DznWSQ==}
+  /@altv/webview@0.0.6(@altv/shared@0.0.14):
+    resolution: {integrity: sha512-++fPDOCmssrcW7oMiKFAjX/Of5oyyihS6INvPAXSEZytj6x37hoxUgn+wz+IkN6wu462dAlwGwiR0lRL9vWBmg==}
+    peerDependencies:
+      '@altv/shared': ~0.0.1
+    dependencies:
+      '@altv/shared': 0.0.14
     dev: false
 
   /@ampproject/remapping@2.2.1:

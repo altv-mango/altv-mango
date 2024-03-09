@@ -126,3 +126,5 @@ export async function createAppBuilder() {
 }
 
 export * from './exports';
+
+import './extension.d.ts';
