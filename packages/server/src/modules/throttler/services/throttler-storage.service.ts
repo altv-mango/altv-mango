@@ -4,7 +4,7 @@ import * as altServer from '@altv/server';
 
 @Injectable()
 export class ThrottlerStorageService implements OnAppShutdown {
-    public readonly storage: Map<altServer.Player, Map<string, ThrottlerStorageOptions>> = new Map();
+    public readonly storage: WeakMap<altServer.Player, Map<string, ThrottlerStorageOptions>> = new WeakMap();
     private timeoutIds: NodeJS.Timeout[] = [];
 
     private getExpirationTime(player: altServer.Player, key: string) {
