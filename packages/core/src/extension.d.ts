@@ -4,15 +4,12 @@ import type { RPCCallOptions, RPCResult } from './interfaces';
 declare module '@altv/shared' {
     export namespace RPC {
         // Client
-        export interface CustomClientRPC {}
         export interface CustomClientToServerRPC {}
         export interface CustomClientToWebviewRPC {}
         // Server
-        export interface CustomServerRPC {}
         export interface CustomServerToClientRPC {}
         export interface CustomServerToWebViewRPC {}
         // WebView
-        export interface CustomWebViewRPC {}
         export interface CustomWebViewToClientRPC {}
         export interface CustomWebViewToServerRPC {}
     }

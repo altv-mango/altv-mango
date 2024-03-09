@@ -3,10 +3,10 @@
 import { InternalLoggerService, WebViewEventService, WebViewRPCService } from './services';
 import { isNil } from '@altv-mango/core/utils';
 import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app/constants';
-import type { EventService, RPCService } from './interfaces';
 import { RPCResultStatus } from '@altv-mango/core/enums';
 import type { RPCResult } from '@altv-mango/core/interfaces';
 import { MangoError } from '@altv-mango/core/errors';
+import type { EventService, RPCService } from './interfaces';
 
 export function initMango() {
     if (!isNil(window.mango)) {
@@ -84,10 +84,12 @@ export function initMango() {
 }
 
 declare global {
-    interface Window {
+    export interface Window {
         mango: {
             event: EventService;
             rpc: RPCService;
         };
     }
 }
+
+import './extension.d.ts';

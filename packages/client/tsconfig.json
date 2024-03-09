@@ -19,13 +19,13 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "checkJs": true,
-        "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
         "verbatimModuleSyntax": true,
-        "typeRoots": ["./node_modules/@types", "./node_modules/@abraham", "./node_modules/@altv-mango"],
+        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@abraham", "./node_modules/@altv-mango"],
         "stripInternal": true
     },
     "include": ["./src/**/*.ts"],
-    "exclude": ["node_modules", "dist"]
+    "exclude": ["./node_modules", "./dist"]
 }

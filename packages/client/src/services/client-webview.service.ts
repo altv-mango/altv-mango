@@ -1,14 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { WEBVIEW_LIST_SERVICE } from '../constants';
 import type { WebViewListService } from './webview-list.service';
-import { InternalLoggerService } from '@altv-mango/core/app';
-import { ErrorMessage, isNumber, isString } from '@altv-mango/core';
+import { ErrorMessage, isNumber, isString, LOGGER_SERVICE, type LoggerService } from '@altv-mango/core';
 import type { WebViewService } from '../interfaces';
 import * as altClient from '@altv/client';
 
 @injectable()
 export class ClientWebViewService implements WebViewService {
-    @inject(InternalLoggerService) private readonly $loggerService: InternalLoggerService;
+    @inject(LOGGER_SERVICE) private readonly $loggerService: LoggerService;
     @inject(WEBVIEW_LIST_SERVICE) private readonly $webViewListService: WebViewListService;
     private readonly $createListeners: ((id: string | number, webView: altClient.WebView) => void)[] = [];
 

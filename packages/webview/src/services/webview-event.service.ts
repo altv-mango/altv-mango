@@ -199,7 +199,7 @@ export class WebViewEventService implements EventService {
     ): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>, body?: unknown): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>, body?: unknown): void {
-        window.alt?.emit('WEBVIEW::EMIT_SERVER', {
+        window.alt?.emit(<string>'WEBVIEW::EMIT_SERVER', {
             eventName,
             payload: body,
         });

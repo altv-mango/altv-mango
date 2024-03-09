@@ -1,12 +1,12 @@
 import { inject, injectable } from 'inversify';
-import type { MangoPlugin, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
+import { type MangoPlugin, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
 import { EVENT_SERVICE, MangoError, RPC_SERVICE, RPCResultStatus, type RPCResult } from '@altv-mango/core';
-import type { ClientEventService, ClientRPCService } from '../services';
+import type { ServerEventService, ServerRPCService } from '../services';
 
 @injectable()
 export class RPCPlugin implements MangoPlugin {
-    @inject(EVENT_SERVICE) private readonly eventService: ClientEventService;
-    @inject(RPC_SERVICE) private readonly rpcService: ClientRPCService;
+    @inject(EVENT_SERVICE) private readonly eventService: ServerEventService;
+    @inject(RPC_SERVICE) private readonly rpcService: ServerRPCService;
 
     public beforeCreate() {
         this.eventService.onPlayer('RPC::CALL_SERVER', async (player, body) => {
