@@ -12,16 +12,16 @@ actions:
     # to: https://github.com/5exyGuy/altv-mango
     # external: true
 features:
-    - title: TypeScript
-      description: Mango Framework is built with TypeScript and provides a powerful type system for your application.
-    - title: Decorators
-      description: Mango Framework has a wide range of decorators that allow you to easily create and manage your resource flow.
-    - title: Modularity
-      description: Mango Framework is built with modularity in mind, allowing you to organize your application into small, reusable pieces.
-    - title: Dependency Injection
-      description: Mango Framework uses InversifyJS under the hood to provide a powerful dependency injection for your application.
-    - title: Controllers
-      description: Mango Framework uses controllers to group and listen to events/rpcs together under a single class.
-    - title: Pipeline
-      description: Mango Framework uses Guards, Interceptors, and Error Filters to create a powerful pipeline that allows you to easily manage every incoming event/rpc.
+    - title: TypeScript Power
+      description: Mango Framework amplifies TypeScript's robust type system, drastically reducing runtime errors and enhancing code reliability, making maintenance a breeze.
+    - title: Decorator-Driven Simplicity
+      description: Mango provided decorators abstract complexity, enabling you to manage resources with unparalleled ease, resulting in cleaner, more maintainable code.
+    - title: Embrace Modularity
+      description: Designed for modularity, Mango Framework allows for the creation of reusable components, streamlining project scalability and maintenance.
+    - title: InversifyJS-Enhanced Dependency Injection
+      description: With InversifyJS at its core, Mango provides a flexible dependency injection system, promoting testable and loosely coupled code architecture.
+    - title: Efficient Controllers
+      description: By grouping event/rpc listeners, our controller design simplifies event management, enhancing code organization and project maintainability.
+    - title: Robust Pipeline Mechanisms
+      description: Through Guards, Interceptors, and Error Filters, we offer a fortified pipeline, ensuring comprehensive security and error management for all incoming events/rpcs.
 ---
