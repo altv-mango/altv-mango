@@ -9,7 +9,7 @@ export class DatabaseService implements OnModuleInit {
     public database: PostgresJsDatabase;
 
     public async onModuleInit() {
-        const sql = postgres(process.env['DATABASE_URL']!);
+        const sql = postgres(process.env['DATABASE_URL']!, { debug: true });
         this.database = drizzle(sql);
     }
 
