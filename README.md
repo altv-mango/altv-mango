@@ -4,12 +4,23 @@ A simple, lightweight, and powerful TypeScript framework for building alt:V serv
 
 ## Features
 
--   Mango Framework is built with TypeScript and provides a powerful type system for your application.
--   Mango Framework has a wide range of decorators that allow you to easily create and manage your resource flow.
--   Mango Framework is built with modularity in mind, allowing you to organize your application into small, reusable pieces.
--   Mango Framework uses InversifyJS under the hood to provide a powerful dependency injection for your application.
--   Mango Framework uses controllers to group and listen to events/rpcs together under a single class.
--   Mango Framework uses Guards, Interceptors, and Error Filters to create a powerful pipeline that allows you to easily manage every incoming event/rpc.
+### • TypeScript Power
+Mango Framework amplifies TypeScript's robust type system, drastically reducing runtime errors and enhancing code reliability, making maintenance a breeze.
+
+### • Decorator-Driven Simplicity
+Mango provided decorators abstract complexity, enabling you to manage resources with unparalleled ease, resulting in cleaner, more maintainable code.
+
+### • Embrace Modularity
+Designed for modularity, Mango Framework allows for the creation of reusable components, streamlining project scalability and maintenance.
+
+### • InversifyJS-Enhanced Dependency Injection
+With InversifyJS at its core, Mango provides a flexible dependency injection system, promoting testable and loosely coupled code architecture.
+
+### • Efficient Controllers
+By grouping event/rpc listeners, our controller design simplifies event management, enhancing code organization and project maintainability.
+
+### • Robust Pipeline Mechanisms
+Through Guards, Interceptors, and Error Filters, we offer a fortified pipeline, ensuring comprehensive security and error management for all incoming events/rpcs.
 
 ## Documentation
 
