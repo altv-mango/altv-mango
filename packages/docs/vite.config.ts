@@ -172,7 +172,7 @@ const config = defineConfig({
                         },
                     ],
                 },
-                github: 'https://github.com/5exyGuy/altv-mango',
+                github: 'https://github.com/altv-mango/altv-mango',
                 logo: '/mango.png',
                 highlighter: {
                     languages: ['svelte', 'sh', 'js', 'html', 'ts', 'md', 'css', 'scss', 'json', 'tsx'],
