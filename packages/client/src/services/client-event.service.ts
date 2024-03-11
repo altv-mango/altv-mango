@@ -30,7 +30,7 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
     public onServer<E extends string>(
         eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         const wrapper = (...args: unknown[]) => callback(args[0]);
         const eventHandler = altClient.Events.onServer(eventName, wrapper);
         this.$remoteHandlers.add(eventHandler);
@@ -50,7 +50,7 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
     public onceServer<E extends string>(
         eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         const wrapper = (...args: unknown[]) => callback(args[0]);
         const eventHandler = this.$altEvents.onceServer(eventName, wrapper);
         this.$remoteHandlers.add(eventHandler);
@@ -62,7 +62,7 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         body: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>[0],
     ): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, body?: unknown): void;
-    public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, body?: unknown): void {
+    public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, body?: unknown) {
         this.$altEvents.emitServer(eventName, body);
     }
 
@@ -82,7 +82,7 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         const webView = this.$webViewListService.tryGet(id);
         const wrapper = (...args: unknown[]) => callback(args[0]);
 
@@ -125,7 +125,7 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         const webView = this.$webViewListService.tryGet(id);
         const wrapper = (...args: any[]) => callback(args[0]);
 
@@ -166,7 +166,7 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
         body?: unknown,
-    ): void {
+    ) {
         const webView = this.$webViewListService.tryGet(id);
         webView.emit(eventName, body);
     }

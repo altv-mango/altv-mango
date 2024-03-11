@@ -10,9 +10,6 @@ const config = defineConfig({
                     dark: '#1e1e1e',
                     light: '#fff',
                     gradient: { end: '#4cc66f', start: '#4cc66f' },
-                    // ffd70c
-                    // 4cc66f
-                    // ffbe00
                 },
                 navbar: [
                     {
@@ -172,7 +169,7 @@ const config = defineConfig({
                         },
                     ],
                 },
-                github: 'https://github.com/5exyGuy/altv-mango',
+                github: 'https://github.com/altv-mango/altv-mango',
                 logo: '/mango.png',
                 highlighter: {
                     languages: ['svelte', 'sh', 'js', 'html', 'ts', 'md', 'css', 'scss', 'json', 'tsx'],
@@ -182,11 +179,13 @@ const config = defineConfig({
                     appId: 'VZAZMXLGRB',
                     indexName: 'altv-mango',
                 },
+                editLink: 'https://github.com/altv-mango/altv-mango/tree/main/packages/docs/src/routes:route',
             }),
             siteConfig: {
                 title: 'Mango Framework',
                 description: 'Create your own alt:V server with ease',
             },
+            addInspect: true,
         }),
     ],
 });

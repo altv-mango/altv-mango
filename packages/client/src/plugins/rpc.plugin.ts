@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { type MangoPlugin, type RPCPayload, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
-import { EVENT_SERVICE, RPC_SERVICE, RPCResultStatus, type RPCResult, MangoError, LOGGER_SERVICE } from '@altv-mango/core';
+import { EVENT_SERVICE, RPC_SERVICE, RPCResultStatus, type RPCResult, MangoError, LOGGER_SERVICE, isNil } from '@altv-mango/core';
 import { WEBVIEW_SERVICE } from '../constants';
 import type { ClientEventService, ClientLoggerService, ClientRPCService, ClientWebViewService } from '../services';
 
@@ -16,7 +16,7 @@ export class RPCPlugin implements MangoPlugin {
 
         this.eventService.onServer('RPC::CALL_CLIENT', async (body) => {
             const rpcHandler = this.rpcService.$serverHandlers.get(body.rpcName);
-            if (!rpcHandler) {
+            if (isNil(rpcHandler)) {
                 this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
                 return;
             }
@@ -48,7 +48,7 @@ export class RPCPlugin implements MangoPlugin {
                 if (!webView.valid) return;
 
                 const rpcHandler = this.rpcService.$webViewHandlers.get(`${webViewId}::${body.rpcName}`);
-                if (!rpcHandler) {
+                if (isNil(rpcHandler)) {
                     webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
                     return;
                 }

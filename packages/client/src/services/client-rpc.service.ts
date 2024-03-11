@@ -33,7 +33,7 @@ export class ClientRPCService extends BaseRPCService<altClient.RPC.CustomClientR
         rpcName: Exclude<E, keyof altShared.RPC.CustomClientToServerRPC>,
         body?: unknown,
         options: RPCCallOptions = { timeout: this.$TIMEOUT },
-    ): Promise<RPCResult> {
+    ) {
         return this.$handleCall(rpcName, EventDestination.Server, options, body);
     }
 
@@ -48,7 +48,7 @@ export class ClientRPCService extends BaseRPCService<altClient.RPC.CustomClientR
     public onServerRequest<E extends string>(
         rpcName: Exclude<E, keyof altShared.RPC.CustomServerToClientRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler {
+    ) {
         if (this.$serverHandlers.has(rpcName)) {
             this.$loggerService.error('An error occurred while trying to register RPC.');
             throw new Error(ErrorMessage.RPCHandlerAlreadyExists);
@@ -84,7 +84,7 @@ export class ClientRPCService extends BaseRPCService<altClient.RPC.CustomClientR
         rpcName: Exclude<E, keyof altShared.RPC.CustomClientToWebviewRPC>,
         body?: unknown,
         options: RPCCallOptions = { timeout: this.$TIMEOUT },
-    ): Promise<RPCResult> {
+    ) {
         return this.$handleCall(rpcName, EventDestination.WebView, options, body, id);
     }
 
@@ -102,7 +102,7 @@ export class ClientRPCService extends BaseRPCService<altClient.RPC.CustomClientR
         id: string | number,
         rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewToClientRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler {
+    ) {
         const key = `${id}::${rpcName}`;
         if (this.$webViewHandlers.has(key)) {
             this.$loggerService.error('An error occurred while trying to register RPC.');

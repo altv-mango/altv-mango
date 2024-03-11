@@ -28,7 +28,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
     public onPlayer<E extends string, U extends altServer.Player>(
         eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         const wrapper = (player: U, ...args: unknown[]) => callback(player, args[0]);
         const eventHandler = altServer.Events.onPlayer(eventName, wrapper);
         this.$remoteHandlers.add(eventHandler);
@@ -49,7 +49,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
     public oncePlayer<E extends string, U extends altServer.Player>(
         eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         const wrapper = (player: U, ...args: unknown[]) => callback(player, args[0]!);
         const eventHandler = altServer.Events.oncePlayer(eventName, wrapper);
         this.$remoteHandlers.add(eventHandler);
@@ -70,7 +70,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
     public onRemote<E extends string, U extends altServer.Player>(
         eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         return this.onPlayer(eventName, callback);
     }
 
@@ -88,7 +88,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
     public onceRemote<E extends string, U extends altServer.Player>(
         eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         return this.oncePlayer(eventName, callback);
     }
 
@@ -106,7 +106,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         players: U[],
         eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
         body?: unknown,
-    ): void {
+    ) {
         for (const player of players) {
             player.emitRaw(eventName, body);
         }
@@ -126,7 +126,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         players: U[],
         eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
         body?: unknown,
-    ): void {
+    ) {
         for (const player of players) {
             player.emitUnreliableRaw(eventName, body);
         }
@@ -137,7 +137,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         body?: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>[0],
     ): void;
     public emitAllPlayers<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, body?: unknown): void;
-    public emitAllPlayers<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, body?: unknown): void {
+    public emitAllPlayers<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>, body?: unknown) {
         altServer.Events.emitAllPlayersRaw(eventName, body);
     }
 
@@ -152,7 +152,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
     public emitAllPlayersUnreliable<E extends string>(
         eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
         body?: unknown,
-    ): void {
+    ) {
         altServer.Events.emitAllPlayersUnreliableRaw(eventName, body);
     }
 
@@ -173,7 +173,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         return this.onPlayer(<string>`SERVER::ON_WEBVIEW_${eventName}_${id}`, <any>callback);
     }
 
@@ -194,7 +194,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomWebViewToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    ) {
         return this.oncePlayer(<string>`SERVER::ON_WEBVIEW_${eventName}_${id}`, <any>callback);
     }
 
@@ -215,7 +215,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
         body?: unknown,
-    ): void {
+    ) {
         this.emitPlayers(players, 'SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
@@ -237,7 +237,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
         body?: unknown,
-    ): void {
+    ) {
         this.emitAllPlayers('SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
@@ -259,7 +259,7 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         id: string | number,
         eventName: Exclude<E, keyof altShared.Events.CustomServerToWebViewEvent>,
         body?: unknown,
-    ): void {
+    ) {
         this.emitAllPlayersUnreliable('SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
@@ -863,6 +863,22 @@ export class ServerEventService extends BaseEventService<altServer.Events.Custom
         callback: altServer.Events.GenericPlayerEventCallback<altServer.Events.PlayerScriptEventParameters<T>, U>,
     ) {
         return altServer.Events.onceRemoteScriptEvent(callback);
+    }
+
+    public onAnyResourceStart(callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStartEventParameters>) {
+        return altServer.Events.onAnyResourceStart(callback);
+    }
+
+    public onceAnyResourceStart(callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStartEventParameters>) {
+        return altServer.Events.onceAnyResourceStart(callback);
+    }
+
+    public onAnyResourceStop(callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStopEventParameters>) {
+        return altServer.Events.onAnyResourceStop(callback);
+    }
+
+    public onceAnyResourceStop(callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStopEventParameters>) {
+        return altServer.Events.onceAnyResourceStop(callback);
     }
 
     public onResourceStart(callback: altServer.Events.GenericEventCallback) {

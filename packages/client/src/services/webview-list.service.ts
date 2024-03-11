@@ -1,6 +1,6 @@
 import * as altClient from '@altv/client';
 import { inject, injectable } from 'inversify';
-import { ErrorMessage, LOGGER_SERVICE, type LoggerService } from '@altv-mango/core';
+import { ErrorMessage, LOGGER_SERVICE, isNil, type LoggerService } from '@altv-mango/core';
 
 @injectable()
 export class WebViewListService {
@@ -18,7 +18,7 @@ export class WebViewListService {
 
     public tryGet(id: string | number) {
         const webView = this.$webViews.get(id);
-        if (!webView || !webView.valid) {
+        if (isNil(webView) || !webView.valid) {
             this.$loggerService.error('An error occurred while trying to get a WebView.');
             throw new Error(ErrorMessage.WebViewNotFound);
         }

@@ -8,9 +8,9 @@ actions:
       to: /guide/introduction/getting-started
       type: primary
     # - label: View on GitHub
-    # type: flat
-    # to: https://github.com/5exyGuy/altv-mango
-    # external: true
+    #   type: flat
+    #   to: https://github.com/altv-mango/altv-mango
+    #   external: true
 features:
     - title: TypeScript Power
       description: Mango Framework amplifies TypeScript's robust type system, drastically reducing runtime errors and enhancing code reliability, making maintenance a breeze.
