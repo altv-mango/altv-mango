@@ -60,6 +60,10 @@ export const INTERNAL_EVENTS = {
     GIVE_PED_SCRIPTED_TASK: 'GivePedScriptedTask',
     LOCAL_SCRIPT_EVENT: 'LocalScriptEvent',
     REMOTE_SCRIPT_EVENT: 'RemoteScriptEvent',
+
+    ANY_RESOURCE_START: 'AnyResourceStart',
+    ANY_RESOURCE_STOP: 'AnyResourceStop',
+
     RESOURCE_START: 'ResourceStart',
     RESOURCE_STOP: 'ResourceStop',
     RESOURCE_ERROR: 'ResourceError',

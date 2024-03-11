@@ -428,6 +428,23 @@ export function OnRemoteScriptEvent() {
 export function OnceRemoteScriptEvent() {
     return OnceInternal(INTERNAL_EVENTS.REMOTE_SCRIPT_EVENT);
 }
+
+export function OnAnyResourceStart() {
+    return OnInternal(INTERNAL_EVENTS.ANY_RESOURCE_START);
+}
+
+export function OnceAnyResourceStart() {
+    return OnceInternal(INTERNAL_EVENTS.ANY_RESOURCE_START);
+}
+
+export function OnAnyResourceStop() {
+    return OnInternal(INTERNAL_EVENTS.ANY_RESOURCE_STOP);
+}
+
+export function OnceAnyResourceStop() {
+    return OnceInternal(INTERNAL_EVENTS.ANY_RESOURCE_STOP);
+}
+
 export function OnResourceStart() {
     return OnInternal(INTERNAL_EVENTS.RESOURCE_START);
 }

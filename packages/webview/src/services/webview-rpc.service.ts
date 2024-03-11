@@ -1,4 +1,4 @@
-import { generateRandomId } from '@altv-mango/core/utils';
+import { generateRandomId, isNil } from '@altv-mango/core/utils';
 import { EventDestination } from '@altv-mango/core/app/enums';
 import type { RPCPayload } from '@altv-mango/core/app/interfaces';
 import type { RPCService } from '../interfaces';
@@ -35,7 +35,7 @@ export class WebViewRPCService implements RPCService {
     ): Promise<RPCResult> {
         return new Promise(async (resolve) => {
             const rpcHandler = this.$localHandlers.get(rpcName);
-            if (!rpcHandler) {
+            if (isNil(rpcHandler)) {
                 resolve(RPC_RESULT_HANDLER_NOT_FOUND);
                 return;
             }
@@ -186,9 +186,9 @@ export class WebViewRPCService implements RPCService {
             const callId = generateRandomId();
             let timeoutId: number;
 
-            const onceHandle = (data: unknown) => {
+            const onceHandle = (body: unknown) => {
                 clearTimeout(timeoutId);
-                resolve(<RPCResult<TResult>>data);
+                resolve(<RPCResult<TResult>>body);
             };
             const scriptEventHandler =
                 destination === EventDestination.Server

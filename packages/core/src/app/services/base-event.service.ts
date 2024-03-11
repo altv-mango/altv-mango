@@ -18,10 +18,7 @@ export abstract class BaseEventService<T extends Record<string, any>> {
         eventName: Exclude<E, keyof T>,
         callback: (body: unknown) => void | Promise<void>,
     ): altShared.Events.ScriptEventHandler;
-    public on<E extends string>(
-        eventName: Exclude<E, keyof T>,
-        callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    public on<E extends string>(eventName: Exclude<E, keyof T>, callback: (body: unknown) => void | Promise<void>) {
         const wrapper = (...args: any[]) => callback(args[0]);
         const eventHandler = <altShared.Events.ScriptEventHandler>this.$altEvents.on(eventName, wrapper);
         this.$localHandlers.add(eventHandler);
@@ -35,10 +32,7 @@ export abstract class BaseEventService<T extends Record<string, any>> {
         eventName: Exclude<E, keyof T>,
         callback: (body: unknown) => void | Promise<void>,
     ): altShared.Events.ScriptEventHandler;
-    public once<E extends string>(
-        eventName: Exclude<E, keyof T>,
-        callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler {
+    public once<E extends string>(eventName: Exclude<E, keyof T>, callback: (body: unknown) => void | Promise<void>) {
         const wrapper = (...args: any[]) => callback(args[0]);
         const eventHandler = <altShared.Events.ScriptEventHandler>this.$altEvents.once(eventName, wrapper);
         this.$localHandlers.add(eventHandler);
@@ -47,7 +41,7 @@ export abstract class BaseEventService<T extends Record<string, any>> {
 
     public emit<E extends keyof T>(eventName: E, body?: T[E]): void;
     public emit<E extends string>(eventName: E, body?: unknown): void;
-    public emit<E extends string>(eventName: E, body?: unknown): void {
+    public emit<E extends string>(eventName: E, body?: unknown) {
         this.$altEvents.emitRaw(eventName, body);
     }
 

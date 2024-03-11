@@ -496,6 +496,18 @@ export interface EventService {
     onceRemoteScriptEvent<T = unknown[], U extends altServer.Player = altServer.Player>(
         callback: altServer.Events.GenericPlayerEventCallback<altServer.Events.PlayerScriptEventParameters<T>, U>,
     ): altShared.Events.EventHandler;
+    onAnyResourceStart(
+        callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStartEventParameters>,
+    ): altShared.Events.EventHandler;
+    onceAnyResourceStart(
+        callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStartEventParameters>,
+    ): altShared.Events.EventHandler;
+    onAnyResourceStop(
+        callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStopEventParameters>,
+    ): altShared.Events.EventHandler;
+    onceAnyResourceStop(
+        callback: altServer.Events.GenericEventCallback<altServer.Events.ResourceStopEventParameters>,
+    ): altShared.Events.EventHandler;
     onResourceStart(callback: altServer.Events.GenericEventCallback): altShared.Events.EventHandler;
     onceResourceStart(callback: altServer.Events.GenericEventCallback): altShared.Events.EventHandler;
     onResourceStop(callback: altServer.Events.GenericEventCallback): altShared.Events.EventHandler;

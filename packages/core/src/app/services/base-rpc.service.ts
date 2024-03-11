@@ -17,11 +17,7 @@ export class BaseRPCService<T extends Record<string, any>> {
         options?: RPCCallOptions,
     ): Promise<RPCResult<ReturnType<T[E]>>>;
     public async call<E extends string>(rpcName: E, body?: unknown, options?: RPCCallOptions): Promise<RPCResult<unknown>>;
-    public async call<E extends string>(
-        rpcName: E,
-        body?: unknown,
-        options: RPCCallOptions = { timeout: this.$TIMEOUT },
-    ): Promise<RPCResult<unknown>> {
+    public async call<E extends string>(rpcName: E, body?: unknown, options: RPCCallOptions = { timeout: this.$TIMEOUT }) {
         return new Promise(async (resolve) => {
             const handler = this.$localHandlers.get(<string>rpcName)?.handler;
             if (!handler) {
@@ -53,7 +49,7 @@ export class BaseRPCService<T extends Record<string, any>> {
     }
     public onRequest<E extends keyof T>(rpcName: E, handler: (body: Parameters<T[E]>[0]) => ReturnType<T[E]>): ScriptRPCHandler;
     public onRequest<E extends string>(rpcName: E, handler: (body: unknown) => unknown | Promise<unknown>): ScriptRPCHandler;
-    public onRequest<E extends string>(rpcName: E, handler: (body: unknown) => unknown | Promise<unknown>): ScriptRPCHandler {
+    public onRequest<E extends string>(rpcName: E, handler: (body: unknown) => unknown | Promise<unknown>) {
         if (this.$localHandlers.has(rpcName)) {
             this.$loggerService.error('An error occurred while trying to register RPC.');
             throw new Error(ErrorMessage.RPCHandlerAlreadyExists);
@@ -61,9 +57,9 @@ export class BaseRPCService<T extends Record<string, any>> {
 
         const rpcHandler: ScriptRPCHandler = {
             destroy: () => {
-                this.$localHandlers.delete(rpcName);
                 // @ts-ignore
                 rpcHandler.valid = false;
+                this.$localHandlers.delete(rpcName);
             },
             rpcName: rpcName,
             handler,

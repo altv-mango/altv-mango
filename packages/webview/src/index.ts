@@ -56,7 +56,7 @@ export function initMango() {
         const payload = body.body;
 
         const rpcHandler = rpc.$clientHandlers.get(name);
-        if (!rpcHandler) {
+        if (isNil(rpcHandler)) {
             event.emitPlayer(`RPC::RETURN_FROM_WEBVIEW_${id}`, RPC_RESULT_HANDLER_NOT_FOUND);
             return;
         }
