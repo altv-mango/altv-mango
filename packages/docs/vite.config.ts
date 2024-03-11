@@ -188,9 +188,6 @@ const config = defineConfig({
             addInspect: true,
         }),
     ],
-    server: {
-        host: '0.0.0.0',
-    },
 });
 
 export default config;
