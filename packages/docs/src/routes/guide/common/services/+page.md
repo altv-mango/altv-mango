@@ -42,7 +42,7 @@ The RPC service is a service that allows you to listen to RPC requests and send 
 @Controller()
 export class FooController {
     @Inject(RPC_SERVICE) private readonly rpcService: RPCService;
-    @Inject(LOGGING_SERVICE) private readonly loggingService: LoggingService;
+    @Inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     @On('foo')
     public onFoo() {
@@ -52,19 +52,19 @@ export class FooController {
 }
 ```
 
-## Logging Service
+## Logger Service
 
-The logging service is a service that allows you to log messages to the console.
+The logger service is a service that allows you to log messages to the console.
 
 ```ts
 @Controller()
 export class FooController {
-    @Inject(LOGGING_SERVICE) private readonly loggingService: LoggingService;
+    @Inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     @On('foo')
     public onFoo() {
         // Do something
-        this.loggingService.log('bar');
+        this.loggerService.log('bar');
     }
 }
 ```
