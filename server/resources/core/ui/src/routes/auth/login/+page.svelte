@@ -3,6 +3,7 @@
     import * as Card from '$lib/components/ui/card';
     import Icon from '@iconify/svelte';
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
 
     let loading = false;
 
@@ -12,6 +13,11 @@
         await window.mango.rpc.callServer('login', { provider: 'discord', token: result.body });
         goto('/main-menu');
     }
+
+    onMount(() => {
+        window.mango.logger.log('This is a test log');
+        window.mango.event.emitPlayer('TEST_ERROR', { message: 'This is a test error' });
+    });
 </script>
 
 <div class="flex min-h-screen justify-start items-center p-4 sm:p-12 md:p-20 lg:p-28 xl:p-36">

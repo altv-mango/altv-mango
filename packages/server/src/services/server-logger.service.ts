@@ -10,11 +10,11 @@ export class ServerLoggerService implements LoggerService {
     }
 
     public warn(...args: unknown[]): void {
-        altServer.logWarning(`~w~[~y~${MANGO_LOG_PREFIX}Server~w~][~ly~Warn~w~]`, ...args);
+        altServer.logWarning(`[${MANGO_LOG_PREFIX}Server][Warn]`, ...args);
     }
 
     public error(...args: unknown[]): void {
-        altServer.logError(`~w~[~y~${MANGO_LOG_PREFIX}Server~w~][~lr~Error~w~]`, ...args);
+        altServer.logError(`[${MANGO_LOG_PREFIX}Server][Error]`, ...args);
     }
 
     public debug(...args: unknown[]): void {

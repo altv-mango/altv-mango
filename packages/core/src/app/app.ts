@@ -52,27 +52,27 @@ export class App {
             throw new Error(ErrorMessage.AppAlreadyLoaded);
         }
         this.loggerService.log('~lw~Starting app...');
-        this.runPluginMethods('beforeStart');
+        await this.runPluginMethods('beforeStart');
 
         this.loggerService.log('~lw~Scanning module tree...');
-        this.runPluginMethods('beforeScan');
+        await this.runPluginMethods('beforeScan');
         this.moduleTree = await this.moduleTreeScanner.scan(rootModule);
-        this.runPluginMethods('afterScan');
+        await this.runPluginMethods('afterScan');
 
         this.loggerService.log('~lw~Binding module dependencies...');
-        this.runPluginMethods('beforeBind');
+        await this.runPluginMethods('beforeBind');
         await this.moduleDependencyBinder.bind(this.moduleTree);
-        this.runPluginMethods('afterBind');
+        await this.runPluginMethods('afterBind');
 
         this.loggerService.log('~lw~Loading app...');
-        this.runPluginMethods('beforeLoad');
+        await this.runPluginMethods('beforeLoad');
         await this.appRuntime.boot(this.moduleTree);
         this.loaded = true;
-        this.runPluginMethods('afterLoad');
+        await this.runPluginMethods('afterLoad');
 
         this.loggerService.log('~lw~App loaded');
 
-        this.runPluginMethods('afterStart');
+        await this.runPluginMethods('afterStart');
     }
 
     public async stop() {
@@ -80,22 +80,24 @@ export class App {
             this.loggerService.error('Error occurred while stopping the app.');
             throw new Error(ErrorMessage.AppNotLoaded);
         }
-        this.runPluginMethods('beforeStop');
+        await this.runPluginMethods('beforeStop');
         this.loggerService.log('~lw~Stopping app...');
         await this.appRuntime.shutdown(this.moduleTree);
         this.loaded = false;
         this.loggerService.log('~lw~App stopped');
-        this.runPluginMethods('afterStop');
+        await this.runPluginMethods('afterStop');
     }
 
     /**
      * @internal
      */
-    private runPluginMethods(method: keyof MangoPlugin) {
-        this.plugins.forEach(async (p) => {
-            const plugin = this.internalAppContainer.get(p);
-            if (!plugin[method]) return;
-            await plugin[method]!();
-        });
+    private async runPluginMethods(method: keyof MangoPlugin) {
+        await Promise.all(
+            this.plugins.map(async (p) => {
+                const plugin = this.internalAppContainer.get(p);
+                if (!plugin[method]) return Promise.resolve();
+                return Promise.resolve(plugin[method]!());
+            }),
+        );
     }
 }

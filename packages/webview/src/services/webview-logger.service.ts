@@ -1,19 +1,19 @@
 import type { LoggerService } from '@altv-mango/core/interfaces';
 
 export class WebViewLoggerService implements LoggerService {
-    public log(message: string) {
-        console.log(`[🥭WebView][Log] ${message}`);
+    public log(...args: unknown[]) {
+        console.log(`[🥭WebView][Log]`, ...args);
     }
 
-    public error(message: string) {
-        console.error(`[🥭WebView][Error] ${message}`);
+    public error(...args: unknown[]) {
+        console.error(`[🥭WebView][Error]`, ...args);
     }
 
-    public warn(message: string) {
-        console.warn(`[🥭WebView][Warn] ${message}`);
+    public warn(...args: unknown[]) {
+        console.warn(`[🥭WebView][Warn]`, ...args);
     }
 
-    public debug(message: string) {
-        console.debug(`[🥭WebView][Debug] ${message}`);
+    public debug(...args: unknown[]) {
+        console.debug(`[🥭WebView][Debug]`, ...args);
     }
 }

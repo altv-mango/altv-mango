@@ -11,7 +11,7 @@ export class WebViewPlugin implements MangoPlugin {
     @inject(WEBVIEW_SERVICE) private readonly webViewService: ClientWebViewService;
     @inject(LOGGER_SERVICE) private readonly loggerService: ClientLoggerService;
 
-    public afterLoad() {
+    public async beforeLoad() {
         const time = Date.now();
 
         const addWebViews = this.internalAppContainer.isBound(ADD_WEBVIEW)
@@ -24,7 +24,10 @@ export class WebViewPlugin implements MangoPlugin {
             : [];
         if (addWebViews.length === 0) return;
 
-        addWebViews.forEach((webView) => this.webViewService.create(webView.id, webView.options));
+        addWebViews.forEach((webView) => {
+            this.webViewService.create(webView.id, webView.options);
+        });
+
         this.loggerService.log(`~lw~WebViews created ~lk~(${Date.now() - time}ms)`);
     }
 }
