@@ -183,8 +183,8 @@ export class ServerRPCService extends BaseRPCService<altServer.RPC.CustomServerR
             // Example: RPC::RETURN_FROM_SERVER_21ewrEq, RPC::RETURN_FROM_WEBVIEW_teEqd2
             const eventHandler =
                 destination === EventDestination.WebView
-                    ? this.$eventService.onceWebView(webViewId!, 'RPC::RETURN_FROM_WEBVIEW', onceHandle)
-                    : this.$eventService.oncePlayer('RPC::RETURN_FROM_SERVER', onceHandle);
+                    ? this.$eventService.onceWebView(webViewId!, `RPC::RETURN_FROM_WEBVIEW_${callId}`, onceHandle)
+                    : this.$eventService.oncePlayer(`RPC::RETURN_FROM_CLIENT_${callId}`, onceHandle);
 
             const payload: RPCPayload = {
                 source: EventDestination.Server,
@@ -195,8 +195,8 @@ export class ServerRPCService extends BaseRPCService<altServer.RPC.CustomServerR
             };
             // Example: RPC::CALL_SERVER, RPC::CALL_WEBVIEW
             destination === EventDestination.WebView
-                ? this.$eventService.emitWebViews([player], webViewId!, 'RPC::CALL_WEBVIEW', payload)
-                : this.$eventService.emitPlayers([player], 'RPC::CALL_SERVER', payload);
+                ? player.emitWebView(webViewId!, 'RPC::CALL_WEBVIEW', payload)
+                : player.emit('RPC::CALL_CLIENT', payload);
 
             timeoutId = setTimeout(() => {
                 eventHandler.destroy();

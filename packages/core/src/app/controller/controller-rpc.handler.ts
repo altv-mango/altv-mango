@@ -46,7 +46,7 @@ export class ControllerRPCHandler {
     ) {
         if (rpc.type === 'onRequest') {
             return this.rpcService[rpc.type](rpc.name, async (body) => {
-                await this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
+                return this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
             });
         } else if (rpc.type === 'onPlayerRequest') {
             return this.rpcService[rpc.type](rpc.name, async (player, body) => {
@@ -54,7 +54,7 @@ export class ControllerRPCHandler {
             });
         } else if (rpc.type === 'onServerRequest') {
             return this.rpcService[rpc.type](rpc.name, async (body) => {
-                await this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
+                return this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
             });
         } else if (rpc.type === 'onWebViewRequest') {
             return this.rpcService[rpc.type](rpc.webViewId!, rpc.name, async (...args: unknown[]) => {
