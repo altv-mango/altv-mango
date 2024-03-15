@@ -1,3 +1,3 @@
-import type { Events } from '@altv/shared';
+import type { Events as SharedEvents } from '@altv/shared';
 
-export type ScriptEventHandler = Omit<Events.ScriptEventHandler, 'location' | 'eventType' | 'eventTypeName'>;
+export type ScriptEventHandler = Omit<SharedEvents.ScriptEventHandler, 'location' | 'eventType' | 'eventTypeName'>;

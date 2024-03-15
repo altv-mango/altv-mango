@@ -27,7 +27,7 @@ import { AppRuntime, ModuleDependencyBinder, ModuleTreeScanner } from './module-
 import { Controller } from './controller';
 import { ExecutionContextBase, MangoRequestBase, MangoResponseBase } from './pipeline';
 import type { ExecutionContextType } from './enums';
-import * as altServer from '@altv/server';
+import type { Player } from '@altv/server';
 
 @injectable()
 export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interceptor, EF extends ErrorFilter = ErrorFilter> {
@@ -108,7 +108,7 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
         // Mango Request and Response bindings
         this.internalAppContainer.bind(MangoRequestBase).toSelf().inTransientScope();
         this.internalAppContainer.bind(MANGO_REQUEST_FACTORY).toFactory((context) => {
-            return (body: unknown, player: altServer.Player) => {
+            return (body: unknown, player: Player) => {
                 const request = context.container.get(MangoRequestBase);
                 request.$body = body;
                 request.$player = player;

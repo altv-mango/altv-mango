@@ -1,74 +1,71 @@
 import type { RPCCallOptions, RPCResult, ScriptRPCHandler } from '@altv-mango/core';
-import * as altServer from '@altv/server';
-import * as altShared from '@altv/shared';
+import type { RPC as ServerRPC, Player } from '@altv/server';
+import type { RPC as SharedRPC } from '@altv/shared';
 
 export interface RPCService {
-    call<E extends keyof altServer.RPC.CustomServerRPC>(
+    call<E extends keyof ServerRPC.CustomServerRPC>(
         rpcName: E,
-        body?: Parameters<altServer.RPC.CustomServerRPC[E]>[0],
+        body?: Parameters<ServerRPC.CustomServerRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altServer.RPC.CustomServerRPC[E]>>>;
+    ): Promise<RPCResult<ReturnType<ServerRPC.CustomServerRPC[E]>>>;
     call<E extends string>(
-        rpcName: Exclude<E, keyof altServer.RPC.CustomServerRPC>,
+        rpcName: Exclude<E, keyof ServerRPC.CustomServerRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult<unknown>>;
-    onRequest<E extends keyof altServer.RPC.CustomServerRPC>(
+    onRequest<E extends keyof ServerRPC.CustomServerRPC>(
         rpcName: E,
-        handler: (body: Parameters<altServer.RPC.CustomServerRPC[E]>[0]) => ReturnType<altServer.RPC.CustomServerRPC[E]>,
+        handler: (body: Parameters<ServerRPC.CustomServerRPC[E]>[0]) => ReturnType<ServerRPC.CustomServerRPC[E]>,
     ): ScriptRPCHandler;
     onRequest<E extends string>(
-        rpcName: Exclude<E, keyof altServer.RPC.CustomServerRPC>,
+        rpcName: Exclude<E, keyof ServerRPC.CustomServerRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
-    callPlayer<E extends keyof altShared.RPC.CustomServerToClientRPC, U extends altServer.Player>(
+    callPlayer<E extends keyof SharedRPC.CustomServerToClientRPC, U extends Player>(
         player: U,
         rpcName: E,
-        body?: Parameters<altShared.RPC.CustomServerToClientRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomServerToClientRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altShared.RPC.CustomServerToClientRPC[E]>>>;
-    callPlayer<E extends string, U extends altServer.Player>(
+    ): Promise<RPCResult<ReturnType<SharedRPC.CustomServerToClientRPC[E]>>>;
+    callPlayer<E extends string, U extends Player>(
         player: U,
-        rpcName: Exclude<E, keyof altShared.RPC.CustomServerToClientRPC>,
+        rpcName: Exclude<E, keyof SharedRPC.CustomServerToClientRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult>;
-    onPlayerRequest<E extends keyof altShared.RPC.CustomClientToServerRPC, U extends altServer.Player>(
+    onPlayerRequest<E extends keyof SharedRPC.CustomClientToServerRPC, U extends Player>(
         rpcName: E,
-        handler: (
-            sender: U,
-            body: Parameters<altShared.RPC.CustomClientToServerRPC[E]>[0],
-        ) => ReturnType<altShared.RPC.CustomClientToServerRPC[E]>,
+        handler: (sender: U, body: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0]) => ReturnType<SharedRPC.CustomClientToServerRPC[E]>,
     ): ScriptRPCHandler;
-    onPlayerRequest<E extends string, U extends altServer.Player>(
-        rpcName: Exclude<E, keyof altShared.RPC.CustomClientToServerRPC>,
+    onPlayerRequest<E extends string, U extends Player>(
+        rpcName: Exclude<E, keyof SharedRPC.CustomClientToServerRPC>,
         handler: (sender: U, body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
-    callWebView<E extends keyof altShared.RPC.CustomServerToWebViewRPC, U extends altServer.Player>(
+    callWebView<E extends keyof SharedRPC.CustomServerToWebViewRPC, U extends Player>(
         player: U,
         id: string | number,
         rpcName: E,
-        body?: Parameters<altShared.RPC.CustomServerToWebViewRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomServerToWebViewRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<altShared.RPC.CustomServerToWebViewRPC[E]>>>;
-    callWebView<E extends string, U extends altServer.Player>(
+    ): Promise<RPCResult<ReturnType<SharedRPC.CustomServerToWebViewRPC[E]>>>;
+    callWebView<E extends string, U extends Player>(
         player: U,
         id: string | number,
-        rpcName: Exclude<E, keyof altShared.RPC.CustomServerToWebViewRPC>,
+        rpcName: Exclude<E, keyof SharedRPC.CustomServerToWebViewRPC>,
         body?: unknown,
         options?: RPCCallOptions,
     ): Promise<RPCResult>;
-    onWebViewRequest<E extends string, U extends altServer.Player>(
+    onWebViewRequest<E extends string, U extends Player>(
         id: string | number,
-        rpcName: Exclude<E, keyof altShared.RPC.CustomWebViewToServerRPC>,
+        rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToServerRPC>,
         handler: (player: U, body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
-    onWebViewRequest<E extends keyof altShared.RPC.CustomWebViewToServerRPC, U extends altServer.Player>(
+    onWebViewRequest<E extends keyof SharedRPC.CustomWebViewToServerRPC, U extends Player>(
         id: string | number,
         rpcName: E,
         handler: (
             player: U,
-            body: Parameters<altShared.RPC.CustomWebViewToServerRPC[E]>[0],
-        ) => ReturnType<altShared.RPC.CustomWebViewToServerRPC[E]>,
+            body: Parameters<SharedRPC.CustomWebViewToServerRPC[E]>[0],
+        ) => ReturnType<SharedRPC.CustomWebViewToServerRPC[E]>,
     ): ScriptRPCHandler;
 }

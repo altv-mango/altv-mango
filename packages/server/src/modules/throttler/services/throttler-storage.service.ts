@@ -1,17 +1,17 @@
 import { Injectable, type OnAppShutdown } from '@altv-mango/core';
 import type { ThrottlerStorageOptions } from '../interfaces';
-import * as altServer from '@altv/server';
+import type { Player } from '@altv/server';
 
 @Injectable()
 export class ThrottlerStorageService implements OnAppShutdown {
-    public readonly storage: WeakMap<altServer.Player, Map<string, ThrottlerStorageOptions>> = new WeakMap();
+    public readonly storage: WeakMap<Player, Map<string, ThrottlerStorageOptions>> = new WeakMap();
     private timeoutIds: NodeJS.Timeout[] = [];
 
-    private getExpirationTime(player: altServer.Player, key: string) {
+    private getExpirationTime(player: Player, key: string) {
         return Math.floor((this.storage.get(player)!.get(key)!.expiresAt - Date.now()) / 1000);
     }
 
-    private setExpirationTime(player: altServer.Player, key: string, ttlMilliseconds: number) {
+    private setExpirationTime(player: Player, key: string, ttlMilliseconds: number) {
         const timeoutId = setTimeout(() => {
             this.storage.get(player)!.get(key)!.totalHits--;
             clearTimeout(timeoutId);
@@ -20,7 +20,7 @@ export class ThrottlerStorageService implements OnAppShutdown {
         this.timeoutIds.push(timeoutId);
     }
 
-    public async increment(player: altServer.Player, key: string, ttl: number) {
+    public async increment(player: Player, key: string, ttl: number) {
         const ttlMilliseconds = ttl;
 
         if (!this.storage.get(player)) {

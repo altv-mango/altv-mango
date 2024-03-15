@@ -6,3 +6,5 @@ client-files = [
     "ui/dist/*"
 ]
 deps = []
+[js-module-v2]
+compatibilityEnabled = true

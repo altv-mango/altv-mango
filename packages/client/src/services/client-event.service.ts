@@ -2,53 +2,49 @@ import { BaseEventService } from '@altv-mango/core/app';
 import { inject, injectable } from 'inversify';
 import { INTERNAL_EVENTS, WEBVIEW_LIST_SERVICE } from '../constants';
 import type { WebViewListService } from './webview-list.service';
-import * as altClient from '@altv/client';
-import * as altShared from '@altv/shared';
+import { Events as ClientEvents, Enums, type Player } from '@altv/client';
+import type { Events as SharedEvents } from '@altv/shared';
 import type { EventService } from '../interfaces';
 
 @injectable()
-export class ClientEventService extends BaseEventService<altClient.Events.CustomClientEvent> implements EventService {
+export class ClientEventService extends BaseEventService<ClientEvents.CustomClientEvent> implements EventService {
     @inject(WEBVIEW_LIST_SERVICE) private readonly $webViewListService: WebViewListService;
 
     public constructor() {
         super();
 
-        this.$altEvents = altClient.Events;
+        this.$altEvents = ClientEvents;
         this.$internalEventNames = new Set(Object.values(INTERNAL_EVENTS));
     }
 
-    public onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(
+    public onServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomServerToPlayerEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     public onServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public onServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ) {
         const wrapper = (...args: unknown[]) => callback(args[0]);
-        const eventHandler = altClient.Events.onServer(eventName, wrapper);
+        const eventHandler = ClientEvents.onServer(eventName, wrapper);
         this.$remoteHandlers.add(eventHandler);
         return eventHandler;
     }
 
-    public onceServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(
+    public onceServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomServerToPlayerEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     public onceServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public onceServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ) {
         const wrapper = (...args: unknown[]) => callback(args[0]);
@@ -57,43 +53,43 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         return eventHandler;
     }
 
-    public emitServer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(
+    public emitServer<E extends keyof SharedEvents.CustomPlayerToServerEvent>(
         eventName: E,
-        body: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>[0],
+        body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
     ): void;
-    public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, body?: unknown): void;
-    public emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, body?: unknown) {
+    public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
+    public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown) {
         this.$altEvents.emitServer(eventName, body);
     }
 
-    public onWebView<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
+    public onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
         id: string | number,
         eventName: E,
         callback: (
-            body: Parameters<altShared.Events.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomWebViewToClientEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
+        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     public onWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public onWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ) {
         const webView = this.$webViewListService.tryGet(id);
         const wrapper = (...args: unknown[]) => callback(args[0]);
 
-        const eventHandler: altShared.Events.ScriptEventHandler = {
+        const eventHandler: SharedEvents.ScriptEventHandler = {
             destroy() {
                 // @ts-ignore
                 this.valid = false;
                 webView.off(eventName, wrapper);
             },
             eventName,
-            eventType: altClient.Enums.EventType.WEB_VIEW_EVENT,
+            eventType: Enums.EventType.WEB_VIEW_EVENT,
             eventTypeName: 'WEB_VIEW_EVENT',
             handler: wrapper,
             local: false,
@@ -109,34 +105,34 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         return eventHandler;
     }
 
-    public onceWebView<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
+    public onceWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
         id: string | number,
         eventName: E,
         callback: (
-            body: Parameters<altShared.Events.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomWebViewToClientEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
+        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     public onceWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public onceWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
     ) {
         const webView = this.$webViewListService.tryGet(id);
         const wrapper = (...args: any[]) => callback(args[0]);
 
-        const eventHandler: altShared.Events.ScriptEventHandler = {
+        const eventHandler: SharedEvents.ScriptEventHandler = {
             destroy() {
                 // @ts-ignore
                 this.valid = false;
                 webView.off(eventName, wrapper);
             },
             eventName,
-            eventType: altClient.Enums.EventType.WEB_VIEW_EVENT,
+            eventType: Enums.EventType.WEB_VIEW_EVENT,
             eventTypeName: 'WEB_VIEW_EVENT',
             handler: wrapper,
             local: false,
@@ -152,414 +148,404 @@ export class ClientEventService extends BaseEventService<altClient.Events.Custom
         return eventHandler;
     }
 
-    public emitWebView<E extends keyof altShared.Events.CustomClientToWebViewEvent>(
+    public emitWebView<E extends keyof SharedEvents.CustomClientToWebViewEvent>(
         id: string | number,
         eventName: E,
-        body: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>[0],
+        body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
     ): void;
     public emitWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
         body?: unknown,
     ): void;
     public emitWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
         body?: unknown,
     ) {
         const webView = this.$webViewListService.tryGet(id);
         webView.emit(eventName, body);
     }
 
-    public onScriptRPC(callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCEventParameters>) {
-        return altClient.Events.onScriptRPC(callback);
+    public onScriptRPC(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCEventParameters>) {
+        return ClientEvents.onScriptRPC(callback);
     }
 
-    public onceScriptRPC(callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCEventParameters>) {
-        return altClient.Events.onceScriptRPC(callback);
+    public onceScriptRPC(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCEventParameters>) {
+        return ClientEvents.onceScriptRPC(callback);
     }
 
-    public onScriptRPCAnswer(callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCAnswerEventParameters>) {
-        return altClient.Events.onScriptRPCAnswer(callback);
+    public onScriptRPCAnswer(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCAnswerEventParameters>) {
+        return ClientEvents.onScriptRPCAnswer(callback);
     }
 
-    public onceScriptRPCAnswer(callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCAnswerEventParameters>) {
-        return altClient.Events.onceScriptRPCAnswer(callback);
+    public onceScriptRPCAnswer(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCAnswerEventParameters>) {
+        return ClientEvents.onceScriptRPCAnswer(callback);
     }
 
-    public onKeyboardEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyboardEventParameters>) {
-        return altClient.Events.onKeyboardEvent(callback);
+    public onKeyboardEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyboardEventParameters>) {
+        return ClientEvents.onKeyboardEvent(callback);
     }
 
-    public onceKeyboardEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyboardEventParameters>) {
-        return altClient.Events.onceKeyboardEvent(callback);
+    public onceKeyboardEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyboardEventParameters>) {
+        return ClientEvents.onceKeyboardEvent(callback);
     }
 
-    public onKeyUp(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>) {
-        return altClient.Events.onKeyUp(callback);
+    public onKeyUp(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>) {
+        return ClientEvents.onKeyUp(callback);
     }
 
-    public onceKeyUp(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>) {
-        return altClient.Events.onceKeyUp(callback);
+    public onceKeyUp(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>) {
+        return ClientEvents.onceKeyUp(callback);
     }
 
-    public onKeyDown(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>) {
-        return altClient.Events.onKeyDown(callback);
+    public onKeyDown(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>) {
+        return ClientEvents.onKeyDown(callback);
     }
 
-    public onceKeyDown(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>) {
-        return altClient.Events.onceKeyDown(callback);
+    public onceKeyDown(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>) {
+        return ClientEvents.onceKeyDown(callback);
     }
 
-    public onWebViewEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.WebViewEventParameters>) {
-        return altClient.Events.onWebViewEvent(callback);
+    public onWebViewEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebViewEventParameters>) {
+        return ClientEvents.onWebViewEvent(callback);
     }
 
-    public onceWebViewEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.WebViewEventParameters>) {
-        return altClient.Events.onceWebViewEvent(callback);
+    public onceWebViewEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebViewEventParameters>) {
+        return ClientEvents.onceWebViewEvent(callback);
     }
 
-    public onWebSocketEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.WebSocketEventParameters>) {
-        return altClient.Events.onWebSocketEvent(callback);
+    public onWebSocketEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebSocketEventParameters>) {
+        return ClientEvents.onWebSocketEvent(callback);
     }
 
-    public onceWebSocketEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.WebSocketEventParameters>) {
-        return altClient.Events.onceWebSocketEvent(callback);
+    public onceWebSocketEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebSocketEventParameters>) {
+        return ClientEvents.onceWebSocketEvent(callback);
     }
 
-    public onAudioEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.AudioEventParameters>) {
-        return altClient.Events.onAudioEvent(callback);
+    public onAudioEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.AudioEventParameters>) {
+        return ClientEvents.onAudioEvent(callback);
     }
 
-    public onceAudioEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.AudioEventParameters>) {
-        return altClient.Events.onceAudioEvent(callback);
+    public onceAudioEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.AudioEventParameters>) {
+        return ClientEvents.onceAudioEvent(callback);
     }
 
-    public onRmluiEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.RmluiEventParameters>) {
-        return altClient.Events.onRmluiEvent(callback);
+    public onRmluiEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.RmluiEventParameters>) {
+        return ClientEvents.onRmluiEvent(callback);
     }
 
-    public onceRmluiEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.RmluiEventParameters>) {
-        return altClient.Events.onceRmluiEvent(callback);
+    public onceRmluiEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.RmluiEventParameters>) {
+        return ClientEvents.onceRmluiEvent(callback);
     }
 
-    public onWindowFocusChange(callback: altClient.Events.GenericEventCallback<altClient.Events.WindowFocusChangeEventParameters>) {
-        return altClient.Events.onWindowFocusChange(callback);
+    public onWindowFocusChange(callback: ClientEvents.GenericEventCallback<ClientEvents.WindowFocusChangeEventParameters>) {
+        return ClientEvents.onWindowFocusChange(callback);
     }
 
-    public onceWindowFocusChange(callback: altClient.Events.GenericEventCallback<altClient.Events.WindowFocusChangeEventParameters>) {
-        return altClient.Events.onceWindowFocusChange(callback);
+    public onceWindowFocusChange(callback: ClientEvents.GenericEventCallback<ClientEvents.WindowFocusChangeEventParameters>) {
+        return ClientEvents.onceWindowFocusChange(callback);
     }
 
-    public onWindowResolutionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WindowResolutionChangeEventParameters>,
+    public onWindowResolutionChange(callback: ClientEvents.GenericEventCallback<ClientEvents.WindowResolutionChangeEventParameters>) {
+        return ClientEvents.onWindowResolutionChange(callback);
+    }
+
+    public onceWindowResolutionChange(callback: ClientEvents.GenericEventCallback<ClientEvents.WindowResolutionChangeEventParameters>) {
+        return ClientEvents.onceWindowResolutionChange(callback);
+    }
+
+    public onConnectionComplete(callback: ClientEvents.GenericEventCallback) {
+        return ClientEvents.onConnectionComplete(callback);
+    }
+
+    public onceConnectionComplete(callback: ClientEvents.GenericEventCallback) {
+        return ClientEvents.onceConnectionComplete(callback);
+    }
+
+    public onDisconnect(callback: ClientEvents.GenericEventCallback) {
+        return ClientEvents.onDisconnect(callback);
+    }
+
+    public onceDisconnect(callback: ClientEvents.GenericEventCallback) {
+        return ClientEvents.onceDisconnect(callback);
+    }
+
+    public onSpawned(callback: ClientEvents.GenericEventCallback) {
+        return ClientEvents.onSpawned(callback);
+    }
+
+    public onceSpawned(callback: ClientEvents.GenericEventCallback) {
+        return ClientEvents.onceSpawned(callback);
+    }
+
+    public onGameEntityCreate(callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityCreateEventParameters>) {
+        return ClientEvents.onGameEntityCreate(callback);
+    }
+
+    public onceGameEntityCreate(callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityCreateEventParameters>) {
+        return ClientEvents.onceGameEntityCreate(callback);
+    }
+
+    public onGameEntityDestroy(callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityDestroyEventParameters>) {
+        return ClientEvents.onGameEntityDestroy(callback);
+    }
+
+    public onceGameEntityDestroy(callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityDestroyEventParameters>) {
+        return ClientEvents.onceGameEntityDestroy(callback);
+    }
+
+    public onEntityHitEntity(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityHitEntityEventParameters>) {
+        return ClientEvents.onEntityHitEntity(callback);
+    }
+
+    public onceEntityHitEntity(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityHitEntityEventParameters>) {
+        return ClientEvents.onceEntityHitEntity(callback);
+    }
+
+    public onTaskChange(callback: ClientEvents.GenericEventCallback<ClientEvents.TaskChangeEventParameters>) {
+        return ClientEvents.onTaskChange(callback);
+    }
+
+    public onceTaskChange(callback: ClientEvents.GenericEventCallback<ClientEvents.TaskChangeEventParameters>) {
+        return ClientEvents.onceTaskChange(callback);
+    }
+
+    public onPlayerWeaponShoot(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponShootEventParameters>) {
+        return ClientEvents.onPlayerWeaponShoot(callback);
+    }
+
+    public oncePlayerWeaponShoot(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponShootEventParameters>) {
+        return ClientEvents.oncePlayerWeaponShoot(callback);
+    }
+
+    public onPlayerBulletHit(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerBulletHitEventParameters>) {
+        return ClientEvents.onPlayerBulletHit(callback);
+    }
+
+    public oncePlayerBulletHit(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerBulletHitEventParameters>) {
+        return ClientEvents.oncePlayerBulletHit(callback);
+    }
+
+    public onPlayerWeaponChange(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponChangeEventParameters>) {
+        return ClientEvents.onPlayerWeaponChange(callback);
+    }
+
+    public oncePlayerWeaponChange(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponChangeEventParameters>) {
+        return ClientEvents.oncePlayerWeaponChange(callback);
+    }
+
+    public onPlayerStartVehicleEnter<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleEnterEventParameters, T>,
     ) {
-        return altClient.Events.onWindowResolutionChange(callback);
+        return ClientEvents.onPlayerStartVehicleEnter(callback);
     }
 
-    public onceWindowResolutionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WindowResolutionChangeEventParameters>,
+    public oncePlayerStartVehicleEnter<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleEnterEventParameters, T>,
     ) {
-        return altClient.Events.onceWindowResolutionChange(callback);
+        return ClientEvents.oncePlayerStartVehicleEnter(callback);
     }
 
-    public onConnectionComplete(callback: altClient.Events.GenericEventCallback) {
-        return altClient.Events.onConnectionComplete(callback);
-    }
-
-    public onceConnectionComplete(callback: altClient.Events.GenericEventCallback) {
-        return altClient.Events.onceConnectionComplete(callback);
-    }
-
-    public onDisconnect(callback: altClient.Events.GenericEventCallback) {
-        return altClient.Events.onDisconnect(callback);
-    }
-
-    public onceDisconnect(callback: altClient.Events.GenericEventCallback) {
-        return altClient.Events.onceDisconnect(callback);
-    }
-
-    public onSpawned(callback: altClient.Events.GenericEventCallback) {
-        return altClient.Events.onSpawned(callback);
-    }
-
-    public onceSpawned(callback: altClient.Events.GenericEventCallback) {
-        return altClient.Events.onceSpawned(callback);
-    }
-
-    public onGameEntityCreate(callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityCreateEventParameters>) {
-        return altClient.Events.onGameEntityCreate(callback);
-    }
-
-    public onceGameEntityCreate(callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityCreateEventParameters>) {
-        return altClient.Events.onceGameEntityCreate(callback);
-    }
-
-    public onGameEntityDestroy(callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityDestroyEventParameters>) {
-        return altClient.Events.onGameEntityDestroy(callback);
-    }
-
-    public onceGameEntityDestroy(callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityDestroyEventParameters>) {
-        return altClient.Events.onceGameEntityDestroy(callback);
-    }
-
-    public onEntityHitEntity(callback: altClient.Events.GenericEventCallback<altClient.Events.EntityHitEntityEventParameters>) {
-        return altClient.Events.onEntityHitEntity(callback);
-    }
-
-    public onceEntityHitEntity(callback: altClient.Events.GenericEventCallback<altClient.Events.EntityHitEntityEventParameters>) {
-        return altClient.Events.onceEntityHitEntity(callback);
-    }
-
-    public onTaskChange(callback: altClient.Events.GenericEventCallback<altClient.Events.TaskChangeEventParameters>) {
-        return altClient.Events.onTaskChange(callback);
-    }
-
-    public onceTaskChange(callback: altClient.Events.GenericEventCallback<altClient.Events.TaskChangeEventParameters>) {
-        return altClient.Events.onceTaskChange(callback);
-    }
-
-    public onPlayerWeaponShoot(callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponShootEventParameters>) {
-        return altClient.Events.onPlayerWeaponShoot(callback);
-    }
-
-    public oncePlayerWeaponShoot(callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponShootEventParameters>) {
-        return altClient.Events.oncePlayerWeaponShoot(callback);
-    }
-
-    public onPlayerBulletHit(callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerBulletHitEventParameters>) {
-        return altClient.Events.onPlayerBulletHit(callback);
-    }
-
-    public oncePlayerBulletHit(callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerBulletHitEventParameters>) {
-        return altClient.Events.oncePlayerBulletHit(callback);
-    }
-
-    public onPlayerWeaponChange(callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponChangeEventParameters>) {
-        return altClient.Events.onPlayerWeaponChange(callback);
-    }
-
-    public oncePlayerWeaponChange(callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponChangeEventParameters>) {
-        return altClient.Events.oncePlayerWeaponChange(callback);
-    }
-
-    public onPlayerStartVehicleEnter<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleEnterEventParameters, T>,
+    public onPlayerStartVehicleLeave<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleLeaveEventParameters, T>,
     ) {
-        return altClient.Events.onPlayerStartVehicleEnter(callback);
+        return ClientEvents.onPlayerStartVehicleLeave(callback);
     }
 
-    public oncePlayerStartVehicleEnter<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleEnterEventParameters, T>,
+    public oncePlayerStartVehicleLeave<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleLeaveEventParameters, T>,
     ) {
-        return altClient.Events.oncePlayerStartVehicleEnter(callback);
+        return ClientEvents.oncePlayerStartVehicleLeave(callback);
     }
 
-    public onPlayerStartVehicleLeave<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleLeaveEventParameters, T>,
+    public onPlayerVehicleEntered<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleEnterEventParameters, T>,
     ) {
-        return altClient.Events.onPlayerStartVehicleLeave(callback);
+        return ClientEvents.onPlayerVehicleEntered(callback);
     }
 
-    public oncePlayerStartVehicleLeave<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleLeaveEventParameters, T>,
+    public oncePlayerVehicleEntered<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleEnterEventParameters, T>,
     ) {
-        return altClient.Events.oncePlayerStartVehicleLeave(callback);
+        return ClientEvents.oncePlayerVehicleEntered(callback);
     }
 
-    public onPlayerVehicleEntered<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleEnterEventParameters, T>,
+    public onPlayerVehicleLeft<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleLeaveEventParameters, T>,
     ) {
-        return altClient.Events.onPlayerVehicleEntered(callback);
+        return ClientEvents.onPlayerVehicleLeft(callback);
     }
 
-    public oncePlayerVehicleEntered<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleEnterEventParameters, T>,
+    public oncePlayerVehicleLeft<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleLeaveEventParameters, T>,
     ) {
-        return altClient.Events.oncePlayerVehicleEntered(callback);
+        return ClientEvents.oncePlayerVehicleLeft(callback);
     }
 
-    public onPlayerVehicleLeft<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleLeaveEventParameters, T>,
+    public onPlayerVehicleSeatChange<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerChangeVehicleSeatEventParameters, T>,
     ) {
-        return altClient.Events.onPlayerVehicleLeft(callback);
+        return ClientEvents.onPlayerVehicleSeatChange(callback);
     }
 
-    public oncePlayerVehicleLeft<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleLeaveEventParameters, T>,
+    public oncePlayerVehicleSeatChange<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerChangeVehicleSeatEventParameters, T>,
     ) {
-        return altClient.Events.oncePlayerVehicleLeft(callback);
+        return ClientEvents.oncePlayerVehicleSeatChange(callback);
     }
 
-    public onPlayerVehicleSeatChange<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerChangeVehicleSeatEventParameters, T>,
-    ) {
-        return altClient.Events.onPlayerVehicleSeatChange(callback);
+    public onVoiceConnectionUpdate(callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>) {
+        return ClientEvents.onVoiceConnectionUpdate(callback);
     }
 
-    public oncePlayerVehicleSeatChange<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerChangeVehicleSeatEventParameters, T>,
-    ) {
-        return altClient.Events.oncePlayerVehicleSeatChange(callback);
+    public onceVoiceConnectionUpdate(callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>) {
+        return ClientEvents.onceVoiceConnectionUpdate(callback);
     }
 
-    public onVoiceConnectionUpdate(callback: altClient.Events.GenericEventCallback<altClient.Events.VoiceConnectionEventParameters>) {
-        return altClient.Events.onVoiceConnectionUpdate(callback);
+    public onPlayerStartTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>) {
+        return ClientEvents.onPlayerStartTalking(callback);
     }
 
-    public onceVoiceConnectionUpdate(callback: altClient.Events.GenericEventCallback<altClient.Events.VoiceConnectionEventParameters>) {
-        return altClient.Events.onceVoiceConnectionUpdate(callback);
+    public oncePlayerStartTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>) {
+        return ClientEvents.oncePlayerStartTalking(callback);
     }
 
-    public onPlayerStartTalking<T extends altClient.Player>(callback: altClient.Events.GenericPlayerEventCallback<{}, T>) {
-        return altClient.Events.onPlayerStartTalking(callback);
+    public onPlayerStopTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>) {
+        return ClientEvents.onPlayerStopTalking(callback);
     }
 
-    public oncePlayerStartTalking<T extends altClient.Player>(callback: altClient.Events.GenericPlayerEventCallback<{}, T>) {
-        return altClient.Events.oncePlayerStartTalking(callback);
+    public oncePlayerStopTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>) {
+        return ClientEvents.oncePlayerStopTalking(callback);
     }
 
-    public onPlayerStopTalking<T extends altClient.Player>(callback: altClient.Events.GenericPlayerEventCallback<{}, T>) {
-        return altClient.Events.onPlayerStopTalking(callback);
+    public onPedDeath(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDeathEventParameters>) {
+        return ClientEvents.onPedDeath(callback);
     }
 
-    public oncePlayerStopTalking<T extends altClient.Player>(callback: altClient.Events.GenericPlayerEventCallback<{}, T>) {
-        return altClient.Events.oncePlayerStopTalking(callback);
+    public oncePedDeath(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDeathEventParameters>) {
+        return ClientEvents.oncePedDeath(callback);
     }
 
-    public onPedDeath(callback: altClient.Events.GenericEventCallback<altClient.Events.PedDeathEventParameters>) {
-        return altClient.Events.onPedDeath(callback);
+    public onPedDamage(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDamageEventParameters>) {
+        return ClientEvents.onPedDamage(callback);
     }
 
-    public oncePedDeath(callback: altClient.Events.GenericEventCallback<altClient.Events.PedDeathEventParameters>) {
-        return altClient.Events.oncePedDeath(callback);
-    }
-
-    public onPedDamage(callback: altClient.Events.GenericEventCallback<altClient.Events.PedDamageEventParameters>) {
-        return altClient.Events.onPedDamage(callback);
-    }
-
-    public onWorldObjectPositionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectPositionChangeEventParameters>,
-    ) {
-        return altClient.Events.onWorldObjectPositionChange(callback);
+    public onWorldObjectPositionChange(callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectPositionChangeEventParameters>) {
+        return ClientEvents.onWorldObjectPositionChange(callback);
     }
 
     public onceWorldObjectPositionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectPositionChangeEventParameters>,
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectPositionChangeEventParameters>,
     ) {
-        return altClient.Events.onceWorldObjectPositionChange(callback);
+        return ClientEvents.onceWorldObjectPositionChange(callback);
     }
 
-    public onWorldObjectStreamIn(callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamInEventParameters>) {
-        return altClient.Events.onWorldObjectStreamIn(callback);
+    public onWorldObjectStreamIn(callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamInEventParameters>) {
+        return ClientEvents.onWorldObjectStreamIn(callback);
     }
 
-    public onceWorldObjectStreamIn(callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamInEventParameters>) {
-        return altClient.Events.onceWorldObjectStreamIn(callback);
+    public onceWorldObjectStreamIn(callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamInEventParameters>) {
+        return ClientEvents.onceWorldObjectStreamIn(callback);
     }
 
-    public onWorldObjectStreamOut(callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamOutEventParameters>) {
-        return altClient.Events.onWorldObjectStreamOut(callback);
+    public onWorldObjectStreamOut(callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamOutEventParameters>) {
+        return ClientEvents.onWorldObjectStreamOut(callback);
     }
 
-    public onceWorldObjectStreamOut(callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamOutEventParameters>) {
-        return altClient.Events.onceWorldObjectStreamOut(callback);
+    public onceWorldObjectStreamOut(callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamOutEventParameters>) {
+        return ClientEvents.onceWorldObjectStreamOut(callback);
     }
 
-    public onEvent(callback: altClient.Events.GenericEventCallback<altShared.Events.GenericOnEventParameters>) {
-        return altClient.Events.onEvent(callback);
+    public onEvent(callback: ClientEvents.GenericEventCallback<SharedEvents.GenericOnEventParameters>) {
+        return ClientEvents.onEvent(callback);
     }
 
-    public onBaseObjectCreate(callback: altClient.Events.GenericEventCallback<altClient.Events.BaseObjectCreateEventParameters>) {
-        return altClient.Events.onBaseObjectCreate(callback);
+    public onBaseObjectCreate(callback: ClientEvents.GenericEventCallback<ClientEvents.BaseObjectCreateEventParameters>) {
+        return ClientEvents.onBaseObjectCreate(callback);
     }
 
-    public onBaseObjectRemove(callback: altClient.Events.GenericEventCallback<altClient.Events.BaseObjectRemoveEventParameters>) {
-        return altClient.Events.onBaseObjectRemove(callback);
+    public onBaseObjectRemove(callback: ClientEvents.GenericEventCallback<ClientEvents.BaseObjectRemoveEventParameters>) {
+        return ClientEvents.onBaseObjectRemove(callback);
     }
 
-    public onNetOwnerChange(callback: altClient.Events.GenericEventCallback<altClient.Events.NetOwnerChangeEventParameters>) {
-        return altClient.Events.onNetOwnerChange(callback);
+    public onNetOwnerChange(callback: ClientEvents.GenericEventCallback<ClientEvents.NetOwnerChangeEventParameters>) {
+        return ClientEvents.onNetOwnerChange(callback);
     }
 
-    public onWeaponDamage(callback: altClient.Events.GenericEventCallback<altClient.Events.WeaponDamageEventParameters>) {
-        return altClient.Events.onWeaponDamage(callback);
+    public onWeaponDamage(callback: ClientEvents.GenericEventCallback<ClientEvents.WeaponDamageEventParameters>) {
+        return ClientEvents.onWeaponDamage(callback);
     }
 
-    public onMetaChange(callback: altClient.Events.GenericEventCallback<altClient.Events.MetaChangeEventParameters>) {
-        return altClient.Events.onMetaChange(callback);
+    public onMetaChange(callback: ClientEvents.GenericEventCallback<ClientEvents.MetaChangeEventParameters>) {
+        return ClientEvents.onMetaChange(callback);
     }
 
-    public onLocalMetaChange(callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.LocalMetaChangeEventParameters>) {
-        return altClient.Events.onLocalMetaChange(callback);
+    public onLocalMetaChange(callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.LocalMetaChangeEventParameters>) {
+        return ClientEvents.onLocalMetaChange(callback);
     }
 
-    public onSyncedMetaChange(callback: altClient.Events.GenericEventCallback<altClient.Events.SyncedMetaChangeEventParameters>) {
-        return altClient.Events.onSyncedMetaChange(callback);
+    public onSyncedMetaChange(callback: ClientEvents.GenericEventCallback<ClientEvents.SyncedMetaChangeEventParameters>) {
+        return ClientEvents.onSyncedMetaChange(callback);
     }
 
-    public onStreamSyncedMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.StreamSyncedMetaChangeEventParameters>,
-    ) {
-        return altClient.Events.onStreamSyncedMetaChange(callback);
+    public onStreamSyncedMetaChange(callback: ClientEvents.GenericEventCallback<ClientEvents.StreamSyncedMetaChangeEventParameters>) {
+        return ClientEvents.onStreamSyncedMetaChange(callback);
     }
 
-    public onGlobalMetaChange(callback: altClient.Events.GenericEventCallback<altClient.Events.GlobalMetaChangeEventParameters>) {
-        return altClient.Events.onGlobalMetaChange(callback);
+    public onGlobalMetaChange(callback: ClientEvents.GenericEventCallback<ClientEvents.GlobalMetaChangeEventParameters>) {
+        return ClientEvents.onGlobalMetaChange(callback);
     }
 
-    public onGlobalSyncedMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GlobalSyncedMetaChangeEventParameters>,
-    ) {
-        return altClient.Events.onGlobalSyncedMetaChange(callback);
+    public onGlobalSyncedMetaChange(callback: ClientEvents.GenericEventCallback<ClientEvents.GlobalSyncedMetaChangeEventParameters>) {
+        return ClientEvents.onGlobalSyncedMetaChange(callback);
     }
 
-    public onEntityColShapeEnter(callback: altClient.Events.GenericEventCallback<altClient.Events.EntityColShapeEnterEventParameters>) {
-        return altClient.Events.onEntityColShapeEnter(callback);
+    public onEntityColShapeEnter(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityColShapeEnterEventParameters>) {
+        return ClientEvents.onEntityColShapeEnter(callback);
     }
 
-    public onEntityColShapeLeave(callback: altClient.Events.GenericEventCallback<altClient.Events.EntityColShapeLeaveEventParameters>) {
-        return altClient.Events.onEntityColShapeLeave(callback);
+    public onEntityColShapeLeave(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityColShapeLeaveEventParameters>) {
+        return ClientEvents.onEntityColShapeLeave(callback);
     }
 
-    public onEntityCheckpointEnter(callback: altClient.Events.GenericEventCallback<altClient.Events.EntityCheckpointEnterEventParameters>) {
-        return altClient.Events.onEntityCheckpointEnter(callback);
+    public onEntityCheckpointEnter(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityCheckpointEnterEventParameters>) {
+        return ClientEvents.onEntityCheckpointEnter(callback);
     }
 
-    public onEntityCheckpointLeave(callback: altClient.Events.GenericEventCallback<altClient.Events.EntityCheckpointLeaveEventParameters>) {
-        return altClient.Events.onEntityCheckpointLeave(callback);
+    public onEntityCheckpointLeave(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityCheckpointLeaveEventParameters>) {
+        return ClientEvents.onEntityCheckpointLeave(callback);
     }
 
-    public onColShapeEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.ColShapeEventParameters>) {
-        return altClient.Events.onColShapeEvent(callback);
+    public onColShapeEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.ColShapeEventParameters>) {
+        return ClientEvents.onColShapeEvent(callback);
     }
 
-    public onConsoleCommand(callback: altClient.Events.GenericEventCallback<altClient.Events.ConsoleCommandEventParameters>) {
-        return altClient.Events.onConsoleCommand(callback);
+    public onConsoleCommand(callback: ClientEvents.GenericEventCallback<ClientEvents.ConsoleCommandEventParameters>) {
+        return ClientEvents.onConsoleCommand(callback);
     }
 
-    public onError(callback: altClient.Events.GenericEventCallback<altClient.Events.ErrorEventParameters>) {
-        return altClient.Events.onError(callback);
+    public onError(callback: ClientEvents.GenericEventCallback<ClientEvents.ErrorEventParameters>) {
+        return ClientEvents.onError(callback);
     }
 
-    public onLocalScriptEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.LocalScriptEventParameters>) {
-        return altClient.Events.onLocalScriptEvent(callback);
+    public onLocalScriptEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.LocalScriptEventParameters>) {
+        return ClientEvents.onLocalScriptEvent(callback);
     }
 
-    public onRemoteScriptEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.RemoteScriptEventParameters>) {
-        return altClient.Events.onRemoteScriptEvent(callback);
+    public onRemoteScriptEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.RemoteScriptEventParameters>) {
+        return ClientEvents.onRemoteScriptEvent(callback);
     }
 
-    public onResourceStart(callback: altClient.Events.GenericEventCallback<altClient.Events.ResourceStartEventParameters>) {
-        return altClient.Events.onResourceStart(callback);
+    public onResourceStart(callback: ClientEvents.GenericEventCallback<ClientEvents.ResourceStartEventParameters>) {
+        return ClientEvents.onResourceStart(callback);
     }
 
-    public onResourceStop(callback: altClient.Events.GenericEventCallback<altClient.Events.ResourceStopEventParameters>) {
-        return altClient.Events.onResourceStop(callback);
+    public onResourceStop(callback: ClientEvents.GenericEventCallback<ClientEvents.ResourceStopEventParameters>) {
+        return ClientEvents.onResourceStop(callback);
     }
 
-    public onResourceError(callback: altClient.Events.GenericEventCallback<altClient.Events.ResourceErrorEventParameters>) {
-        return altClient.Events.onResourceError(callback);
+    public onResourceError(callback: ClientEvents.GenericEventCallback<ClientEvents.ResourceErrorEventParameters>) {
+        return ClientEvents.onResourceError(callback);
     }
 }

@@ -1,312 +1,260 @@
-import * as altShared from '@altv/shared';
-import * as altClient from '@altv/client';
+import type { Events as SharedEvents } from '@altv/shared';
+import type { Events as ClientEvents, Player } from '@altv/client';
 
 export interface EventService {
-    on<E extends keyof altClient.Events.CustomClientEvent>(
+    on<E extends keyof ClientEvents.CustomClientEvent>(
         eventName: E,
-        callback: (body: Parameters<altClient.Events.CustomClientEvent[E]>[0]) => ReturnType<altClient.Events.CustomClientEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => ReturnType<ClientEvents.CustomClientEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     on<E extends string>(
-        eventName: Exclude<E, keyof altClient.Events.CustomClientEvent>,
+        eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
-    once<E extends keyof altClient.Events.CustomClientEvent>(
+    ): SharedEvents.ScriptEventHandler;
+    once<E extends keyof ClientEvents.CustomClientEvent>(
         eventName: E,
-        callback: (body: Parameters<altClient.Events.CustomClientEvent[E]>[0]) => ReturnType<altClient.Events.CustomClientEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => ReturnType<ClientEvents.CustomClientEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     once<E extends string>(
-        eventName: Exclude<E, keyof altClient.Events.CustomClientEvent>,
+        eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
-    emit<E extends keyof altClient.Events.CustomClientEvent>(eventName: E, body?: altClient.Events.CustomClientEvent[E]): void;
-    emit<E extends string>(eventName: Exclude<E, keyof altClient.Events.CustomClientEvent>, body?: unknown): void;
-    onServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(
+    ): SharedEvents.ScriptEventHandler;
+    emit<E extends keyof ClientEvents.CustomClientEvent>(eventName: E, body?: ClientEvents.CustomClientEvent[E]): void;
+    emit<E extends string>(eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>, body?: unknown): void;
+    onServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomServerToPlayerEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     onServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
-    onceServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(
+    ): SharedEvents.ScriptEventHandler;
+    onceServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (
-            body: Parameters<altShared.Events.CustomServerToPlayerEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomServerToPlayerEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     onceServer<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
-    emitServer<E extends keyof altShared.Events.CustomPlayerToServerEvent>(
+    ): SharedEvents.ScriptEventHandler;
+    emitServer<E extends keyof SharedEvents.CustomPlayerToServerEvent>(
         eventName: E,
-        body: Parameters<altShared.Events.CustomPlayerToServerEvent[E]>[0],
+        body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
     ): void;
-    emitServer<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomPlayerToServerEvent>, body?: unknown): void;
-    onWebView<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
+    emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
+    onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
         id: string | number,
         eventName: E,
         callback: (
-            body: Parameters<altShared.Events.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomWebViewToClientEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
+        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     onWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
-    onceWebView<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
+    ): SharedEvents.ScriptEventHandler;
+    onceWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
         id: string | number,
         eventName: E,
         callback: (
-            body: Parameters<altShared.Events.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<altShared.Events.CustomWebViewToClientEvent[E]>,
-    ): altShared.Events.ScriptEventHandler;
+            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
+        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+    ): SharedEvents.ScriptEventHandler;
     onceWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
-    emitWebView<E extends keyof altShared.Events.CustomClientToWebViewEvent>(
+    ): SharedEvents.ScriptEventHandler;
+    emitWebView<E extends keyof SharedEvents.CustomClientToWebViewEvent>(
         id: string | number,
         eventName: E,
-        body: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>[0],
+        body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
     ): void;
     emitWebView<E extends string>(
         id: string | number,
-        eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>,
+        eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
         body?: unknown,
     ): void;
-    onScriptRPC(callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCEventParameters>): altShared.Events.EventHandler;
-    onceScriptRPC(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCEventParameters>,
-    ): altShared.Events.EventHandler;
-    onScriptRPCAnswer(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCAnswerEventParameters>,
-    ): altShared.Events.EventHandler;
+    onScriptRPC(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCEventParameters>): SharedEvents.EventHandler;
+    onceScriptRPC(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCEventParameters>): SharedEvents.EventHandler;
+    onScriptRPCAnswer(callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCAnswerEventParameters>): SharedEvents.EventHandler;
     onceScriptRPCAnswer(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ScriptRPCAnswerEventParameters>,
-    ): altShared.Events.EventHandler;
-    onKeyboardEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.KeyboardEventParameters>,
-    ): altShared.Events.EventHandler;
-    onceKeyboardEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.KeyboardEventParameters>,
-    ): altShared.Events.EventHandler;
-    onKeyUp(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>): altShared.Events.EventHandler;
-    onceKeyUp(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>): altShared.Events.EventHandler;
-    onKeyDown(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>): altShared.Events.EventHandler;
-    onceKeyDown(callback: altClient.Events.GenericEventCallback<altClient.Events.KeyUpDownEventParameters>): altShared.Events.EventHandler;
-    onWebViewEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.WebViewEventParameters>): altShared.Events.EventHandler;
-    onceWebViewEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WebViewEventParameters>,
-    ): altShared.Events.EventHandler;
-    onWebSocketEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WebSocketEventParameters>,
-    ): altShared.Events.EventHandler;
-    onceWebSocketEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WebSocketEventParameters>,
-    ): altShared.Events.EventHandler;
-    onAudioEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.AudioEventParameters>): altShared.Events.EventHandler;
-    onceAudioEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.AudioEventParameters>): altShared.Events.EventHandler;
-    onRmluiEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.RmluiEventParameters>): altShared.Events.EventHandler;
-    onceRmluiEvent(callback: altClient.Events.GenericEventCallback<altClient.Events.RmluiEventParameters>): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.ScriptRPCAnswerEventParameters>,
+    ): SharedEvents.EventHandler;
+    onKeyboardEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyboardEventParameters>): SharedEvents.EventHandler;
+    onceKeyboardEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyboardEventParameters>): SharedEvents.EventHandler;
+    onKeyUp(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>): SharedEvents.EventHandler;
+    onceKeyUp(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>): SharedEvents.EventHandler;
+    onKeyDown(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>): SharedEvents.EventHandler;
+    onceKeyDown(callback: ClientEvents.GenericEventCallback<ClientEvents.KeyUpDownEventParameters>): SharedEvents.EventHandler;
+    onWebViewEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebViewEventParameters>): SharedEvents.EventHandler;
+    onceWebViewEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebViewEventParameters>): SharedEvents.EventHandler;
+    onWebSocketEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebSocketEventParameters>): SharedEvents.EventHandler;
+    onceWebSocketEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.WebSocketEventParameters>): SharedEvents.EventHandler;
+    onAudioEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.AudioEventParameters>): SharedEvents.EventHandler;
+    onceAudioEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.AudioEventParameters>): SharedEvents.EventHandler;
+    onRmluiEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.RmluiEventParameters>): SharedEvents.EventHandler;
+    onceRmluiEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.RmluiEventParameters>): SharedEvents.EventHandler;
     onWindowFocusChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WindowFocusChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WindowFocusChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onceWindowFocusChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WindowFocusChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WindowFocusChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onWindowResolutionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WindowResolutionChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WindowResolutionChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onceWindowResolutionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WindowResolutionChangeEventParameters>,
-    ): altShared.Events.EventHandler;
-    onConnectionComplete(callback: altClient.Events.GenericEventCallback): altShared.Events.EventHandler;
-    onceConnectionComplete(callback: altClient.Events.GenericEventCallback): altShared.Events.EventHandler;
-    onDisconnect(callback: altClient.Events.GenericEventCallback): altShared.Events.EventHandler;
-    onceDisconnect(callback: altClient.Events.GenericEventCallback): altShared.Events.EventHandler;
-    onSpawned(callback: altClient.Events.GenericEventCallback): altShared.Events.EventHandler;
-    onceSpawned(callback: altClient.Events.GenericEventCallback): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WindowResolutionChangeEventParameters>,
+    ): SharedEvents.EventHandler;
+    onConnectionComplete(callback: ClientEvents.GenericEventCallback): SharedEvents.EventHandler;
+    onceConnectionComplete(callback: ClientEvents.GenericEventCallback): SharedEvents.EventHandler;
+    onDisconnect(callback: ClientEvents.GenericEventCallback): SharedEvents.EventHandler;
+    onceDisconnect(callback: ClientEvents.GenericEventCallback): SharedEvents.EventHandler;
+    onSpawned(callback: ClientEvents.GenericEventCallback): SharedEvents.EventHandler;
+    onceSpawned(callback: ClientEvents.GenericEventCallback): SharedEvents.EventHandler;
     onGameEntityCreate(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityCreateEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityCreateEventParameters>,
+    ): SharedEvents.EventHandler;
     onceGameEntityCreate(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityCreateEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityCreateEventParameters>,
+    ): SharedEvents.EventHandler;
     onGameEntityDestroy(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityDestroyEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityDestroyEventParameters>,
+    ): SharedEvents.EventHandler;
     onceGameEntityDestroy(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GameEntityDestroyEventParameters>,
-    ): altShared.Events.EventHandler;
-    onEntityHitEntity(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.EntityHitEntityEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.GameEntityDestroyEventParameters>,
+    ): SharedEvents.EventHandler;
+    onEntityHitEntity(callback: ClientEvents.GenericEventCallback<ClientEvents.EntityHitEntityEventParameters>): SharedEvents.EventHandler;
     onceEntityHitEntity(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.EntityHitEntityEventParameters>,
-    ): altShared.Events.EventHandler;
-    onTaskChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.TaskChangeEventParameters>,
-    ): altShared.Events.EventHandler;
-    onceTaskChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.TaskChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.EntityHitEntityEventParameters>,
+    ): SharedEvents.EventHandler;
+    onTaskChange(callback: ClientEvents.GenericEventCallback<ClientEvents.TaskChangeEventParameters>): SharedEvents.EventHandler;
+    onceTaskChange(callback: ClientEvents.GenericEventCallback<ClientEvents.TaskChangeEventParameters>): SharedEvents.EventHandler;
     onPlayerWeaponShoot(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponShootEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponShootEventParameters>,
+    ): SharedEvents.EventHandler;
     oncePlayerWeaponShoot(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponShootEventParameters>,
-    ): altShared.Events.EventHandler;
-    onPlayerBulletHit(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerBulletHitEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponShootEventParameters>,
+    ): SharedEvents.EventHandler;
+    onPlayerBulletHit(callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerBulletHitEventParameters>): SharedEvents.EventHandler;
     oncePlayerBulletHit(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerBulletHitEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerBulletHitEventParameters>,
+    ): SharedEvents.EventHandler;
     onPlayerWeaponChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     oncePlayerWeaponChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.PlayerWeaponChangeEventParameters>,
-    ): altShared.Events.EventHandler;
-    onPlayerStartVehicleEnter<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleEnterEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerStartVehicleEnter<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleEnterEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    onPlayerStartVehicleLeave<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleLeaveEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerStartVehicleLeave<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerStartVehicleLeaveEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    onPlayerVehicleEntered<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleEnterEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerVehicleEntered<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleEnterEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    onPlayerVehicleLeft<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleLeaveEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerVehicleLeft<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerVehicleLeaveEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    onPlayerVehicleSeatChange<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerChangeVehicleSeatEventParameters, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerVehicleSeatChange<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.PlayerChangeVehicleSeatEventParameters, T>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.PlayerWeaponChangeEventParameters>,
+    ): SharedEvents.EventHandler;
+    onPlayerStartVehicleEnter<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleEnterEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    oncePlayerStartVehicleEnter<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleEnterEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    onPlayerStartVehicleLeave<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleLeaveEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    oncePlayerStartVehicleLeave<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerStartVehicleLeaveEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    onPlayerVehicleEntered<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleEnterEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    oncePlayerVehicleEntered<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleEnterEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    onPlayerVehicleLeft<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleLeaveEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    oncePlayerVehicleLeft<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerVehicleLeaveEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    onPlayerVehicleSeatChange<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerChangeVehicleSeatEventParameters, T>,
+    ): SharedEvents.EventHandler;
+    oncePlayerVehicleSeatChange<T extends Player>(
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.PlayerChangeVehicleSeatEventParameters, T>,
+    ): SharedEvents.EventHandler;
     onVoiceConnectionUpdate(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.VoiceConnectionEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>,
+    ): SharedEvents.EventHandler;
     onceVoiceConnectionUpdate(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.VoiceConnectionEventParameters>,
-    ): altShared.Events.EventHandler;
-    onPlayerStartTalking<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<{}, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerStartTalking<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<{}, T>,
-    ): altShared.Events.EventHandler;
-    onPlayerStopTalking<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<{}, T>,
-    ): altShared.Events.EventHandler;
-    oncePlayerStopTalking<T extends altClient.Player>(
-        callback: altClient.Events.GenericPlayerEventCallback<{}, T>,
-    ): altShared.Events.EventHandler;
-    onPedDeath(callback: altClient.Events.GenericEventCallback<altClient.Events.PedDeathEventParameters>): altShared.Events.EventHandler;
-    oncePedDeath(callback: altClient.Events.GenericEventCallback<altClient.Events.PedDeathEventParameters>): altShared.Events.EventHandler;
-    onPedDamage(callback: altClient.Events.GenericEventCallback<altClient.Events.PedDamageEventParameters>): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>,
+    ): SharedEvents.EventHandler;
+    onPlayerStartTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
+    oncePlayerStartTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
+    onPlayerStopTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
+    oncePlayerStopTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
+    onPedDeath(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDeathEventParameters>): SharedEvents.EventHandler;
+    oncePedDeath(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDeathEventParameters>): SharedEvents.EventHandler;
+    onPedDamage(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDamageEventParameters>): SharedEvents.EventHandler;
     onWorldObjectPositionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectPositionChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectPositionChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onceWorldObjectPositionChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectPositionChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectPositionChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onWorldObjectStreamIn(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamInEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamInEventParameters>,
+    ): SharedEvents.EventHandler;
     onceWorldObjectStreamIn(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamInEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamInEventParameters>,
+    ): SharedEvents.EventHandler;
     onWorldObjectStreamOut(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamOutEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamOutEventParameters>,
+    ): SharedEvents.EventHandler;
     onceWorldObjectStreamOut(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WorldObjectStreamOutEventParameters>,
-    ): altShared.Events.EventHandler;
-    onEvent(
-        callback: altClient.Events.GenericEventCallback<altShared.Events.GenericOnEventParameters>,
-    ): altShared.Events.GenericEventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectStreamOutEventParameters>,
+    ): SharedEvents.EventHandler;
+    onEvent(callback: ClientEvents.GenericEventCallback<SharedEvents.GenericOnEventParameters>): SharedEvents.GenericEventHandler;
     onBaseObjectCreate(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.BaseObjectCreateEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.BaseObjectCreateEventParameters>,
+    ): SharedEvents.EventHandler;
     onBaseObjectRemove(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.BaseObjectRemoveEventParameters>,
-    ): altShared.Events.EventHandler;
-    onNetOwnerChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.NetOwnerChangeEventParameters>,
-    ): altShared.Events.EventHandler;
-    onWeaponDamage(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.WeaponDamageEventParameters>,
-    ): altShared.Events.EventHandler;
-    onMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.MetaChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.BaseObjectRemoveEventParameters>,
+    ): SharedEvents.EventHandler;
+    onNetOwnerChange(callback: ClientEvents.GenericEventCallback<ClientEvents.NetOwnerChangeEventParameters>): SharedEvents.EventHandler;
+    onWeaponDamage(callback: ClientEvents.GenericEventCallback<ClientEvents.WeaponDamageEventParameters>): SharedEvents.EventHandler;
+    onMetaChange(callback: ClientEvents.GenericEventCallback<ClientEvents.MetaChangeEventParameters>): SharedEvents.EventHandler;
     onLocalMetaChange(
-        callback: altClient.Events.GenericPlayerEventCallback<altClient.Events.LocalMetaChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericPlayerEventCallback<ClientEvents.LocalMetaChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onSyncedMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.SyncedMetaChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.SyncedMetaChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onStreamSyncedMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.StreamSyncedMetaChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.StreamSyncedMetaChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onGlobalMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GlobalMetaChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.GlobalMetaChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onGlobalSyncedMetaChange(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.GlobalSyncedMetaChangeEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.GlobalSyncedMetaChangeEventParameters>,
+    ): SharedEvents.EventHandler;
     onEntityColShapeEnter(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.EntityColShapeEnterEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.EntityColShapeEnterEventParameters>,
+    ): SharedEvents.EventHandler;
     onEntityColShapeLeave(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.EntityColShapeLeaveEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.EntityColShapeLeaveEventParameters>,
+    ): SharedEvents.EventHandler;
     onEntityCheckpointEnter(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.EntityCheckpointEnterEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.EntityCheckpointEnterEventParameters>,
+    ): SharedEvents.EventHandler;
     onEntityCheckpointLeave(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.EntityCheckpointLeaveEventParameters>,
-    ): altShared.Events.EventHandler;
-    onColShapeEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ColShapeEventParameters>,
-    ): altShared.Events.EventHandler;
-    onConsoleCommand(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ConsoleCommandEventParameters>,
-    ): altShared.Events.EventHandler;
-    onError(callback: altClient.Events.GenericEventCallback<altClient.Events.ErrorEventParameters>): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.EntityCheckpointLeaveEventParameters>,
+    ): SharedEvents.EventHandler;
+    onColShapeEvent(callback: ClientEvents.GenericEventCallback<ClientEvents.ColShapeEventParameters>): SharedEvents.EventHandler;
+    onConsoleCommand(callback: ClientEvents.GenericEventCallback<ClientEvents.ConsoleCommandEventParameters>): SharedEvents.EventHandler;
+    onError(callback: ClientEvents.GenericEventCallback<ClientEvents.ErrorEventParameters>): SharedEvents.EventHandler;
     onLocalScriptEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.LocalScriptEventParameters>,
-    ): altShared.Events.ScriptEventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.LocalScriptEventParameters>,
+    ): SharedEvents.ScriptEventHandler;
     onRemoteScriptEvent(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.RemoteScriptEventParameters>,
-    ): altShared.Events.ScriptEventHandler;
-    onResourceStart(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ResourceStartEventParameters>,
-    ): altShared.Events.EventHandler;
-    onResourceStop(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ResourceStopEventParameters>,
-    ): altShared.Events.EventHandler;
-    onResourceError(
-        callback: altClient.Events.GenericEventCallback<altClient.Events.ResourceErrorEventParameters>,
-    ): altShared.Events.EventHandler;
+        callback: ClientEvents.GenericEventCallback<ClientEvents.RemoteScriptEventParameters>,
+    ): SharedEvents.ScriptEventHandler;
+    onResourceStart(callback: ClientEvents.GenericEventCallback<ClientEvents.ResourceStartEventParameters>): SharedEvents.EventHandler;
+    onResourceStop(callback: ClientEvents.GenericEventCallback<ClientEvents.ResourceStopEventParameters>): SharedEvents.EventHandler;
+    onResourceError(callback: ClientEvents.GenericEventCallback<ClientEvents.ResourceErrorEventParameters>): SharedEvents.EventHandler;
 }

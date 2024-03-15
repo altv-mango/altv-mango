@@ -1,8 +1,8 @@
 import { createEventDecorator } from '@altv-mango/core';
-import * as altShared from '@altv/shared';
+import type { Events as SharedEvents } from '@altv/shared';
 
-export function OnServer<E extends keyof altShared.Events.CustomServerToPlayerEvent>(eventName?: E): MethodDecorator;
-export function OnServer<E extends string>(eventName?: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>): MethodDecorator;
-export function OnServer<E extends string>(eventName?: Exclude<E, keyof altShared.Events.CustomServerToPlayerEvent>) {
+export function OnServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(eventName?: E): MethodDecorator;
+export function OnServer<E extends string>(eventName?: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>): MethodDecorator;
+export function OnServer<E extends string>(eventName?: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>) {
     return createEventDecorator('onServer', eventName);
 }

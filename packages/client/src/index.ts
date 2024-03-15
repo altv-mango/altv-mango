@@ -22,6 +22,7 @@ class ClientAppBuilder extends AppBuilder<Guard, Interceptor, ErrorFilter> {
         } else {
             this.internalAppContainer.bind(ADD_WEBVIEW).toConstantValue([{ id, options }]);
         }
+        return this;
     }
 
     public setAudioFactory(factory: typeof altClient.Audio) {

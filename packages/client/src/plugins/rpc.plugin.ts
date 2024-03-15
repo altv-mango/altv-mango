@@ -22,12 +22,15 @@ export class RPCPlugin implements MangoPlugin {
             }
 
             try {
+                this.loggerService.debug(`RPC::RETURN_FROM_CLIENT_${body.id}`, body);
                 const result = await rpcHandler.handler(body.body);
+                this.loggerService.debug(`RPC::RETURN_FROM_CLIENT_${body.id}`, result);
                 const rpcResult: RPCResult = {
                     success: true,
                     status: RPCResultStatus.Success,
                     body: result,
                 };
+                this.loggerService.debug(`RPC::RETURN_FROM_CLIENT_${body.id}`, rpcResult);
                 this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${body.id}`, rpcResult);
             } catch (error) {
                 if (error instanceof MangoError) {

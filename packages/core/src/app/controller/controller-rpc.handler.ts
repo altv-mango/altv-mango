@@ -14,7 +14,7 @@ import { PipelineHandler } from './pipeline.handler';
 import type { RPCMetadata } from '../interfaces';
 import { AppEnviroment, ExecutionContextType } from '../enums';
 import { ExecutionContextBase, type MangoRequestBase, type MangoResponseBase } from '../pipeline';
-import * as altServer from '@altv/server';
+import type { Player } from '@altv/server';
 import { ErrorMessage } from '../../enums';
 import type { LoggerService, Pipe } from '../../interfaces';
 import type { Controller } from './controller';
@@ -26,7 +26,7 @@ export class ControllerRPCHandler {
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
-    @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (data: unknown, player?: altServer.Player) => MangoRequestBase;
+    @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (data: unknown, player?: Player) => MangoRequestBase;
     @inject(MANGO_RESPONSE_FACTORY) private readonly createMangoResponse: () => MangoResponseBase;
     @inject(EXECUTION_CONTEXT_FACTORY) private readonly createExecutionContext: (
         type: ExecutionContextType,
@@ -46,7 +46,7 @@ export class ControllerRPCHandler {
     ) {
         if (rpc.type === 'onRequest') {
             return this.rpcService[rpc.type](rpc.name, async (body) => {
-                await this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
+                return this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
             });
         } else if (rpc.type === 'onPlayerRequest') {
             return this.rpcService[rpc.type](rpc.name, async (player, body) => {
@@ -54,12 +54,12 @@ export class ControllerRPCHandler {
             });
         } else if (rpc.type === 'onServerRequest') {
             return this.rpcService[rpc.type](rpc.name, async (body) => {
-                await this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
+                return this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body);
             });
         } else if (rpc.type === 'onWebViewRequest') {
             return this.rpcService[rpc.type](rpc.webViewId!, rpc.name, async (...args: unknown[]) => {
                 const body = this.appEnv === AppEnviroment.Server ? args[1] : args[0];
-                const player = this.appEnv === AppEnviroment.Server ? <altServer.Player>args[0] : undefined;
+                const player = this.appEnv === AppEnviroment.Server ? <Player>args[0] : undefined;
                 return this.handleRPC(guards, interceptors, pipes, mappedErrorFilters, controller, rpc, body, player);
             });
         }
@@ -76,7 +76,7 @@ export class ControllerRPCHandler {
         controller: Controller,
         rpc: RPCMetadata,
         body: unknown,
-        player?: altServer.Player,
+        player?: Player,
     ) {
         return new Promise(async (resolve) => {
             const request = this.createMangoRequest(
@@ -136,7 +136,6 @@ export class ControllerRPCHandler {
                 for (const postInterceptor of postInterceptors) {
                     await Promise.resolve(postInterceptor(result));
                 }
-
                 if (!response.$isSent) {
                     response.send(result);
                 }

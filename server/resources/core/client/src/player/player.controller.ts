@@ -1,4 +1,4 @@
-import { Inject, OnConnectionComplete, Controller, WEBVIEW_SERVICE, type WebViewService } from '@altv-mango/client';
+import { Inject, OnConnectionComplete, Controller, WEBVIEW_SERVICE, type WebViewService, OnServerRequest } from '@altv-mango/client';
 import { MAIN_WEBVIEW } from '@shared/constants';
 import * as altClient from '@altv/client';
 
@@ -10,5 +10,10 @@ export class PlayerController {
     public onConnectionComplete() {
         this.webViewService.tryGet(MAIN_WEBVIEW).focused = true;
         altClient.Cursor.visible = true;
+    }
+
+    @OnServerRequest('TEST_RPC')
+    public onTestRPC() {
+        return 'Hello from client';
     }
 }

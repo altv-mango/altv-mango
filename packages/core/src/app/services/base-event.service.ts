@@ -1,40 +1,37 @@
 import { injectable } from 'inversify';
 import { ErrorMessage } from '../../enums';
-import * as altShared from '@altv/shared';
+import type { Events as SharedEvents } from '@altv/shared';
 
 @injectable()
 export abstract class BaseEventService<T extends Record<string, any>> {
     protected $altEvents: any;
-    protected readonly $localHandlers: Set<altShared.Events.ScriptEventHandler> = new Set();
-    protected readonly $internalHandlers: Set<altShared.Events.EventHandler> = new Set();
-    protected readonly $remoteHandlers: Set<altShared.Events.ScriptEventHandler> = new Set();
+    protected readonly $localHandlers: Set<SharedEvents.ScriptEventHandler> = new Set();
+    protected readonly $internalHandlers: Set<SharedEvents.EventHandler> = new Set();
+    protected readonly $remoteHandlers: Set<SharedEvents.ScriptEventHandler> = new Set();
     protected $internalEventNames = new Set<string>();
 
-    public on<E extends keyof T>(
-        eventName: E,
-        callback: (body: Parameters<T[E]>[0]) => ReturnType<T[E]>,
-    ): altShared.Events.ScriptEventHandler;
+    public on<E extends keyof T>(eventName: E, callback: (body: Parameters<T[E]>[0]) => ReturnType<T[E]>): SharedEvents.ScriptEventHandler;
     public on<E extends string>(
         eventName: Exclude<E, keyof T>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public on<E extends string>(eventName: Exclude<E, keyof T>, callback: (body: unknown) => void | Promise<void>) {
         const wrapper = (...args: any[]) => callback(args[0]);
-        const eventHandler = <altShared.Events.ScriptEventHandler>this.$altEvents.on(eventName, wrapper);
+        const eventHandler = <SharedEvents.ScriptEventHandler>this.$altEvents.on(eventName, wrapper);
         this.$localHandlers.add(eventHandler);
         return eventHandler;
     }
     public once<E extends keyof T>(
         eventName: E,
         callback: (body: Parameters<T[E]>[0]) => ReturnType<T[E]>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public once<E extends string>(
         eventName: Exclude<E, keyof T>,
         callback: (body: unknown) => void | Promise<void>,
-    ): altShared.Events.ScriptEventHandler;
+    ): SharedEvents.ScriptEventHandler;
     public once<E extends string>(eventName: Exclude<E, keyof T>, callback: (body: unknown) => void | Promise<void>) {
         const wrapper = (...args: any[]) => callback(args[0]);
-        const eventHandler = <altShared.Events.ScriptEventHandler>this.$altEvents.once(eventName, wrapper);
+        const eventHandler = <SharedEvents.ScriptEventHandler>this.$altEvents.once(eventName, wrapper);
         this.$localHandlers.add(eventHandler);
         return eventHandler;
     }
@@ -49,7 +46,7 @@ export abstract class BaseEventService<T extends Record<string, any>> {
         if (!this.$internalEventNames.has(eventName)) {
             throw new Error(ErrorMessage.InvalidInternalEventName);
         }
-        const eventHandler = <altShared.Events.EventHandler>this.$altEvents[`on${eventName}`](handler);
+        const eventHandler = <SharedEvents.EventHandler>this.$altEvents[`on${eventName}`](handler);
         this.$internalHandlers.add(eventHandler);
         return eventHandler;
     }
@@ -58,7 +55,7 @@ export abstract class BaseEventService<T extends Record<string, any>> {
         if (!this.$internalEventNames.has(eventName)) {
             throw new Error(ErrorMessage.InvalidInternalEventName);
         }
-        const eventHandler = <altShared.Events.ScriptEventHandler>this.$altEvents[`once${eventName}`](handler);
+        const eventHandler = <SharedEvents.ScriptEventHandler>this.$altEvents[`once${eventName}`](handler);
         this.$internalHandlers.add(eventHandler);
         return eventHandler;
     }

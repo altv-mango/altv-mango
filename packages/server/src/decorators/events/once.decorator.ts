@@ -1,8 +1,8 @@
 import { Once as $Once } from '@altv-mango/core';
-import * as altServer from '@altv/server';
+import type { Events as ServerEvents } from '@altv/server';
 
-export function Once<E extends keyof altServer.Events.CustomServerEvent>(eventName?: E): MethodDecorator;
-export function Once<E extends string>(eventName?: Exclude<E, keyof altServer.Events.CustomServerEvent>): MethodDecorator;
-export function Once<E extends string>(eventName?: Exclude<E, keyof altServer.Events.CustomServerEvent>) {
+export function Once<E extends keyof ServerEvents.CustomServerEvent>(eventName?: E): MethodDecorator;
+export function Once<E extends string>(eventName?: Exclude<E, keyof ServerEvents.CustomServerEvent>): MethodDecorator;
+export function Once<E extends string>(eventName?: Exclude<E, keyof ServerEvents.CustomServerEvent>) {
     return $Once(eventName);
 }
