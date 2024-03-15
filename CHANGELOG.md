@@ -6,17 +6,18 @@
 
 ```typescript
 const appBuilder = await createAppBuilder();
-appBuilder.setContainerOptions(
-    {
-        autoBindInjectable: true,
-        defaultScope: 'Singleton',
-        skipBaseClassChecks: true,
-    },
-    true,
-    // If false, the options will be applied to every module's container.
-    // If true, the options will be applied to the global container.
-);
-const app = await appBuilder.build();
+const app = await appBuilder
+    .setContainerOptions(
+        {
+            autoBindInjectable: true,
+            defaultScope: 'Singleton',
+            skipBaseClassChecks: true,
+        },
+        true,
+        // If false, the options will be applied to every module's container.
+        // If true, the options will be applied to the global container.
+    )
+    .build();
 await app.start(RootModule);
 ```
 

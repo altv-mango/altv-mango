@@ -6,7 +6,7 @@
     },
     "devDependencies": {
         "@swc/cli": "^0.3.10",
-        "@swc/core": "^1.4.6",
+        "@swc/core": "^1.4.8",
         "tsup": "^8.0.2",
         "typescript": "^5.4.2"
     },
