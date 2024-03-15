@@ -1,3 +1,9 @@
+## [1.2.29] - 2024-03-15
+
+### Fixed
+
+-   `RPCService.callPlayer` now returns a value.
+
 ## [1.2.28] - 2024-03-15
 
 ### Added
