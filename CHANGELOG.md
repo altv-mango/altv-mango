@@ -32,6 +32,17 @@ await app.start(RootModule);
 })
 ```
 
+### Fixed
+
+-   `@Player` decorator now works with internal/built-in events.
+
+```typescript
+@OnPlayerConnect()
+public onPlayerConnect(@Player() player: altServer.Player) {
+    this.loggerService.log(`Player ${player.name} connected`);
+}
+```
+
 ### Changed
 
 -   `AppBuilder.build` now is a async method.
