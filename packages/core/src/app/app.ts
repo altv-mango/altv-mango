@@ -12,38 +12,13 @@ import { LOGGER_SERVICE } from '../constants';
 
 @injectable()
 export class App {
-    /**
-     * @internal
-     */
     @inject(ModuleTreeScanner) private readonly moduleTreeScanner: ModuleTreeScanner;
-    /**
-     * @internal
-     */
     @inject(ModuleDependencyBinder) private readonly moduleDependencyBinder: ModuleDependencyBinder;
-
-    /**
-     * @internal
-     */
     @inject(AppRuntime) private readonly appRuntime: AppRuntime;
-    /**
-     * @internal
-     */
     @inject(INTERNAL_APP_CONTAINER) private readonly internalAppContainer: Container;
-    /**
-     * @internal
-     */
     @inject(PLUGINS) private readonly plugins: Newable<MangoPlugin>[];
-    /**
-     * @internal
-     */
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
-    /**
-     * @internal
-     */
     private moduleTree: Tree<Module>;
-    /**
-     * @internal
-     */
     private loaded = false;
 
     public async start<T>(rootModule: Newable<T>) {
@@ -88,9 +63,6 @@ export class App {
         await this.runPluginMethods('afterStop');
     }
 
-    /**
-     * @internal
-     */
     private async runPluginMethods(method: keyof MangoPlugin) {
         await Promise.all(
             this.plugins.map(async (p) => {

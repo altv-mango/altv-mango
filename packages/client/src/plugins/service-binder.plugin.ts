@@ -9,7 +9,7 @@ export class ServiceBinderPlugin implements MangoPlugin {
     @inject(INTERNAL_APP_CONTAINER) private readonly internalAppContainer: Container;
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
 
-    public beforeCreate() {
+    public onBuild() {
         const time = Date.now();
 
         this.globalAppContainer.bind(LOGGER_SERVICE).to(ClientLoggerService).inSingletonScope();

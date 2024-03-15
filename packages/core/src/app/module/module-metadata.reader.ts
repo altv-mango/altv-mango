@@ -26,6 +26,7 @@ export class ModuleMetadataReader {
                 ...separatedProviders,
                 classRef: module,
                 global: Reflect.getMetadata<boolean>(CoreMetadataKey.GlobalModule, module) ?? false,
+                container: options.container,
             };
         }
         // Dynamic module
@@ -46,6 +47,7 @@ export class ModuleMetadataReader {
             ...separatedProviders,
             classRef,
             global: global ?? false,
+            container: options.container,
         };
     }
 

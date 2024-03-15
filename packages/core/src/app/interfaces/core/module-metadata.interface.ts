@@ -1,3 +1,4 @@
+import type { interfaces } from 'inversify';
 import type { DynamicModule, Provider } from '../../../interfaces';
 import type { InjectionToken, Newable } from '../../../types';
 import type { PipelineMetadata } from '../pipeline/pipeline-metadata.interface';
@@ -9,4 +10,5 @@ export interface ModuleMetadata extends PipelineMetadata {
     internalProviders: Map<InjectionToken, Exclude<Provider, Newable>>;
     externalProviders: Map<InjectionToken, Exclude<Provider, Newable>>;
     global: boolean;
+    container?: interfaces.ContainerOptions;
 }

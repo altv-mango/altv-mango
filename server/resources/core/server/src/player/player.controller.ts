@@ -8,11 +8,8 @@ export class PlayerController {
     private readonly loggerService: LoggerService;
 
     @OnPlayerConnect()
-    public onPlayerConnect() {
-        this.loggerService.log('Player connected');
-        this.loggerService.warn('Player connected');
-        this.loggerService.debug('Player connected');
-        this.loggerService.error('Player connected');
+    public onPlayerConnect(@Player() player: CustomPlayer) {
+        this.loggerService.log(`Player ${player.name} connected`);
     }
 
     @OnWebView(MAIN_WEBVIEW, 'prepareMainMenuScene')

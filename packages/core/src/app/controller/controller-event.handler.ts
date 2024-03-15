@@ -42,7 +42,8 @@ export class ControllerEventHandler {
             });
         } else if (event.type === 'onInternal' || event.type === 'onceInternal') {
             return this.eventService[`$${event.type}`](event.name, async (body) => {
-                await this.handleEvent(guards, interceptors, pipes, mappedErrorFilters, controller, event, body);
+                const player = isObject(body) && 'player' in body && isObject(body.player) ? <altServer.Player>body.player : undefined;
+                await this.handleEvent(guards, interceptors, pipes, mappedErrorFilters, controller, event, body, player);
             });
         } else if (event.type === 'onPlayer' || event.type === 'oncePlayer') {
             return this.eventService[event.type](event.name, async (player, body) => {
@@ -76,10 +77,11 @@ export class ControllerEventHandler {
     ) {
         const request = this.createMangoRequest(
             body,
-            this.appEnv === AppEnviroment.Server &&
-                (event.type === 'onPlayer' || event.type === 'oncePlayer' || event.type === 'onWebView' || event.type === 'onceWebView')
-                ? player
-                : undefined,
+            player,
+            // this.appEnv === AppEnviroment.Server &&
+            //     (event.type === 'onPlayer' || event.type === 'oncePlayer' || event.type === 'onWebView' || event.type === 'onceWebView')
+            //     ? player
+            //     : undefined,
         );
         const executionContext = this.createExecutionContext(
             ExecutionContextType.Event,

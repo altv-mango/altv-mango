@@ -6,5 +6,5 @@ import { CustomPlayer } from './player/custom-player';
 
 const appBuilder = await createAppBuilder();
 appBuilder.setPlayerFactory(CustomPlayer);
-const app = appBuilder.build();
+const app = await appBuilder.build();
 await app.start(RootModule);

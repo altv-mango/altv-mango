@@ -1,5 +1,5 @@
 export interface MangoPlugin {
-    beforeCreate?(): Promise<void> | void;
+    onBuild?(): Promise<void> | void;
 
     beforeStart?(): Promise<void> | void;
     afterStart?(): Promise<void> | void;

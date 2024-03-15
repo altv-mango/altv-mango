@@ -1,9 +1,9 @@
 import type { LoggerService, Provider } from '../../interfaces';
 import type { Newable } from '../../types';
 import { isObject } from '../../utils';
-import { GLOBAL_APP_CONTAINER } from '../constants';
-import { Module } from '../module';
-import { Container, inject, injectable } from 'inversify';
+import { CONTAINER_OPTIONS, GLOBAL_APP_CONTAINER } from '../constants';
+import { Module, ModuleContainer } from '../module';
+import { Container, inject, injectable, optional, type interfaces } from 'inversify';
 import { LOGGER_SERVICE, MODULE_CONTAINER } from '../../constants';
 import type { Tree } from '../utils';
 
@@ -11,12 +11,14 @@ import type { Tree } from '../utils';
 export class ModuleDependencyBinder {
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
+    @optional() @inject(CONTAINER_OPTIONS) private readonly containerOptions?: interfaces.ContainerOptions;
 
     public async bind(resolvedTree: Tree<Module>) {
         await resolvedTree.asyncTraverse(async (node) => {
             const startTime = Date.now();
 
             const module = node.value;
+            module.container = new ModuleContainer(module.metadata.container ?? this.containerOptions);
             // Attach the global container to the module container, so it can be used to resolve dependencies.
             module.container.parent = this.globalAppContainer;
             this.globalAppContainer.bind(module.metadata.classRef).toSelf().inSingletonScope();
