@@ -1,7 +1,7 @@
 import { Container, inject, injectable } from 'inversify';
 import { INTERNAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/core/app';
 import { ADD_WEBVIEW, WEBVIEW_SERVICE } from '../constants';
-import * as altClient from '@altv/client';
+import type { _WebViewCreateOptionsDrawable, _WebViewCreateOptionsOverlay } from '@altv/client';
 import type { ClientLoggerService, ClientWebViewService } from '../services';
 import { LOGGER_SERVICE } from '..';
 
@@ -18,7 +18,7 @@ export class WebViewPlugin implements MangoPlugin {
             ? this.internalAppContainer.get<
                   {
                       id: string | number;
-                      options: altClient._WebViewCreateOptionsDrawable | altClient._WebViewCreateOptionsOverlay;
+                      options: _WebViewCreateOptionsDrawable | _WebViewCreateOptionsOverlay;
                   }[]
               >(ADD_WEBVIEW)
             : [];

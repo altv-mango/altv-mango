@@ -1,4 +1,3 @@
-import '@abraham/reflection';
 import { createAppBuilder as $createAppBuilder, AppBuilder, AppEnviroment } from '@altv-mango/core/app';
 import { PlayerPrototypePlugin, RPCPlugin, ServiceBinderPlugin } from './plugins';
 import type { ErrorFilter, Guard, Interceptor } from './interfaces';
@@ -72,4 +71,4 @@ export async function createAppBuilder() {
 
 export * from './exports';
 
-// import './extension.d.ts';
+import './extension.d.ts';

@@ -3,23 +3,23 @@ import { WEBVIEW_LIST_SERVICE } from '../constants';
 import type { WebViewListService } from './webview-list.service';
 import { ErrorMessage, isNumber, isString, LOGGER_SERVICE, type LoggerService } from '@altv-mango/core';
 import type { WebViewService } from '../interfaces';
-import * as altClient from '@altv/client';
+import { WebView, type _WebViewCreateOptionsDrawable, type _WebViewCreateOptionsOverlay } from '@altv/client';
 
 @injectable()
 export class ClientWebViewService implements WebViewService {
     @inject(LOGGER_SERVICE) private readonly $loggerService: LoggerService;
     @inject(WEBVIEW_LIST_SERVICE) private readonly $webViewListService: WebViewListService;
-    private readonly $createListeners: ((id: string | number, webView: altClient.WebView) => void)[] = [];
+    private readonly $createListeners: ((id: string | number, webView: WebView) => void)[] = [];
 
-    public create(id: string | number, options: altClient._WebViewCreateOptionsDrawable): altClient.WebView;
-    public create(id: string | number, options: altClient._WebViewCreateOptionsOverlay): altClient.WebView;
-    public create(id: string | number, options: altClient._WebViewCreateOptionsOverlay) {
+    public create(id: string | number, options: _WebViewCreateOptionsDrawable): WebView;
+    public create(id: string | number, options: _WebViewCreateOptionsOverlay): WebView;
+    public create(id: string | number, options: _WebViewCreateOptionsOverlay) {
         if (!isString(id) && !isNumber(id)) {
             this.$loggerService.error('An error occurred while trying to create a WebView.');
             throw new Error(ErrorMessage.WebViewIdMustBeStringOrNumber);
         }
 
-        const webView = altClient.WebView.create(options);
+        const webView = WebView.create(options);
         this.$webViewListService.set(id, webView);
         this.$createListeners.forEach((listener) => listener(id, webView));
         return webView;
@@ -41,7 +41,7 @@ export class ClientWebViewService implements WebViewService {
         }
     }
 
-    public $onCreate(listener: (id: string | number, webView: altClient.WebView) => void) {
+    public $onCreate(listener: (id: string | number, webView: WebView) => void) {
         this.$createListeners.push(listener);
     }
 }

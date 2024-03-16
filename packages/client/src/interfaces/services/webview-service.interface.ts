@@ -1,9 +1,9 @@
-import * as altClient from '@altv/client';
+import type { WebView, _WebViewCreateOptionsDrawable, _WebViewCreateOptionsOverlay } from '@altv/client';
 
 export interface WebViewService {
-    create(id: string | number, options: altClient._WebViewCreateOptionsDrawable): altClient.WebView;
-    create(id: string | number, options: altClient._WebViewCreateOptionsOverlay): altClient.WebView;
-    get(id: string | number): altClient.WebView | undefined;
-    tryGet(id: string | number): altClient.WebView;
+    create(id: string | number, options: _WebViewCreateOptionsDrawable): WebView;
+    create(id: string | number, options: _WebViewCreateOptionsOverlay): WebView;
+    get(id: string | number): WebView | undefined;
+    tryGet(id: string | number): WebView;
     destroy(id: string | number): void;
 }
