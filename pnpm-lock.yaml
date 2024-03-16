@@ -210,9 +210,6 @@ importers:
       '@altv/client':
         specifier: ^0.0.30
         version: 0.0.30
-      altv-esbuild:
-        specifier: ^0.7.1
-        version: 0.7.1
     devDependencies:
       '@abraham/reflection':
         specifier: ^0.12.0
@@ -241,9 +238,6 @@ importers:
       '@altv/server':
         specifier: ^0.0.37
         version: 0.0.37
-      altv-esbuild:
-        specifier: ^0.7.1
-        version: 0.7.1
       axios:
         specifier: ^1.6.7
         version: 1.6.7
@@ -3923,10 +3917,6 @@ packages:
       '@algolia/requester-node-http': 4.22.1
       '@algolia/transporter': 4.22.1
     dev: true
-
-  /altv-esbuild@0.7.1:
-    resolution: {integrity: sha512-ds3rgshlxVJ8wmapiz3DNYIsx4h+jMNEyzUOVi+R3GzbSmb/5HE6uYprkDdfhL51yvMNfj9g+b9q3IA+mbhLvA==}
-    dev: false
 
   /altv-pkg@2.7.5:
     resolution: {integrity: sha512-sEdUAnS8DgaFuyFYtLWfGPci5qIVq0D09iDSwsyBMZo4l9iyz8nwW8cQjxtdIQ3BFX220Ob5mdZcCoWGe7/4oA==}

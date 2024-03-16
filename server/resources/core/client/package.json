@@ -6,8 +6,7 @@
         "dev": "tsup --watch"
     },
     "dependencies": {
-        "@altv/client": "^0.0.30",
-        "altv-esbuild": "^0.7.1"
+        "@altv/client": "^0.0.30"
     },
     "devDependencies": {
         "@abraham/reflection": "^0.12.0",

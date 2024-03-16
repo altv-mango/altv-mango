@@ -8,3 +8,5 @@ const appBuilder = await createAppBuilder();
 appBuilder.setPlayerFactory(CustomPlayer);
 const app = await appBuilder.build();
 await app.start(RootModule);
+
+console.log('Server started!');
