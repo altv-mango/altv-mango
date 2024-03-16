@@ -37,6 +37,10 @@ const config = defineConfig({
                                     title: 'Getting Started',
                                     to: '/guide/introduction/getting-started/',
                                 },
+                                {
+                                    title: 'Templates',
+                                    to: '/guide/introduction/templates/',
+                                },
                             ],
                         },
                         {
