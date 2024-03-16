@@ -220,9 +220,6 @@ importers:
       '@altv-mango/client':
         specifier: workspace:^
         version: link:../../../../packages/client
-      '@swc/cli':
-        specifier: ^0.3.10
-        version: 0.3.10(@swc/core@1.4.8)
       '@swc/core':
         specifier: ^1.4.8
         version: 1.4.8
@@ -263,9 +260,6 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
     devDependencies:
-      '@swc/cli':
-        specifier: ^0.3.10
-        version: 0.3.10(@swc/core@1.4.8)
       '@swc/core':
         specifier: ^1.4.8
         version: 1.4.8
@@ -291,9 +285,6 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
-      '@swc/cli':
-        specifier: ^0.3.10
-        version: 0.3.10(@swc/core@1.4.8)
       '@swc/core':
         specifier: ^1.4.8
         version: 1.4.8
