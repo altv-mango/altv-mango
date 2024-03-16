@@ -13,9 +13,9 @@ export default defineConfig({
     external: [...Object.keys(packageJson.dependencies), ...Object.keys(packageJson.peerDependencies), '@altv-mango/core/app'],
     plugins: [
         esbuild({
-            sourceMap: 'inline',
+            // sourceMap: 'inline',
             target: 'esnext',
-            minify: true,
+            // minify: true,
         }),
         nodeResolve({
             resolveOnly: [...Object.keys(packageJson.dependencies)],

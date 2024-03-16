@@ -3,7 +3,7 @@ import { INTERNAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/core/app';
 import { ADD_WEBVIEW, WEBVIEW_SERVICE } from '../constants';
 import type { _WebViewCreateOptionsDrawable, _WebViewCreateOptionsOverlay } from '@altv/client';
 import type { ClientLoggerService, ClientWebViewService } from '../services';
-import { LOGGER_SERVICE } from '..';
+import { LOGGER_SERVICE } from '@altv-mango/core';
 
 @injectable()
 export class WebViewPlugin implements MangoPlugin {
