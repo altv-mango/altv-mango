@@ -3,16 +3,16 @@
     "pipeline": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": ["dist"],
+            "outputs": ["dist/**"],
             "cache": false
         },
         "dev": {
             "dependsOn": ["^build"],
-            "outputs": ["dist"]
+            "outputs": ["dist/**"]
         },
         "types": {
             "dependsOn": ["^types"],
-            "outputs": ["dist"]
+            "outputs": ["dist/**"]
         },
         "typecheck": {}
     }

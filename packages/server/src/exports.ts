@@ -3,6 +3,7 @@ export * from './decorators';
 export { Body, Param, Req, Request, Res, Response } from '@altv-mango/core/decorators';
 export { UsePipes } from '@altv-mango/core/decorators';
 export { Catch, Controller, Global, Inject, Injectable, Module, Optional, SetMetadata } from '@altv-mango/core/decorators';
+export { forwardRef, applyDecorators, createParamDecorator } from '@altv-mango/core/decorators';
 // Interfaces
 export * from './interfaces';
 export type { ControllerOptions, DynamicModule, InjectableOptions, ModuleOptions } from '@altv-mango/core/interfaces';
@@ -31,7 +32,6 @@ export { DefaultValuePipe } from '@altv-mango/core/pipes';
 export { GuardCancelError, GuardInvalidReturnError, MangoError, TooManyRequests, UnknownError } from '@altv-mango/core';
 // Utils
 export {
-    forwardRef,
     isConstructor,
     isEmpty,
     isFunction,
@@ -42,8 +42,6 @@ export {
     isUndefined,
     isNumber,
     generateRandomId,
-    applyDecorators,
-    createParamDecorator,
 } from '@altv-mango/core/utils';
 // Services
 export { ReflectorService } from '@altv-mango/core/services';
