@@ -1,4 +1,4 @@
-import type { LoggerService } from '@altv-mango/core';
+import type { LoggerService } from '@altv-mango/core/interfaces';
 
 export class WebViewLoggerService implements LoggerService {
     public log(...args: unknown[]) {

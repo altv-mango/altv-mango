@@ -1,18 +1,14 @@
-import {
-    generateRandomId,
-    isNil,
-    RPCResultStatus,
-    type RPCCallOptions,
-    type RPCResult,
-    type ScriptRPCHandler,
-    ErrorMessage,
-} from '@altv-mango/core';
-import { EventDestination, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_TIMEOUT, type RPCPayload } from '@altv-mango/core/app';
+import { type RPCCallOptions, type RPCResult, type ScriptRPCHandler } from '@altv-mango/core/interfaces';
+import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_TIMEOUT } from '@altv-mango/core/app/constants';
 import type { RPCService } from '../interfaces';
 import type { WebViewEventService } from './webview-event.service';
 import type { WebViewLoggerService } from './webview-logger.service';
 import type { RPC as SharedRPC } from '@altv/shared';
 import type { RPC as WebViewRPC } from '@altv/webview';
+import { generateRandomId, isNil } from '@altv-mango/core/utils';
+import { ErrorMessage, RPCResultStatus } from '@altv-mango/core/enums';
+import { EventDestination } from '@altv-mango/core/app/enums';
+import type { RPCPayload } from '@altv-mango/core/app/interfaces';
 
 export class WebViewRPCService implements RPCService {
     private readonly $TIMEOUT = 2000;

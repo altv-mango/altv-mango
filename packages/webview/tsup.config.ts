@@ -8,7 +8,7 @@ export default defineConfig({
     clean: false,
     format: 'esm',
     bundle: true,
-    minify: true,
+    minify: false,
     external: Object.keys(packageJson.dependencies),
-    noExternal: Object.keys(packageJson.devDependencies),
+    noExternal: [...Object.keys(packageJson.devDependencies), ...Object.keys(packageJson.peerDependencies)],
 });
