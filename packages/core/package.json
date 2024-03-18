@@ -1,6 +1,6 @@
 {
     "name": "@altv-mango/core",
-    "version": "1.3.4",
+    "version": "1.3.5",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
@@ -12,76 +12,100 @@
     "type": "module",
     "exports": {
         ".": {
-            "default": "./src/index.ts"
+            "default": "./dist/index.js",
+            "types": "./dist/index.d.ts"
         },
         "./app": {
-            "default": "./src/app/index.ts"
+            "default": "./dist/app/index.js",
+            "types": "./dist/app/index.d.ts"
         },
         "./app/constants": {
-            "default": "./src/app/constants/index.ts"
+            "default": "./dist/app/constants/index.js",
+            "types": "./dist/app/constants/index.d.ts"
         },
         "./app/controller": {
-            "default": "./src/app/controller/index.ts"
+            "default": "./dist/app/controller/index.js",
+            "types": "./dist/app/controller/index.d.ts"
         },
         "./app/enums": {
-            "default": "./src/app/enums/index.ts"
+            "default": "./dist/app/enums/index.js",
+            "types": "./dist/app/enums/index.d.ts"
         },
         "./app/interfaces": {
-            "default": "./src/app/interfaces/index.ts"
+            "default": "./dist/app/interfaces/index.js",
+            "types": "./dist/app/interfaces/index.d.ts"
         },
         "./app/module": {
-            "default": "./src/app/module/index.ts"
+            "default": "./dist/app/module/index.js",
+            "types": "./dist/app/module/index.d.ts"
         },
         "./app/module-tree": {
-            "default": "./src/app/module-tree/index.ts"
+            "default": "./dist/app/module-tree/index.js",
+            "types": "./dist/app/module-tree/index.d.ts"
         },
         "./app/pipeline": {
-            "default": "./src/app/pipeline/index.ts"
+            "default": "./dist/app/pipeline/index.js",
+            "types": "./dist/app/pipeline/index.d.ts"
         },
         "./app/services": {
-            "default": "./src/app/services/index.ts"
+            "default": "./dist/app/services/index.js",
+            "types": "./dist/app/services/index.d.ts"
         },
         "./app/utils": {
-            "default": "./src/app/utils/index.ts"
+            "default": "./dist/app/utils/index.js",
+            "types": "./dist/app/utils/index.d.ts"
         },
         "./constants": {
-            "default": "./src/constants/index.ts"
+            "default": "./dist/constants/index.js",
+            "types": "./dist/constants/index.d.ts"
         },
         "./decorators": {
-            "default": "./src/decorators/index.ts"
+            "default": "./dist/decorators/index.js",
+            "types": "./dist/decorators/index.d.ts"
         },
         "./enums": {
-            "default": "./src/enums/index.ts"
+            "default": "./dist/enums/index.js",
+            "types": "./dist/enums/index.d.ts"
         },
         "./errors": {
-            "default": "./src/errors/index.ts"
+            "default": "./dist/errors/index.js",
+            "types": "./dist/errors/index.d.ts"
         },
         "./interfaces": {
-            "default": "./src/interfaces/index.ts"
+            "default": "./dist/interfaces/index.js",
+            "types": "./dist/interfaces/index.d.ts"
         },
         "./pipes": {
-            "default": "./src/pipes/index.ts"
+            "default": "./dist/pipes/index.js",
+            "types": "./dist/pipes/index.d.ts"
         },
         "./schemas": {
-            "default": "./src/schemas/index.ts"
+            "default": "./dist/schemas/index.js",
+            "types": "./dist/schemas/index.d.ts"
         },
         "./services": {
-            "default": "./src/services/index.ts"
+            "default": "./dist/services/index.js",
+            "types": "./dist/services/index.d.ts"
         },
         "./types": {
-            "default": "./src/types/index.ts"
+            "default": "./dist/types/index.js",
+            "types": "./dist/types/index.d.ts"
         },
         "./utils": {
-            "default": "./src/utils/index.ts"
+            "default": "./dist/utils/index.js",
+            "types": "./dist/utils/index.d.ts"
         }
     },
-    "main": "src/index.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "files": [
-        "src",
-        "types"
+        "dist"
     ],
     "scripts": {
-        "typecheck": "tsc --noEmit"
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "typecheck": "tsc --noEmit",
+        "types": "tsup --dts-only"
     },
     "dependencies": {
         "@abraham/reflection": "^0.12.0",

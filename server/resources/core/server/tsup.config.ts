@@ -12,5 +12,5 @@ export default defineConfig({
     bundle: true,
     minify: false,
     external: Object.keys(packageJson.dependencies),
-    noExternal: [...Object.keys(packageJson.devDependencies), '@altv-mango/server'],
+    noExternal: Object.keys(packageJson.devDependencies),
 });
