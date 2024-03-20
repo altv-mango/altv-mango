@@ -55,7 +55,7 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
 
     public emitServer<E extends keyof SharedEvents.CustomPlayerToServerEvent>(
         eventName: E,
-        body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
+        body?: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
     ): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown) {
@@ -151,7 +151,7 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
     public emitWebView<E extends keyof SharedEvents.CustomClientToWebViewEvent>(
         id: string | number,
         eventName: E,
-        body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
+        body?: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
     ): void;
     public emitWebView<E extends string>(
         id: string | number,
