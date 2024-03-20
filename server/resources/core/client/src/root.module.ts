@@ -1,7 +1,6 @@
 import { Module } from '@altv-mango/client';
-import { PlayerModule } from './player/player.module';
 
 @Module({
-    imports: [PlayerModule],
+    imports: [],
 })
 export class RootModule {}

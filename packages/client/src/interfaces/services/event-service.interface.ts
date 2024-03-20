@@ -4,7 +4,7 @@ import type { Events as ClientEvents, Player } from '@altv/client';
 export interface EventService {
     on<E extends keyof ClientEvents.CustomClientEvent>(
         eventName: E,
-        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => ReturnType<ClientEvents.CustomClientEvent[E]>,
+        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     on<E extends string>(
         eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>,
@@ -12,7 +12,7 @@ export interface EventService {
     ): SharedEvents.ScriptEventHandler;
     once<E extends keyof ClientEvents.CustomClientEvent>(
         eventName: E,
-        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => ReturnType<ClientEvents.CustomClientEvent[E]>,
+        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     once<E extends string>(
         eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>,
@@ -22,7 +22,7 @@ export interface EventService {
     emit<E extends string>(eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>, body?: unknown): void;
     onServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
@@ -30,7 +30,7 @@ export interface EventService {
     ): SharedEvents.ScriptEventHandler;
     onceServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onceServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
@@ -38,7 +38,7 @@ export interface EventService {
     ): SharedEvents.ScriptEventHandler;
     emitServer<E extends keyof SharedEvents.CustomPlayerToServerEvent>(
         eventName: E,
-        body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
+        body?: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
     ): void;
     emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
     onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
@@ -46,7 +46,7 @@ export interface EventService {
         eventName: E,
         callback: (
             body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+        ) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onWebView<E extends string>(
         id: string | number,
@@ -58,7 +58,7 @@ export interface EventService {
         eventName: E,
         callback: (
             body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+        ) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onceWebView<E extends string>(
         id: string | number,
@@ -68,7 +68,7 @@ export interface EventService {
     emitWebView<E extends keyof SharedEvents.CustomClientToWebViewEvent>(
         id: string | number,
         eventName: E,
-        body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
+        body?: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
     ): void;
     emitWebView<E extends string>(
         id: string | number,

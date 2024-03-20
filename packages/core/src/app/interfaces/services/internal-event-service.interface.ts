@@ -43,7 +43,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     emitServer<E extends keyof SharedEvents.CustomPlayerToServerEvent>(
         eventName: E,
-        body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
+        body?: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
     ): void;
     emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
     onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
@@ -73,7 +73,7 @@ export interface InternalEventService {
     emitWebView<E extends keyof SharedEvents.CustomClientToWebViewEvent>(
         id: string | number,
         eventName: E,
-        body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
+        body?: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
     ): void;
     emitWebView<E extends string>(
         id: string | number,

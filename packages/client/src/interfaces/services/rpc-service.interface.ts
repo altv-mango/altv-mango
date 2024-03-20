@@ -23,7 +23,7 @@ export interface RPCService {
     ): ScriptRPCHandler;
     callServer<E extends keyof SharedRPC.CustomClientToServerRPC>(
         rpcName: E,
-        body: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<SharedRPC.CustomServerToClientRPC[E]>>;
     callServer<E extends string>(
@@ -42,7 +42,7 @@ export interface RPCService {
     callWebView<E extends keyof SharedRPC.CustomClientToWebviewRPC>(
         id: string | number,
         rpcName: E,
-        body: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<SharedRPC.CustomClientToWebviewRPC[E]>>;
     callWebView<E extends string>(

@@ -35,6 +35,11 @@ export class ModuleDependencyBinder {
                     this.bindProvider(provider, module.container);
                     module.parent?.container.bind(token).toDynamicValue(() => module.container.get(token));
                 }
+                for (const importModule of module.repetitiveImports) {
+                    for (const [token] of importModule.metadata.externalProviders) {
+                        module.container.bind(token).toDynamicValue(() => importModule.container.get(token));
+                    }
+                }
             }
 
             // Bind internal providers.

@@ -21,7 +21,7 @@ export class ClientRPCService extends BaseRPCService<ClientRPC.CustomClientRPC> 
 
     public async callServer<E extends keyof SharedRPC.CustomClientToServerRPC>(
         rpcName: E,
-        body: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<SharedRPC.CustomServerToClientRPC[E]>>;
     public async callServer<E extends string>(
@@ -70,7 +70,7 @@ export class ClientRPCService extends BaseRPCService<ClientRPC.CustomClientRPC> 
     public async callWebView<E extends keyof SharedRPC.CustomClientToWebviewRPC>(
         id: string | number,
         rpcName: E,
-        body: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<SharedRPC.CustomClientToWebviewRPC[E]>>;
     public async callWebView<E extends string>(
