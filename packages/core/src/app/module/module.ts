@@ -10,5 +10,5 @@ export class Module {
     public parent: Module | undefined;
     public metadata: ModuleMetadata;
     public instance: { [key: string]: Function };
-    public imports: Set<Module> = new Set();
+    public repetitiveImports: Set<Module> = new Set();
 }

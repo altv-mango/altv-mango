@@ -45,7 +45,7 @@ export class ModuleTreeScanner {
         // Check if module is already imported
         const scannedModule = scannedModules.get(classRef);
         if (!isNil(scannedModule)) {
-            parentNode.value.imports.add(scannedModule);
+            parentNode.value.repetitiveImports.add(scannedModule);
             return;
         }
 
