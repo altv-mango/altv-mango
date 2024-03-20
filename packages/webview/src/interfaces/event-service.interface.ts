@@ -5,7 +5,7 @@ import type { ScriptEventHandler } from './script-event-handler.interface';
 export interface EventService {
     on<E extends keyof WebViewEvents.CustomWebViewEvent>(
         eventName: E,
-        callback: (body: Parameters<WebViewEvents.CustomWebViewEvent[E]>[0]) => ReturnType<WebViewEvents.CustomWebViewEvent[E]>,
+        callback: (body: Parameters<WebViewEvents.CustomWebViewEvent[E]>[0]) => void | Promise<void>,
     ): ScriptEventHandler;
     on<E extends string>(
         eventName: Exclude<E, keyof WebViewEvents.CustomWebViewEvent>,
@@ -13,7 +13,7 @@ export interface EventService {
     ): ScriptEventHandler;
     once<E extends keyof WebViewEvents.CustomWebViewEvent>(
         eventName: E,
-        callback: (body: Parameters<WebViewEvents.CustomWebViewEvent[E]>[0]) => ReturnType<WebViewEvents.CustomWebViewEvent[E]>,
+        callback: (body: Parameters<WebViewEvents.CustomWebViewEvent[E]>[0]) => void | Promise<void>,
     ): ScriptEventHandler;
     once<E extends string>(
         eventName: Exclude<E, keyof WebViewEvents.CustomWebViewEvent>,
@@ -25,7 +25,7 @@ export interface EventService {
         eventName: E,
         callback: (
             body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomClientToWebViewEvent[E]>,
+        ) => void | Promise<void>,
     ): ScriptEventHandler;
     onPlayer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
@@ -35,7 +35,7 @@ export interface EventService {
         eventName: E,
         callback: (
             body: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomClientToWebViewEvent[E]>,
+        ) => void | Promise<void>,
     ): ScriptEventHandler;
     oncePlayer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
@@ -50,7 +50,7 @@ export interface EventService {
         eventName: E,
         callback: (
             body: Parameters<SharedEvents.CustomServerToWebViewEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomServerToWebViewEvent[E]>,
+        ) => void | Promise<void>,
     ): ScriptEventHandler;
     onServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
@@ -60,7 +60,7 @@ export interface EventService {
         eventName: E,
         callback: (
             body: Parameters<SharedEvents.CustomServerToWebViewEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomServerToWebViewEvent[E]>,
+        ) => void | Promise<void>,
     ): ScriptEventHandler;
     onceServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
