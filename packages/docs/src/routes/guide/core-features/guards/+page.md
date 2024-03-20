@@ -11,14 +11,14 @@ title: Guards
 
 ## Overview
 
-Guards are classes annotated with an `@Guard()` decorator. They can be used to control access to a handler. They are executed before the handler method and can allow or deny execution of the handler method. They may also change the execution context. Interceptors are executed after guards.
+Guards can be used to control access to a handler. They are executed before the handler method and can allow or deny execution of the handler method. They may also change the execution context. Interceptors are executed after guards.
 
 ## Creating a Guard
 
 Guards are classes that implement the `Guard` interface. The `Guard` interface has a single method, `canActivate`, which returns a boolean or a promise that resolves to a boolean.
 
 ```typescript
-@Guard()
+@Injectable()
 export class OnlyRipeMangoGuard implements Guard {
     public canActivate(context: ExecutionContext) {
         const data = context.getMangoData();

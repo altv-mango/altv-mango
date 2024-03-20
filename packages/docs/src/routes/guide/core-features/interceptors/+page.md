@@ -11,14 +11,14 @@ title: Interceptors
 
 ## Overview
 
-Interceptors are classes annotated with an `@Interceptor()` decorator. They can be used to intercept any incoming event/request and outgoing response. They can also change the execution context. Interceptors are executed after guards.
+Interceptors can be used to intercept any incoming event/request and outgoing response. They can also change the execution context. Interceptors are executed after guards.
 
 ## Creating an Interceptor
 
 Interceptors are classes that implement the `Interceptor` interface. The `Interceptor` interface has an `intercept` method that returns a function to be used after the handler method has been executed.
 
 ```typescript
-@Interceptor()
+@Injectable()
 export class DeliciousMangoInterceptor implements Interceptor {
     public intercept(context: ExecutionContext) {
         console.log('Mango is delicious!');

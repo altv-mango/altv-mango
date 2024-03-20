@@ -11,14 +11,14 @@ title: Error Filters
 
 ## Overview
 
-Error filters are classes annotated with an `@ErrorFilter()` decorator. They can be used to handle errors thrown by guards, pipes, interceptors and handlers.
+Error filters can be used to handle errors thrown by guards, pipes, interceptors and handlers.
 
 ## Creating an Error Filter
 
 Error filters are classes that implement the `ErrorFilter` interface. The `ErrorFilter` interface has a `catch` method that returns the transformed data.
 
 ```typescript
-@ErrorFilter()
+@Injectable()
 export class MangoSpoilFilter implements ErrorFilter {
     public catch(error) {
         console.log('Mango is spoiled!');

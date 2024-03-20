@@ -11,14 +11,14 @@ title: Pipes
 
 ## Overview
 
-Pipes are classes annotated with a `@Pipe()` decorator. They can be used to transform the input data before passing it to the handler method.
+Pipes can be used to transform the input data before passing it to the handler method.
 
 ## Creating a Pipe
 
 Pipes are classes that implement the `Pipe` interface. The `Pipe` interface has a `transform` method that returns the transformed data.
 
 ```typescript
-@Pipe()
+@Injectable()
 export class MangoColorPipe implements Pipe<MyMangoData> {
     public transform(data) {
         return data.isRipe ? 'yellow' : 'green';
