@@ -59,7 +59,7 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
     ): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown) {
-        this.$altEvents.emitServer(eventName, body);
+        this.$altEvents.emitServerRaw(eventName, body);
     }
 
     public onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(

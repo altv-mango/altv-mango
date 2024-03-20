@@ -6,6 +6,8 @@ import { inject, injectable } from 'inversify';
 import { ErrorMessage } from '../../enums';
 import { Tree, TreeNode } from '../utils';
 import { LOGGER_SERVICE } from '../../constants';
+import { isNil } from '../..';
+import type { ModuleMetadata } from '..';
 
 @injectable()
 export class ModuleTreeScanner {
@@ -26,8 +28,8 @@ export class ModuleTreeScanner {
         await this.scanControllers(module);
         // Scan controllers in module
         const moduleTree = new Tree(module);
-        const scannedModules = new Set<Newable | DynamicModule | Promise<DynamicModule>>();
-        scannedModules.add(classRef);
+        const scannedModules = new Map<Newable | DynamicModule | Promise<DynamicModule>, Module>();
+        scannedModules.set(classRef, module);
         // Scan imported modules
         for (const importedModule of moduleMetadata.imports) {
             await this.scanModules(moduleTree.root, importedModule, scannedModules);
@@ -38,19 +40,21 @@ export class ModuleTreeScanner {
     private async scanModules(
         parentNode: TreeNode<Module>,
         classRef: Newable | DynamicModule | Promise<DynamicModule>,
-        scannedModules = new Set<Newable | DynamicModule | Promise<DynamicModule>>(),
+        scannedModules = new Map<Newable | DynamicModule | Promise<DynamicModule>, Module>(),
     ) {
         // Check if module is already imported
-        if (scannedModules.has(classRef)) {
+        const scannedModule = scannedModules.get(classRef);
+        if (!isNil(scannedModule)) {
+            parentNode.value.imports.add(scannedModule);
             return;
         }
-        // Add module to imported modules set to prevent unnecessary scanning
-        scannedModules.add(classRef);
 
         const startTime = Date.now();
 
         // Read module metadata
         const moduleMetadata = await this.moduleMetadataReader.read(classRef);
+        // Check if there is a circular dependency
+        this.checkCircularDependency(parentNode.value.metadata, moduleMetadata);
         // Create module instance
         const module = new Module();
         module.metadata = moduleMetadata;
@@ -59,11 +63,11 @@ export class ModuleTreeScanner {
         this.loggerService.log(`~lw~Module ~lb~${module.metadata.classRef.name} ~lw~scanned ~lk~(${Date.now() - startTime}ms)`);
         // Scan controllers in module
         await this.scanControllers(module);
-        // Check if there is a circular dependency
-        this.checkCircularDependency(parentNode.value, module);
         // Add module to tree
         const treeNode = new TreeNode(module);
         parentNode.addChild(treeNode);
+        // Add module to imported modules set to prevent unnecessary scanning
+        scannedModules.set(classRef, module);
         // Scan imported modules recursively
         for (const importModule of moduleMetadata.imports) {
             await this.scanModules(treeNode, importModule, scannedModules);
@@ -84,9 +88,9 @@ export class ModuleTreeScanner {
         }
     }
 
-    private async checkCircularDependency(parentModule: Module, module: Module) {
+    private async checkCircularDependency(parentMetadata: ModuleMetadata, moduleMetadata: ModuleMetadata) {
         // Check if parent module is imported in module
-        if (module.metadata.imports.includes(parentModule.metadata.classRef)) {
+        if (moduleMetadata.imports.includes(parentMetadata.classRef)) {
             // this.loggerService.error('An error occurred while scanning the module tree.');
             throw new Error(ErrorMessage.CircularDependencyDetected);
         }

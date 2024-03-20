@@ -10,16 +10,11 @@
         "@altv-mango/server": "workspace:^",
         "@altv/server": "^0.0.37",
         "axios": "^1.6.7",
-        "dotenv": "^16.4.5",
-        "drizzle-orm": "^0.30.2",
-        "pg": "^8.11.3",
-        "postgres": "^3.4.3"
+        "dotenv": "^16.4.5"
     },
     "devDependencies": {
         "@swc/core": "^1.4.8",
         "@types/node": "^20.11.28",
-        "@types/pg": "^8.11.2",
-        "drizzle-kit": "^0.20.14",
         "tsup": "^8.0.2",
         "typescript": "^5.4.2"
     }

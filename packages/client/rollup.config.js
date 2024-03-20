@@ -10,7 +10,10 @@ export default defineConfig({
         file: 'dist/index.js',
         format: 'esm',
     },
-    external: [...Object.keys(packageJson.dependencies), ...Object.keys(packageJson.peerDependencies)],
+    external: [
+        ...Object.keys(packageJson.dependencies),
+        ...Object.keys(packageJson.peerDependencies).filter((dep) => dep !== '@altv-mango/core' && dep !== '@altv-mango/core/app'),
+    ],
     plugins: [
         esbuild({
             sourceMap: 'inline',
@@ -19,7 +22,7 @@ export default defineConfig({
             // minify: true,
         }),
         nodeResolve({
-            resolveOnly: [...Object.keys(packageJson.devDependencies)],
+            resolveOnly: [...Object.keys(packageJson.devDependencies), '@altv-mango/core', '@altv-mango/core/app'],
         }),
         commonjs(),
     ],
