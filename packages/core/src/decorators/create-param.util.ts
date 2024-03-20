@@ -8,7 +8,7 @@ import { ErrorMessage } from '../enums';
 import type { Pipe } from '../interfaces';
 
 export function createParamDecorator<TInput = unknown, TOutput = unknown>(factory: (data: TInput, ctx: ExecutionContext) => TOutput) {
-    return <TInput = unknown>(data: TInput, ...pipes: (Newable<Pipe> | Pipe)[]) => {
+    return <TInput = unknown>(data?: TInput, ...pipes: (Newable<Pipe> | Pipe)[]) => {
         return <ParameterDecorator>((target: Object, method: string, index: number) => {
             if (!z.array(PipeSchema).safeParse(pipes).success) {
                 throw new Error(ErrorMessage.InvalidPipeDefinition);
