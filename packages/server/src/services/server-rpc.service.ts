@@ -26,18 +26,6 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
     public readonly $clientHandlers = new Map<string, ScriptRPCHandler>();
     public readonly $webViewHandlers = new Map<string, ScriptRPCHandler>();
 
-    public async callPlayer<E extends keyof SharedRPC.CustomServerToClientRPC, U extends Player>(
-        player: U,
-        rpcName: E,
-        body?: Parameters<SharedRPC.CustomServerToClientRPC[E]>[0],
-        options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<SharedRPC.CustomServerToClientRPC[E]>>>;
-    public async callPlayer<E extends string, U extends Player>(
-        player: U,
-        rpcName: Exclude<E, keyof SharedRPC.CustomServerToClientRPC>,
-        body?: unknown,
-        options?: RPCCallOptions,
-    ): Promise<RPCResult>;
     public async callPlayer<E extends string, U extends Player>(
         player: U,
         rpcName: Exclude<E, keyof SharedRPC.CustomServerToClientRPC>,
@@ -47,14 +35,6 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
         return this.$handleCall(player, rpcName, EventDestination.Client, options, body);
     }
 
-    public onPlayerRequest<E extends keyof SharedRPC.CustomClientToServerRPC, U extends Player>(
-        rpcName: E,
-        handler: (sender: U, body: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0]) => ReturnType<SharedRPC.CustomClientToServerRPC[E]>,
-    ): ScriptRPCHandler;
-    public onPlayerRequest<E extends string, U extends Player>(
-        rpcName: Exclude<E, keyof SharedRPC.CustomClientToServerRPC>,
-        handler: (sender: U, body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler;
     public onPlayerRequest<E extends string, U extends Player>(
         rpcName: Exclude<E, keyof SharedRPC.CustomClientToServerRPC>,
         handler: (sender: U, body: unknown) => unknown | Promise<unknown>,
@@ -80,20 +60,6 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
         return rpcHandler;
     }
 
-    public async callWebView<E extends keyof SharedRPC.CustomServerToWebViewRPC, U extends Player>(
-        player: U,
-        id: string | number,
-        rpcName: E,
-        body?: Parameters<SharedRPC.CustomServerToWebViewRPC[E]>[0],
-        options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<SharedRPC.CustomServerToWebViewRPC[E]>>>;
-    public async callWebView<E extends string, U extends Player>(
-        player: U,
-        id: string | number,
-        rpcName: Exclude<E, keyof SharedRPC.CustomServerToWebViewRPC>,
-        body?: unknown,
-        options?: RPCCallOptions,
-    ): Promise<RPCResult>;
     public async callWebView<E extends string, U extends Player>(
         player: U,
         id: string | number,
@@ -104,19 +70,6 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
         return this.$handleCall(player, rpcName, EventDestination.WebView, options, body, id);
     }
 
-    public onWebViewRequest<E extends string, U extends Player>(
-        id: string | number,
-        rpcName: E,
-        handler: (player: U, body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler;
-    public onWebViewRequest<E extends keyof SharedRPC.CustomWebViewToServerRPC, U extends Player>(
-        id: string | number,
-        rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToServerRPC>,
-        handler: (
-            player: U,
-            body: Parameters<SharedRPC.CustomWebViewToServerRPC[E]>[0],
-        ) => ReturnType<SharedRPC.CustomWebViewToServerRPC[E]>,
-    ): ScriptRPCHandler;
     public onWebViewRequest<E extends keyof SharedRPC.CustomWebViewToServerRPC, U extends Player>(
         id: string | number,
         rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToServerRPC>,

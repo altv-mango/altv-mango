@@ -9,7 +9,7 @@ export interface InternalEventService {
     // Client
     on<E extends keyof ClientEvents.CustomClientEvent>(
         eventName: E,
-        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => ReturnType<ClientEvents.CustomClientEvent[E]>,
+        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     on<E extends string>(
         eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>,
@@ -17,7 +17,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     once<E extends keyof ClientEvents.CustomClientEvent>(
         eventName: E,
-        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => ReturnType<ClientEvents.CustomClientEvent[E]>,
+        callback: (body: Parameters<ClientEvents.CustomClientEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     once<E extends string>(
         eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>,
@@ -27,7 +27,7 @@ export interface InternalEventService {
     emit<E extends string>(eventName: Exclude<E, keyof ClientEvents.CustomClientEvent>, body?: unknown): void;
     onServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
@@ -35,7 +35,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     onceServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
         eventName: E,
-        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
+        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onceServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
@@ -49,9 +49,7 @@ export interface InternalEventService {
     onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
         id: string | number,
         eventName: E,
-        callback: (
-            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+        callback: (body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onWebView<E extends string>(
         id: string | number,
@@ -61,9 +59,7 @@ export interface InternalEventService {
     onceWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
         id: string | number,
         eventName: E,
-        callback: (
-            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
+        callback: (body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onceWebView<E extends string>(
         id: string | number,
@@ -83,7 +79,7 @@ export interface InternalEventService {
     // Server
     on<E extends keyof ServerEvents.CustomServerEvent>(
         eventName: E,
-        callback: (body: Parameters<ServerEvents.CustomServerEvent[E]>[0]) => ReturnType<ServerEvents.CustomServerEvent[E]>,
+        callback: (body: Parameters<ServerEvents.CustomServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     on<E extends string>(
         eventName: Exclude<E, keyof ServerEvents.CustomServerEvent>,
@@ -91,7 +87,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     once<E extends keyof ServerEvents.CustomServerEvent>(
         eventName: E,
-        callback: (body: Parameters<ServerEvents.CustomServerEvent[E]>[0]) => ReturnType<ServerEvents.CustomServerEvent[E]>,
+        callback: (body: Parameters<ServerEvents.CustomServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     once<E extends string>(
         eventName: Exclude<E, keyof ServerEvents.CustomServerEvent>,
@@ -101,10 +97,7 @@ export interface InternalEventService {
     emit<E extends string>(eventName: Exclude<E, keyof ServerEvents.CustomServerEvent>, body?: any): void;
     onPlayer<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
+        callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onPlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
@@ -112,10 +105,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     oncePlayer<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
+        callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     oncePlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
@@ -123,10 +113,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     onRemote<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
+        callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onRemote<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
@@ -134,10 +121,7 @@ export interface InternalEventService {
     ): SharedEvents.ScriptEventHandler;
     onceRemote<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
+        callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onceRemote<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
@@ -176,10 +160,7 @@ export interface InternalEventService {
     onWebView<E extends keyof SharedEvents.CustomWebViewToServerEvent, U extends Player>(
         id: string | number,
         eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToServerEvent[E]>,
+        callback: (player: U, body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onWebView<E extends string, U extends Player>(
         id: string | number,
@@ -189,16 +170,14 @@ export interface InternalEventService {
     onceWebView<E extends keyof SharedEvents.CustomWebViewToServerEvent, U extends Player>(
         id: string | number,
         eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToServerEvent[E]>,
+        callback: (player: U, body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0]) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
     onceWebView<E extends string, U extends Player>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
     ): SharedEvents.ScriptEventHandler;
+
     emitWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent, U extends Player>(
         player: U[],
         id: string | number,
@@ -211,6 +190,7 @@ export interface InternalEventService {
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ): void;
+
     emitAllWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent>(
         id: string | number,
         eventName: E,
@@ -221,6 +201,7 @@ export interface InternalEventService {
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ): void;
+
     emitAllWebViewsUnreliable<E extends keyof SharedEvents.CustomServerToWebViewEvent>(
         id: string | number,
         eventName: E,

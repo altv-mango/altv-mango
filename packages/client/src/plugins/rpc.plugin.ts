@@ -1,15 +1,25 @@
 import { inject, injectable } from 'inversify';
 import { type MangoPlugin, type RPCPayload, RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_UNKNOWN } from '@altv-mango/core/app';
-import { EVENT_SERVICE, RPC_SERVICE, RPCResultStatus, type RPCResult, MangoError, LOGGER_SERVICE, isNil } from '@altv-mango/core';
+import {
+    EVENT_SERVICE,
+    RPC_SERVICE,
+    RPCResultStatus,
+    type RPCResult,
+    MangoError,
+    LOGGER_SERVICE,
+    isNil,
+    type LoggerService,
+} from '@altv-mango/core';
 import { WEBVIEW_SERVICE } from '../constants';
-import type { ClientEventService, ClientLoggerService, ClientRPCService, ClientWebViewService } from '../services';
+import type { ClientWebViewService } from '../services';
+import type { EventService, RPCService } from '../interfaces';
 
 @injectable()
 export class RPCPlugin implements MangoPlugin {
-    @inject(EVENT_SERVICE) private readonly eventService: ClientEventService;
+    @inject(EVENT_SERVICE) private readonly eventService: EventService;
     @inject(WEBVIEW_SERVICE) private readonly webViewService: ClientWebViewService;
-    @inject(RPC_SERVICE) private readonly rpcService: ClientRPCService;
-    @inject(LOGGER_SERVICE) private readonly loggerService: ClientLoggerService;
+    @inject(RPC_SERVICE) private readonly rpcService: RPCService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public beforeLoad() {
         const time = Date.now();

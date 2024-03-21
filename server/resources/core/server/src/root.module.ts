@@ -28,10 +28,4 @@ export class FooModule implements OnModuleInit {
 @Module({
     imports: [FooModule],
 })
-export class RootModule {
-    @Inject(TestService) private readonly testService: TestService;
-
-    public onModuleInit() {
-        console.log('RootModule', this.testService.value++);
-    }
-}
+export class RootModule {}

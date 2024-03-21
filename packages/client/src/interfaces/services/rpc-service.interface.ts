@@ -3,6 +3,15 @@ import type { RPC as SharedRPC } from '@altv/shared';
 import type { RPC as ClientRPC } from '@altv/client';
 
 export interface RPCService {
+    /**
+     * @internal
+     */
+    readonly $serverHandlers: Map<string, ScriptRPCHandler>;
+    /**
+     * @internal
+     */
+    readonly $webViewHandlers: Map<string, ScriptRPCHandler>;
+
     call<E extends keyof ClientRPC.CustomClientRPC>(
         rpcName: E,
         body?: Parameters<ClientRPC.CustomClientRPC[E]>[0],

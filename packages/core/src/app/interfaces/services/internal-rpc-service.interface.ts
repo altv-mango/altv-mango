@@ -28,7 +28,7 @@ export interface InternalRPCService {
     ): ScriptRPCHandler;
     callServer<E extends keyof SharedRPC.CustomClientToServerRPC>(
         rpcName: E,
-        body: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<SharedRPC.CustomServerToClientRPC[E]>>;
     callServer<E extends string>(
@@ -47,7 +47,7 @@ export interface InternalRPCService {
     callWebView<E extends keyof SharedRPC.CustomClientToWebviewRPC>(
         id: string | number,
         rpcName: E,
-        body: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
+        body?: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<SharedRPC.CustomClientToWebviewRPC[E]>>;
     callWebView<E extends string>(
@@ -63,7 +63,7 @@ export interface InternalRPCService {
     ): ScriptRPCHandler;
     onWebViewRequest<E extends string>(
         id: string | number,
-        rpcName: Exclude<E, SharedRPC.CustomWebViewToClientRPC>,
+        rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToClientRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
     ): ScriptRPCHandler;
     // Server
@@ -72,7 +72,11 @@ export interface InternalRPCService {
         body?: Parameters<ServerRPC.CustomServerRPC[E]>[0],
         options?: RPCCallOptions,
     ): Promise<RPCResult<ReturnType<ServerRPC.CustomServerRPC[E]>>>;
-    call<E extends string>(rpcName: E, body?: unknown, options?: RPCCallOptions): Promise<RPCResult<unknown>>;
+    call<E extends string>(
+        rpcName: Exclude<E, keyof ServerRPC.CustomServerRPC>,
+        body?: unknown,
+        options?: RPCCallOptions,
+    ): Promise<RPCResult<unknown>>;
     onRequest<E extends keyof ServerRPC.CustomServerRPC>(
         rpcName: E,
         handler: (body: Parameters<ServerRPC.CustomServerRPC[E]>[0]) => ReturnType<ServerRPC.CustomServerRPC[E]>,

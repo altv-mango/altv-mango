@@ -14,17 +14,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         this.$internalEventNames = new Set(Object.values(INTERNAL_EVENTS));
     }
 
-    public onPlayer<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
-        eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onPlayer<E extends string, U extends Player>(
-        eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
-        callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onPlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
@@ -35,17 +24,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         return eventHandler;
     }
 
-    public oncePlayer<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
-        eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public oncePlayer<E extends string, U extends Player>(
-        eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
-        callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public oncePlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
@@ -56,17 +34,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         return eventHandler;
     }
 
-    public onRemote<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
-        eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onRemote<E extends string, U extends Player>(
-        eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
-        callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onRemote<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
@@ -74,17 +41,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         return this.onPlayer(eventName, callback);
     }
 
-    public onceRemote<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
-        eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomPlayerToServerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onceRemote<E extends string, U extends Player>(
-        eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
-        callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onceRemote<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
@@ -92,16 +48,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         return this.oncePlayer(eventName, callback);
     }
 
-    public emitPlayers<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends Player>(
-        players: U[],
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0],
-    ): void;
-    public emitPlayers<E extends string, U extends Player>(
-        players: U[],
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
-        body?: unknown,
-    ): void;
     public emitPlayers<E extends string, U extends Player>(
         players: U[],
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
@@ -112,16 +58,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         }
     }
 
-    public emitPlayersUnreliable<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends Player>(
-        players: U[],
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0],
-    ): void;
-    public emitPlayersUnreliable<E extends string, U extends Player>(
-        players: U[],
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
-        body?: unknown,
-    ): void;
     public emitPlayersUnreliable<E extends string, U extends Player>(
         players: U[],
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
@@ -132,40 +68,14 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         }
     }
 
-    public emitAllPlayers<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0],
-    ): void;
-    public emitAllPlayers<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>, body?: unknown): void;
     public emitAllPlayers<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>, body?: unknown) {
         ServerEvents.emitAllPlayersRaw(eventName, body);
     }
 
-    public emitAllPlayersUnreliable<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0],
-    ): void;
-    public emitAllPlayersUnreliable<E extends string>(
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
-        body?: unknown,
-    ): void;
     public emitAllPlayersUnreliable<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>, body?: unknown) {
         ServerEvents.emitAllPlayersUnreliableRaw(eventName, body);
     }
 
-    public onWebView<E extends keyof SharedEvents.CustomWebViewToServerEvent, U extends Player>(
-        id: string | number,
-        eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToServerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onWebView<E extends string, U extends Player>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
-        callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onWebView<E extends string, U extends Player>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
@@ -174,19 +84,6 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         return this.onPlayer(<string>`SERVER::ON_WEBVIEW_${eventName}_${id}`, <any>callback);
     }
 
-    public onceWebView<E extends keyof SharedEvents.CustomWebViewToServerEvent, U extends Player>(
-        id: string | number,
-        eventName: E,
-        callback: (
-            player: U,
-            body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToServerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onceWebView<E extends string, U extends Player>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
-        callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onceWebView<E extends string, U extends Player>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
@@ -195,69 +92,37 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         return this.oncePlayer(<string>`SERVER::ON_WEBVIEW_${eventName}_${id}`, <any>callback);
     }
 
-    public emitWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent, U extends Player>(
-        players: U[],
-        id: string | number,
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToWebViewEvent[E]>[0],
-    ): void;
-    public emitWebViews<E extends string, U extends Player>(
-        players: U[],
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
-        body?: unknown,
-    ): void;
     public emitWebViews<E extends string, U extends Player>(
         players: U[],
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ) {
-        this.emitPlayers(players, 'SERVER::EMIT_WEBVIEW', {
+        this.emitPlayers(players, <string>'SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
             payload: body,
         });
     }
 
-    public emitAllWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent>(
-        id: string | number,
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToWebViewEvent[E]>[0],
-    ): void;
-    public emitAllWebViews<E extends string>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
-        body?: unknown,
-    ): void;
     public emitAllWebViews<E extends string>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ) {
-        this.emitAllPlayers('SERVER::EMIT_WEBVIEW', {
+        this.emitAllPlayers(<string>'SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
             payload: body,
         });
     }
 
-    public emitAllWebViewsUnreliable<E extends keyof SharedEvents.CustomServerToWebViewEvent>(
-        id: string | number,
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomServerToWebViewEvent[E]>[0],
-    ): void;
-    public emitAllWebViewsUnreliable<E extends string>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
-        body?: unknown,
-    ): void;
     public emitAllWebViewsUnreliable<E extends string>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ) {
-        this.emitAllPlayersUnreliable('SERVER::EMIT_WEBVIEW', {
+        this.emitAllPlayersUnreliable(<string>'SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
             payload: body,

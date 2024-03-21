@@ -1,14 +1,15 @@
 import { inject, injectable } from 'inversify';
 import type { MangoPlugin } from '@altv-mango/core/app';
-import { EVENT_SERVICE, LOGGER_SERVICE } from '@altv-mango/core';
-import type { ClientEventService, ClientLoggerService, ClientWebViewService } from '../services';
+import { EVENT_SERVICE, LOGGER_SERVICE, type LoggerService } from '@altv-mango/core';
 import { WEBVIEW_SERVICE } from '../constants';
+import type { EventService } from '../interfaces';
+import type { ClientWebViewService } from '../services';
 
 @injectable()
 export class EventMediatorPlugin implements MangoPlugin {
-    @inject(EVENT_SERVICE) private readonly eventService: ClientEventService;
+    @inject(EVENT_SERVICE) private readonly eventService: EventService;
     @inject(WEBVIEW_SERVICE) private readonly webViewService: ClientWebViewService;
-    @inject(LOGGER_SERVICE) private readonly loggerService: ClientLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public beforeLoad() {
         const time = Date.now();

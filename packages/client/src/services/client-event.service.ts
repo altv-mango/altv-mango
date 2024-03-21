@@ -17,14 +17,6 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         this.$internalEventNames = new Set(Object.values(INTERNAL_EVENTS));
     }
 
-    public onServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
-        eventName: E,
-        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onServer<E extends string>(
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
-        callback: (body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
@@ -35,14 +27,6 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         return eventHandler;
     }
 
-    public onceServer<E extends keyof SharedEvents.CustomServerToPlayerEvent>(
-        eventName: E,
-        callback: (body: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0]) => ReturnType<SharedEvents.CustomServerToPlayerEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onceServer<E extends string>(
-        eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
-        callback: (body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onceServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         callback: (body: unknown) => void | Promise<void>,
@@ -53,27 +37,10 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         return eventHandler;
     }
 
-    public emitServer<E extends keyof SharedEvents.CustomPlayerToServerEvent>(
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0],
-    ): void;
-    public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown): void;
     public emitServer<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>, body?: unknown) {
         this.$altEvents.emitServerRaw(eventName, body);
     }
 
-    public onWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
-        id: string | number,
-        eventName: E,
-        callback: (
-            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onWebView<E extends string>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
-        callback: (body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onWebView<E extends string>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
@@ -105,18 +72,6 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         return eventHandler;
     }
 
-    public onceWebView<E extends keyof SharedEvents.CustomWebViewToClientEvent>(
-        id: string | number,
-        eventName: E,
-        callback: (
-            body: Parameters<SharedEvents.CustomWebViewToClientEvent[E]>[0],
-        ) => ReturnType<SharedEvents.CustomWebViewToClientEvent[E]>,
-    ): SharedEvents.ScriptEventHandler;
-    public onceWebView<E extends string>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
-        callback: (body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
     public onceWebView<E extends string>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToClientEvent>,
@@ -148,16 +103,6 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         return eventHandler;
     }
 
-    public emitWebView<E extends keyof SharedEvents.CustomClientToWebViewEvent>(
-        id: string | number,
-        eventName: E,
-        body?: Parameters<SharedEvents.CustomClientToWebViewEvent[E]>[0],
-    ): void;
-    public emitWebView<E extends string>(
-        id: string | number,
-        eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
-        body?: unknown,
-    ): void;
     public emitWebView<E extends string>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomClientToWebViewEvent>,
