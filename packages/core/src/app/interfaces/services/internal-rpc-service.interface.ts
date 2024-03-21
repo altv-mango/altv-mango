@@ -30,7 +30,7 @@ export interface InternalRPCService {
         rpcName: E,
         body?: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<SharedRPC.CustomServerToClientRPC[E]>>;
+    ): Promise<RPCResult<SharedRPC.CustomClientToServerRPC[E]>>;
     callServer<E extends string>(
         rpcName: Exclude<E, keyof SharedRPC.CustomClientToServerRPC>,
         body?: unknown,
