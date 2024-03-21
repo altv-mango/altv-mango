@@ -98,7 +98,7 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ) {
-        this.emitPlayers(players, <string>'SERVER::EMIT_WEBVIEW', {
+        (<EventService>this).emitPlayers(players, 'SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
             payload: body,
@@ -110,7 +110,7 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ) {
-        this.emitAllPlayers(<string>'SERVER::EMIT_WEBVIEW', {
+        (<EventService>this).emitAllPlayers('SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
             payload: body,
@@ -122,7 +122,7 @@ export class ServerEventService extends BaseEventService<ServerEvents.CustomServ
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,
         body?: unknown,
     ) {
-        this.emitAllPlayersUnreliable(<string>'SERVER::EMIT_WEBVIEW', {
+        (<EventService>this).emitAllPlayersUnreliable('SERVER::EMIT_WEBVIEW', {
             id,
             eventName,
             payload: body,

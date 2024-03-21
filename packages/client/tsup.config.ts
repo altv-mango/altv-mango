@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 import packageJson from './package.json';
 
 export default defineConfig({
-    entry: ['src/index.ts'],
+    entry: ['src/index.ts', 'src/utils/index.ts'],
     splitting: false,
     sourcemap: 'inline',
     clean: false,

@@ -5,4 +5,5 @@ export enum MethodParamType {
     Player = 'player',
     Request = 'request',
     Response = 'response',
+    Index = 'index',
 }

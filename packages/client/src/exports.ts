@@ -1,6 +1,6 @@
 // Decorators
 export * from './decorators';
-export { Body, Param, Req, Request, Res, Response } from '@altv-mango/core/decorators';
+export { Body, Param, Req, Request, Res, Response, Index } from '@altv-mango/core/decorators';
 export { UsePipes } from '@altv-mango/core/decorators';
 export { Catch, Controller, Global, Inject, Injectable, Module, Optional, SetMetadata } from '@altv-mango/core/decorators';
 export { forwardRef, applyDecorators, createParamDecorator } from '@altv-mango/core/decorators';

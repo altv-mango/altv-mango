@@ -6,9 +6,13 @@ import type { MethodParameter } from '../../app/interfaces';
 import { MethodParamType } from '../../app/enums';
 import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
+import { isNumber } from '../..';
 
-export function Body(...pipes: (Newable<Pipe> | Pipe)[]) {
+export function Index(key: number, ...pipes: (Newable<Pipe> | Pipe)[]) {
     return <ParameterDecorator>((target: object, method: string, index: number) => {
+        if (!isNumber(key)) {
+            throw new Error(ErrorMessage.IndexKeyMustBeNumber);
+        }
         if (!z.array(PipeSchema).safeParse(pipes).success) {
             throw new Error(ErrorMessage.InvalidPipeDefinition);
         }
@@ -24,7 +28,7 @@ export function Body(...pipes: (Newable<Pipe> | Pipe)[]) {
 
         Reflect.defineMetadata<MethodParameter[]>(
             CoreMetadataKey.ControllerParams,
-            [...params, { index, method, pipes, type: MethodParamType.Body, data: undefined, metatype }],
+            [...params, { index, method, pipes, type: MethodParamType.Index, data: key, metatype }],
             target,
             method,
         );

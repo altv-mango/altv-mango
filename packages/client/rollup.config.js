@@ -5,9 +5,12 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import packageJson from './package.json' assert { type: 'json' };
 
 export default defineConfig({
-    input: 'src/index.ts',
+    input: {
+        index: 'src/index.ts',
+        utils: 'src/utils/index.ts',
+    },
     output: {
-        file: 'dist/index.js',
+        dir: 'dist',
         format: 'esm',
     },
     external: [

@@ -50,6 +50,7 @@ export enum ErrorMessage {
     InvalidInjectionTokenSpecified = 'The specified injection token is invalid.',
     InjectionTokenNotFound = 'The injection token could not be found.',
     ParamKeyMustBeString = 'The param key must be a string.',
+    IndexKeyMustBeNumber = 'The index key must be a number.',
     DuplicateDecoratorUsage = 'The same decorator can only be used once in the same class.',
     InvalidControllerOptions = 'Invalid controller options found.',
     InvalidInjectableOptions = 'Invalid injectable options found.',

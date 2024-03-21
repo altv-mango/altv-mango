@@ -112,6 +112,9 @@ export class ControllerEventHandler {
                             [...pipes, ...(param?.pipes ?? [])],
                             argumentMetadata,
                         );
+                    } else if (param.type === 'index') {
+                        if (!Array.isArray(body)) return undefined;
+                        return this.pipelineHandler.goTroughPipes(body[param.data], [...pipes, ...(param?.pipes ?? [])], argumentMetadata);
                     } else if (param.type === 'request') {
                         return request;
                     } else if (param.type === 'custom') {

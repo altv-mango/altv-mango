@@ -1,14 +1,13 @@
 import { Container, inject, injectable } from 'inversify';
 import type { RPCService } from '../interfaces';
-import { LOGGER_SERVICE, RPC_SERVICE, type RPCCallOptions } from '@altv-mango/core';
+import { LOGGER_SERVICE, RPC_SERVICE, type LoggerService, type RPCCallOptions } from '@altv-mango/core';
 import { GLOBAL_APP_CONTAINER, type MangoPlugin } from '@altv-mango/core/app';
 import { Player } from '@altv/server';
-import type { ServerLoggerService } from '../services';
 
 @injectable()
 export class PlayerPrototypePlugin implements MangoPlugin {
     @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
-    @inject(LOGGER_SERVICE) private readonly loggerService: ServerLoggerService;
+    @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
     public beforeLoad() {
         const time = Date.now();

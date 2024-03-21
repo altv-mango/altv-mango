@@ -16,8 +16,8 @@
         "dist"
     ],
     "scripts": {
-        "build": "rollup -c",
-        "dev": "rollup -c -w",
+        "build": "tsup",
+        "dev": "tsup --watch",
         "typecheck": "tsc --noEmit",
         "types": "tsup --dts-only"
     },
