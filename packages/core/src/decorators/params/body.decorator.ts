@@ -8,7 +8,7 @@ import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
 
 export function Body(...pipes: (Newable<Pipe> | Pipe)[]) {
-    return <ParameterDecorator>((target: object, method: string, index: number) => {
+    return <ParameterDecorator>((target: Object, method: string, index: number) => {
         if (!z.array(PipeSchema).safeParse(pipes).success) {
             throw new Error(ErrorMessage.InvalidPipeDefinition);
         }

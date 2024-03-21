@@ -10,6 +10,16 @@
     "license": "MIT",
     "author": "5exyGuy (Aurėjus Remeika)",
     "type": "module",
+    "exports": {
+        ".": {
+            "default": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./utils": {
+            "default": "./dist/utils/index.js",
+            "types": "./dist/utils/index.d.ts"
+        }
+    },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [

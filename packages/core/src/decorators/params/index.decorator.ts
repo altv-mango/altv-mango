@@ -9,7 +9,7 @@ import type { Pipe } from '../../interfaces';
 import { isNumber } from '../..';
 
 export function Index(key: number, ...pipes: (Newable<Pipe> | Pipe)[]) {
-    return <ParameterDecorator>((target: object, method: string, index: number) => {
+    return <ParameterDecorator>((target: Object, method: string, index: number) => {
         if (!isNumber(key)) {
             throw new Error(ErrorMessage.IndexKeyMustBeNumber);
         }

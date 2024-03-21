@@ -15,7 +15,7 @@ export function initMango() {
     const logger = new WebViewLoggerService();
     const rpc = new WebViewRPCService(event, logger);
 
-    event.onServer('RPC::CALL_WEBVIEW', async (body) => {
+    (<EventService>event).onServer('RPC::CALL_WEBVIEW', async (body) => {
         const id = body.id;
         const name = body.rpcName;
         const payload = body.body;
@@ -48,7 +48,7 @@ export function initMango() {
             event.emitServer(`RPC::RETURN_FROM_WEBVIEW_${id}`, RPC_RESULT_UNKNOWN);
         }
     });
-    event.onPlayer('RPC::CALL_WEBVIEW', async (body) => {
+    (<EventService>event).onPlayer('RPC::CALL_WEBVIEW', async (body) => {
         const id = body.id;
         const name = body.rpcName;
         const payload = body.body;

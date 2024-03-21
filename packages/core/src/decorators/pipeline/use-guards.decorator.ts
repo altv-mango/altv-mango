@@ -16,8 +16,8 @@ export function UseGuards(...guards: (Newable<Guard> | Guard)[]) {
                 throw new Error(ErrorMessage.InvalidGuardDefinition);
             }
 
-            const methodGuards = Reflect.getMetadata<Newable<Guard>[]>(CoreMetadataKey.Guards, target, method) || [];
-            Reflect.defineMetadata(CoreMetadataKey.Guards, [...guards, ...methodGuards], target, method);
+            const methodGuards = Reflect.getMetadata<Newable<Guard>[]>(CoreMetadataKey.Guards, target.constructor, method) || [];
+            Reflect.defineMetadata(CoreMetadataKey.Guards, [...guards, ...methodGuards], target.constructor, method);
             return descriptor;
         }
 

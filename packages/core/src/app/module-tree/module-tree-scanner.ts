@@ -6,8 +6,8 @@ import { inject, injectable } from 'inversify';
 import { ErrorMessage } from '../../enums';
 import { Tree, TreeNode } from '../utils';
 import { LOGGER_SERVICE } from '../../constants';
-import { isNil } from '../..';
-import type { ModuleMetadata } from '..';
+import type { ModuleMetadata } from '../interfaces';
+import { isNil } from '../../utils';
 
 @injectable()
 export class ModuleTreeScanner {

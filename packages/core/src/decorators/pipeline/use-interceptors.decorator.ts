@@ -7,7 +7,7 @@ import { CoreMetadataKey } from '../../app/enums';
 import { ErrorMessage } from '../../enums';
 
 export function UseInterceptors(...interceptors: (Newable<Interceptor> | Interceptor)[]) {
-    return <ClassDecorator | MethodDecorator>((target: any, method?: string, descriptor?: PropertyDescriptor) => {
+    return <ClassDecorator | MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
         if (!isNil(descriptor) && !isNil(descriptor.value)) {
             if (interceptors.length === 0) {
                 throw new Error(ErrorMessage.AtLeastOneInterceptorRequired);
@@ -17,13 +17,8 @@ export function UseInterceptors(...interceptors: (Newable<Interceptor> | Interce
             }
 
             const methodInterceptors =
-                Reflect.getMetadata<Newable<Interceptor>[]>(CoreMetadataKey.Interceptors, target, method) || [];
-            Reflect.defineMetadata(
-                CoreMetadataKey.Interceptors,
-                [...interceptors, ...methodInterceptors],
-                target,
-                method,
-            );
+                Reflect.getMetadata<Newable<Interceptor>[]>(CoreMetadataKey.Interceptors, target.constructor, method) || [];
+            Reflect.defineMetadata(CoreMetadataKey.Interceptors, [...interceptors, ...methodInterceptors], target.constructor, method);
             return descriptor;
         }
 
@@ -34,8 +29,7 @@ export function UseInterceptors(...interceptors: (Newable<Interceptor> | Interce
             throw new Error(ErrorMessage.InvalidInterceptorDefinition);
         }
 
-        const classInterceptors =
-            Reflect.getMetadata<Newable<Interceptor>[]>(CoreMetadataKey.Interceptors, target) || [];
+        const classInterceptors = Reflect.getMetadata<Newable<Interceptor>[]>(CoreMetadataKey.Interceptors, target) || [];
         Reflect.defineMetadata(CoreMetadataKey.Interceptors, [...interceptors, ...classInterceptors], target);
         return target;
     });

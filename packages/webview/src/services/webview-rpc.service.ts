@@ -1,6 +1,6 @@
 import { type RPCCallOptions, type RPCResult, type ScriptRPCHandler } from '@altv-mango/core/interfaces';
 import { RPC_RESULT_HANDLER_NOT_FOUND, RPC_RESULT_TIMEOUT } from '@altv-mango/core/app/constants';
-import type { RPCService } from '../interfaces';
+import type { EventService, RPCService } from '../interfaces';
 import type { WebViewEventService } from './webview-event.service';
 import type { WebViewLoggerService } from './webview-logger.service';
 import type { RPC as SharedRPC } from '@altv/shared';
@@ -18,16 +18,6 @@ export class WebViewRPCService implements RPCService {
 
     public constructor(private readonly $eventService: WebViewEventService, private readonly $loggerService: WebViewLoggerService) {}
 
-    public async call<E extends keyof WebViewRPC.CustomWebViewRPC>(
-        rpcName: E,
-        body?: Parameters<WebViewRPC.CustomWebViewRPC[E]>[0],
-        options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<WebViewRPC.CustomWebViewRPC[E]>>>;
-    public async call<E extends string>(
-        rpcName: Exclude<E, keyof WebViewRPC.CustomWebViewRPC>,
-        body?: unknown,
-        options?: RPCCallOptions,
-    ): Promise<RPCResult>;
     public async call<E extends string>(
         rpcName: Exclude<E, keyof WebViewRPC.CustomWebViewRPC>,
         body?: unknown,
@@ -50,14 +40,6 @@ export class WebViewRPCService implements RPCService {
         });
     }
 
-    public onRequest<E extends keyof WebViewRPC.CustomWebViewRPC>(
-        rpcName: E,
-        handler: (body: Parameters<WebViewRPC.CustomWebViewRPC[E]>[0]) => ReturnType<WebViewRPC.CustomWebViewRPC[E]>,
-    ): ScriptRPCHandler;
-    public onRequest<E extends string>(
-        rpcName: Exclude<E, keyof WebViewRPC.CustomWebViewRPC>,
-        handler: (body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler;
     public onRequest<E extends string>(
         rpcName: Exclude<E, keyof WebViewRPC.CustomWebViewRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
@@ -80,16 +62,6 @@ export class WebViewRPCService implements RPCService {
         return rpcHandler;
     }
 
-    public callServer<E extends keyof SharedRPC.CustomWebViewToServerRPC>(
-        rpcName: E,
-        body?: Parameters<SharedRPC.CustomWebViewToServerRPC[E]>[0],
-        options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<SharedRPC.CustomWebViewToServerRPC[E]>>>;
-    public callServer<E extends string>(
-        rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToServerRPC>,
-        body?: unknown,
-        options?: RPCCallOptions,
-    ): Promise<RPCResult>;
     public callServer<E extends string>(
         rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToServerRPC>,
         body?: unknown,
@@ -98,14 +70,6 @@ export class WebViewRPCService implements RPCService {
         return this.$handleCall(rpcName, EventDestination.Server, options, body);
     }
 
-    public onServerRequest<E extends keyof SharedRPC.CustomServerToWebViewRPC>(
-        rpcName: E,
-        handler: (body: Parameters<SharedRPC.CustomServerToWebViewRPC[E]>[0]) => ReturnType<SharedRPC.CustomServerToWebViewRPC[E]>,
-    ): ScriptRPCHandler;
-    public onServerRequest<E extends string>(
-        rpcName: Exclude<E, keyof SharedRPC.CustomServerToWebViewRPC>,
-        handler: (body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler;
     public onServerRequest<E extends string>(
         rpcName: Exclude<E, keyof SharedRPC.CustomServerToWebViewRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
@@ -128,16 +92,6 @@ export class WebViewRPCService implements RPCService {
         return rpcHandler;
     }
 
-    public callPlayer<E extends keyof SharedRPC.CustomWebViewToClientRPC>(
-        rpcName: E,
-        body?: Parameters<SharedRPC.CustomWebViewToClientRPC[E]>[0],
-        options?: RPCCallOptions,
-    ): Promise<RPCResult<ReturnType<SharedRPC.CustomWebViewToClientRPC[E]>>>;
-    public callPlayer<E extends string>(
-        rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToClientRPC>,
-        body?: unknown,
-        options?: RPCCallOptions,
-    ): Promise<RPCResult>;
     public callPlayer<E extends string>(
         rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToClientRPC>,
         body?: unknown,
@@ -146,14 +100,6 @@ export class WebViewRPCService implements RPCService {
         return this.$handleCall(rpcName, EventDestination.Client, options, body);
     }
 
-    public onPlayerRequest<E extends keyof SharedRPC.CustomClientToWebviewRPC>(
-        rpcName: E,
-        handler: (body: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0]) => ReturnType<SharedRPC.CustomClientToWebviewRPC[E]>,
-    ): ScriptRPCHandler;
-    public onPlayerRequest<E extends string>(
-        rpcName: Exclude<E, keyof SharedRPC.CustomClientToWebviewRPC>,
-        handler: (body: unknown) => unknown | Promise<unknown>,
-    ): ScriptRPCHandler;
     public onPlayerRequest<E extends string>(
         rpcName: Exclude<E, keyof SharedRPC.CustomClientToWebviewRPC>,
         handler: (body: unknown) => unknown | Promise<unknown>,
@@ -203,8 +149,8 @@ export class WebViewRPCService implements RPCService {
                 body,
             };
             destination === EventDestination.Server
-                ? this.$eventService.emitPlayer('RPC::CALL_SERVER', payload)
-                : this.$eventService.emitPlayer('RPC::CALL_CLIENT', payload);
+                ? (<EventService>this.$eventService).emitPlayer('RPC::CALL_SERVER', payload)
+                : (<EventService>this.$eventService).emitPlayer('RPC::CALL_CLIENT', payload);
 
             timeoutId = setTimeout(() => {
                 scriptEventHandler.destroy();

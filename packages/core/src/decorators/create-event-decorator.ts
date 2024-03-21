@@ -1,8 +1,9 @@
-import { ErrorMessage, isNil, isString } from '..';
+import { isNil, isString } from '../utils';
 import { CoreMetadataKey, type EventMetadata, type PipelineMetadata } from '../app';
+import { ErrorMessage } from '../enums';
 
 export function createEventDecorator(type: EventMetadata['type'], name?: string, webViewId?: string | number) {
-    return <MethodDecorator>((target: object, method: string) => {
+    return <MethodDecorator>((target: Object, method: string) => {
         if (!isNil(name) && !isString(name)) {
             throw new Error(ErrorMessage.EventNameMustBeString);
         }

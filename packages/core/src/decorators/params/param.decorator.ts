@@ -9,7 +9,7 @@ import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
 
 export function Param(key: string, ...pipes: (Newable<Pipe> | Pipe)[]) {
-    return <ParameterDecorator>((target: object, method: string, index: number) => {
+    return <ParameterDecorator>((target: Object, method: string, index: number) => {
         if (!isString(key)) {
             throw new Error(ErrorMessage.ParamKeyMustBeString);
         }

@@ -7,7 +7,7 @@ import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
 
 export function UsePipes(...pipes: (Newable<Pipe> | Pipe)[]) {
-    return <ClassDecorator | MethodDecorator>((target: any, method?: string, descriptor?: PropertyDescriptor) => {
+    return <ClassDecorator | MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
         if (!isNil(descriptor) && !isNil(descriptor.value)) {
             if (pipes.length === 0) {
                 throw new Error(ErrorMessage.AtLeastOnePipeRequired);
@@ -16,8 +16,8 @@ export function UsePipes(...pipes: (Newable<Pipe> | Pipe)[]) {
                 throw new Error(ErrorMessage.InvalidPipeDefinition);
             }
 
-            const methodPipes = Reflect.getMetadata<Newable<Pipe>[]>(CoreMetadataKey.Pipes, target, method) || [];
-            Reflect.defineMetadata(CoreMetadataKey.Pipes, [...pipes, ...methodPipes], target, method);
+            const methodPipes = Reflect.getMetadata<Newable<Pipe>[]>(CoreMetadataKey.Pipes, target.constructor, method) || [];
+            Reflect.defineMetadata(CoreMetadataKey.Pipes, [...pipes, ...methodPipes], target.constructor, method);
             return descriptor;
         }
 

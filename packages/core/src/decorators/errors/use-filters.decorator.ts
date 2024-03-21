@@ -17,11 +17,11 @@ export function UseFilters(...filters: (Newable<ErrorFilter> | ErrorFilter)[]) {
             }
 
             const methodFilters =
-                Reflect.getMetadata<Newable<ErrorFilter>[]>(CoreMetadataKey.ErrorFilters, descriptor.value) || [];
+                Reflect.getMetadata<Newable<ErrorFilter>[]>(CoreMetadataKey.ErrorFilters, target.constructor, method) || [];
             if (!isNil(methodFilters.find((filter) => filters.includes(filter)))) {
                 throw new Error(ErrorMessage.DuplicateErrorFilterDetected);
             }
-            Reflect.defineMetadata(CoreMetadataKey.ErrorFilters, [...filters, ...methodFilters], target, method);
+            Reflect.defineMetadata(CoreMetadataKey.ErrorFilters, [...filters, ...methodFilters], target.constructor, method);
             return descriptor;
         }
 
