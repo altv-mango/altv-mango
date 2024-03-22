@@ -11,8 +11,8 @@ import {
     applyDecorators,
     OnKeyUp,
     UseGuards,
-    RPC_SERVICE,
-    type RPCService,
+    EVENT_SERVICE,
+    type EventService,
 } from '@altv-mango/client';
 import type { Enums } from '@altv/shared';
 import type { Events } from '@altv/client';
@@ -35,12 +35,13 @@ export function OnTest(key: Enums.KeyCode) {
 @Controller()
 export class RootController {
     @Inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
-    @Inject(RPC_SERVICE) private readonly rpcService: RPCService;
+    // @Inject(RPC_SERVICE) private readonly rpcService: RPCService;
+    @Inject(EVENT_SERVICE) private readonly eventService: EventService;
 
     @OnTest(69)
     public async onKeyDown() {
         this.loggerService.debug('Key E was pressed');
-        const response = await this.rpcService.callServer('EAT_MANGO', { mangoId: 1 });
+        this.eventService.emitServer('testEvent', 'Key E was pressed');
     }
 }
 

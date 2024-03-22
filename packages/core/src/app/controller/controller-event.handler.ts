@@ -1,7 +1,7 @@
-import { Container, inject, injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import type { ErrorFilter, Guard, Interceptor, InternalEventService } from '../interfaces';
 import type { Newable } from '../../types';
-import { APP_ENVIROMENT, EXECUTION_CONTEXT_FACTORY, GLOBAL_APP_CONTAINER, MANGO_REQUEST_FACTORY } from '../constants';
+import { APP_ENVIROMENT, EXECUTION_CONTEXT_FACTORY, MANGO_REQUEST_FACTORY } from '../constants';
 import { isFunction, isNil, isObject } from '../../utils';
 import { PipelineHandler } from './pipeline.handler';
 import type { EventMetadata } from '../interfaces';
@@ -17,7 +17,6 @@ import type { LoggerService, Pipe } from '../../interfaces';
 export class ControllerEventHandler {
     @inject(APP_ENVIROMENT) private readonly appEnv: AppEnviroment;
     @inject(EVENT_SERVICE) private readonly eventService: InternalEventService;
-    @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (body: unknown, player?: Player) => MangoRequestBase;
@@ -91,8 +90,12 @@ export class ControllerEventHandler {
         );
 
         try {
-            await this.pipelineHandler.goTroughGuards(executionContext, guards);
-            const postInterceptors = await this.pipelineHandler.goThroughInterceptors(executionContext, interceptors);
+            await this.pipelineHandler.goTroughGuards(executionContext, guards, controller.owner.container);
+            const postInterceptors = await this.pipelineHandler.goThroughInterceptors(
+                executionContext,
+                interceptors,
+                controller.owner.container,
+            );
             const params = await Promise.all(
                 event.params.map(async (param) => {
                     const argumentMetadata = {
@@ -103,7 +106,12 @@ export class ControllerEventHandler {
 
                     if (param.type === 'body') {
                         // Body
-                        return this.pipelineHandler.goTroughPipes(body, [...pipes, ...(param?.pipes ?? [])], argumentMetadata);
+                        return this.pipelineHandler.goTroughPipes(
+                            body,
+                            [...pipes, ...(param?.pipes ?? [])],
+                            argumentMetadata,
+                            controller.owner.container,
+                        );
                     } else if (param.type === 'param') {
                         // Param
                         if (!isObject(body)) return undefined;
@@ -111,10 +119,16 @@ export class ControllerEventHandler {
                             (<Record<string, unknown>>body)[param.data],
                             [...pipes, ...(param?.pipes ?? [])],
                             argumentMetadata,
+                            controller.owner.container,
                         );
                     } else if (param.type === 'index') {
                         if (!Array.isArray(body)) return undefined;
-                        return this.pipelineHandler.goTroughPipes(body[param.data], [...pipes, ...(param?.pipes ?? [])], argumentMetadata);
+                        return this.pipelineHandler.goTroughPipes(
+                            body[param.data],
+                            [...pipes, ...(param?.pipes ?? [])],
+                            argumentMetadata,
+                            controller.owner.container,
+                        );
                     } else if (param.type === 'request') {
                         return request;
                     } else if (param.type === 'custom') {
@@ -123,6 +137,7 @@ export class ControllerEventHandler {
                             param.factory(param.data, executionContext),
                             [...pipes, ...(param?.pipes ?? [])],
                             argumentMetadata,
+                            controller.owner.container,
                         );
                     } else if (param.type === 'player' && this.appEnv === AppEnviroment.Server) {
                         // Player (Server)
@@ -130,6 +145,7 @@ export class ControllerEventHandler {
                             param.data ? player![<keyof Player>param.data] : player,
                             [...pipes, ...(param?.pipes ?? [])],
                             argumentMetadata,
+                            controller.owner.container,
                         );
                     }
                     return undefined;
@@ -144,7 +160,7 @@ export class ControllerEventHandler {
             );
             if (isNil(errorGroup)) return;
             const instance = isFunction(errorGroup[1])
-                ? this.globalAppContainer.get(errorGroup[1])
+                ? controller.owner.container.get(errorGroup[1])
                 : isObject(errorGroup[1]) && isFunction(errorGroup[1]['catch'])
                 ? errorGroup[1]
                 : null;

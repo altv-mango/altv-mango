@@ -1,13 +1,7 @@
-import { Container, inject, injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import type { ErrorFilter, Guard, Interceptor, InternalRPCService } from '../interfaces';
 import { LOGGER_SERVICE, RPC_SERVICE } from '../../constants';
-import {
-    APP_ENVIROMENT,
-    EXECUTION_CONTEXT_FACTORY,
-    GLOBAL_APP_CONTAINER,
-    MANGO_REQUEST_FACTORY,
-    MANGO_RESPONSE_FACTORY,
-} from '../constants';
+import { APP_ENVIROMENT, EXECUTION_CONTEXT_FACTORY, MANGO_REQUEST_FACTORY, MANGO_RESPONSE_FACTORY } from '../constants';
 import type { Newable } from '../../types';
 import { isFunction, isNil, isObject } from '../../utils';
 import { PipelineHandler } from './pipeline.handler';
@@ -23,7 +17,6 @@ import type { Controller } from './controller';
 export class ControllerRPCHandler {
     @inject(APP_ENVIROMENT) private readonly appEnv: AppEnviroment;
     @inject(RPC_SERVICE) private readonly rpcService: InternalRPCService;
-    @inject(GLOBAL_APP_CONTAINER) private readonly globalAppContainer: Container;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (data: unknown, player?: Player) => MangoRequestBase;
@@ -97,8 +90,12 @@ export class ControllerRPCHandler {
             );
 
             try {
-                await this.pipelineHandler.goTroughGuards(executionContext, guards);
-                const postInterceptors = await this.pipelineHandler.goThroughInterceptors(executionContext, interceptors);
+                await this.pipelineHandler.goTroughGuards(executionContext, guards, controller.owner.container);
+                const postInterceptors = await this.pipelineHandler.goThroughInterceptors(
+                    executionContext,
+                    interceptors,
+                    controller.owner.container,
+                );
                 const params = await Promise.all(
                     rpc.params.map(async (param) => {
                         const argumentMetadata = {
@@ -108,12 +105,18 @@ export class ControllerRPCHandler {
                         };
 
                         if (param.type === 'body') {
-                            return this.pipelineHandler.goTroughPipes(body, [...pipes, ...(param?.pipes ?? [])], argumentMetadata);
+                            return this.pipelineHandler.goTroughPipes(
+                                body,
+                                [...pipes, ...(param?.pipes ?? [])],
+                                argumentMetadata,
+                                controller.owner.container,
+                            );
                         } else if (param.type === 'param') {
                             return this.pipelineHandler.goTroughPipes(
                                 (<Record<string, unknown>>body)[param.data],
                                 [...pipes, ...(param?.pipes ?? [])],
                                 argumentMetadata,
+                                controller.owner.container,
                             );
                         } else if (param.type === 'index') {
                             if (!Array.isArray(body)) return undefined;
@@ -121,6 +124,7 @@ export class ControllerRPCHandler {
                                 body[param.data],
                                 [...pipes, ...(param?.pipes ?? [])],
                                 argumentMetadata,
+                                controller.owner.container,
                             );
                         } else if (param.type === 'request') {
                             return request;
@@ -132,9 +136,15 @@ export class ControllerRPCHandler {
                                 param.factory(param.data, executionContext),
                                 [...pipes, ...(param?.pipes ?? [])],
                                 argumentMetadata,
+                                controller.owner.container,
                             );
                         } else if (param.type === 'player' && this.appEnv === AppEnviroment.Server) {
-                            return this.pipelineHandler.goTroughPipes(player, [...pipes, ...(param?.pipes ?? [])], argumentMetadata);
+                            return this.pipelineHandler.goTroughPipes(
+                                player,
+                                [...pipes, ...(param?.pipes ?? [])],
+                                argumentMetadata,
+                                controller.owner.container,
+                            );
                         }
                         return undefined;
                     }),
@@ -153,7 +163,7 @@ export class ControllerRPCHandler {
                 );
                 if (isNil(errorGroup)) return;
                 const instance = isFunction(errorGroup[1])
-                    ? this.globalAppContainer.get(errorGroup[1])
+                    ? controller.owner.container.get(errorGroup[1])
                     : isObject(errorGroup[1]) && isFunction(errorGroup[1]['catch'])
                     ? errorGroup[1]
                     : null;

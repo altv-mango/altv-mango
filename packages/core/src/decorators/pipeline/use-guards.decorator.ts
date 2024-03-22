@@ -7,7 +7,7 @@ import { CoreMetadataKey } from '../../app/enums';
 import { ErrorMessage } from '../../enums';
 
 export function UseGuards(...guards: (Newable<Guard> | Guard)[]) {
-    return <ClassDecorator | MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
+    return <ClassDecorator & MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
         if (!isNil(descriptor) && !isNil(descriptor.value)) {
             if (guards.length === 0) {
                 throw new Error(ErrorMessage.AtLeastOneGuardRequired);

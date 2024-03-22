@@ -7,7 +7,7 @@ import { CoreMetadataKey } from '../../app/enums';
 import { ErrorMessage } from '../../enums';
 
 export function UseInterceptors(...interceptors: (Newable<Interceptor> | Interceptor)[]) {
-    return <ClassDecorator | MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
+    return <ClassDecorator & MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
         if (!isNil(descriptor) && !isNil(descriptor.value)) {
             if (interceptors.length === 0) {
                 throw new Error(ErrorMessage.AtLeastOneInterceptorRequired);

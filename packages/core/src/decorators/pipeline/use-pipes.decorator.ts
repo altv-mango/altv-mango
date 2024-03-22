@@ -7,7 +7,7 @@ import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
 
 export function UsePipes(...pipes: (Newable<Pipe> | Pipe)[]) {
-    return <ClassDecorator | MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
+    return <ClassDecorator & MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
         if (!isNil(descriptor) && !isNil(descriptor.value)) {
             if (pipes.length === 0) {
                 throw new Error(ErrorMessage.AtLeastOnePipeRequired);
