@@ -1,3 +1,43 @@
+## [1.3.6] - 2024-03-22
+
+### Added
+
+-   `@Index` decorator to get the value from `body`, which is an array type.
+
+```typescript
+@On('I_LOVE_MANGOES')
+public loveMangoes(@Body() myArray: string[], @Index(5) value: string) {
+    this.loggerService.log(myArray[5] === value); // true
+}
+```
+
+-   `@altv-mango/client` package now has a subpackage `@altv-mango/client/utils` with the following functions:
+    -   `@OnKeyUp`
+    -   `@OnceKeyUp`
+    -   `@OnKeyDown`
+    -   `@OnceKeyDown`
+    -   `@OnKeyBoardEvent`
+    -   `@OnceKeyBoardEvent`
+
+```typescript
+@OnKeyUp(69)
+public onKeyUpE() {
+    this.loggerService.log('E key was pressed');
+}
+```
+
+### Fixed
+
+-   `RPCService` and `EventService` mistypos.
+-   `@UseGuards`, `@UseInterceptors`, `@UsePipes` decorators now works at method level, whereas before it only worked at class level.
+-   `createParamDecorator` data argument is now optional.
+
+## [1.3.5] - 2024-03-20
+
+### Fixed
+
+-   Module external providers are now correctly injected.
+
 ## [1.2.29] - 2024-03-15
 
 ### Fixed
