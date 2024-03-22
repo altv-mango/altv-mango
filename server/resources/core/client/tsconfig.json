@@ -24,12 +24,12 @@
         "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
         "verbatimModuleSyntax": true,
-        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@altv-mango"],
+        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@altv-mango", "./types"],
         "paths": {
             "@shared/*": ["../shared/src/*"],
             "@shared": ["../shared/src"]
         }
     },
-    "include": ["src/**/*.ts"],
+    "include": ["./src/**/*.ts", "./types/**/*.d.ts"],
     "exclude": ["node_modules", "dist"]
 }

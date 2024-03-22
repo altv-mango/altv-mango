@@ -34,7 +34,7 @@ export interface RPCService {
         rpcName: E,
         body?: Parameters<SharedRPC.CustomClientToServerRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<SharedRPC.CustomServerToClientRPC[E]>>;
+    ): Promise<RPCResult<ReturnType<SharedRPC.CustomClientToServerRPC[E]>>>;
     callServer<E extends string>(
         rpcName: Exclude<E, keyof SharedRPC.CustomClientToServerRPC>,
         body?: unknown,
@@ -53,7 +53,7 @@ export interface RPCService {
         rpcName: E,
         body?: Parameters<SharedRPC.CustomClientToWebviewRPC[E]>[0],
         options?: RPCCallOptions,
-    ): Promise<RPCResult<SharedRPC.CustomClientToWebviewRPC[E]>>;
+    ): Promise<RPCResult<ReturnType<SharedRPC.CustomClientToWebviewRPC[E]>>>;
     callWebView<E extends string>(
         id: string | number,
         rpcName: Exclude<E, keyof SharedRPC.CustomClientToWebviewRPC>,
