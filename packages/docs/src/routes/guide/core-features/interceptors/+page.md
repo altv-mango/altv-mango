@@ -38,7 +38,10 @@ export class DeliciousMangoInterceptor implements Interceptor {
 Interceptors can be used at the module, controller or handler level. To use an interceptor, use the `@UseInterceptors` decorator on the module, controller or handler, and pass the interceptor class as an argument.
 
 :::note
-When you specify an interceptor as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the interceptor instead of a class reference.
+
+-   When you specify an interceptor as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the interceptor instead of a class reference.
+-   If you're using class references, don't forget to add the `@Injectable` decorator and add the guard to the `providers` array in the module.
+
 :::
 
 ```typescript
@@ -55,6 +58,7 @@ export class DeliciousMangoController {
 @UseInterceptors(DeliciousMangoInterceptor) // [svp! ++]
 @Module({
     controllers: [DeliciousMangoController],
+    providers: [DeliciousMangoInterceptor],
 })
 export class DeliciousMangoModule {}
 ```

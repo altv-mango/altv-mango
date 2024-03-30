@@ -35,7 +35,10 @@ export class OnlyRipeMangoGuard implements Guard {
 Guards can be used at the module, controller or handler level. To use a guard, use the `@UseGuards` decorator on the module, controller or handler, and pass the guard class as an argument.
 
 :::note
-When you specify a guard as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the guard instead of a class reference.
+
+-   When you specify a guard as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the guard instead of a class reference.
+-   If you're using class references, don't forget to add the `@Injectable` decorator and add the guard to the `providers` array in the module.
+
 :::
 
 ```typescript
@@ -52,6 +55,7 @@ export class DeliciousMangoController {
 @UseGuards(OnlyRipeMangoGuard) // [svp! ++]
 @Module({
     controllers: [DeliciousMangoController],
+    providers: [OnlyRipeMangoGuard],
 })
 export class DeliciousMangoModule {}
 ```

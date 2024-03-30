@@ -31,7 +31,10 @@ export class MangoColorPipe implements Pipe<MyMangoData> {
 Pipes can be used at the module, controller, or handler level. To use a pipe at the controller level, use the `@UsePipes` decorator.
 
 :::note
-When you specify a pipe as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the pipe instead of a class reference.
+
+-   When you specify a pipe as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the pipe instead of a class reference.
+-   If you're using class references, don't forget to add the `@Injectable` decorator and add the guard to the `providers` array in the module.
+
 :::
 
 ```typescript
@@ -44,6 +47,12 @@ export class DeliciousMangoController {
         console.log(`I am eating a ${color} mango!`);
     }
 }
+
+@Module({
+    controllers: [DeliciousMangoController],
+    providers: [MangoColorPipe],
+})
+export class DeliciousMangoModule {}
 ```
 
 Also, instead of providing a class reference, you can provide an instance of the pipe. However, dependency injection will not work for the pipe instance.

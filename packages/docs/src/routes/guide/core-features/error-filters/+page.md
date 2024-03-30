@@ -34,7 +34,10 @@ The error filter can take several different error types as arguments. The error 
 Error filters can be used at the module, controller or handler level. To use an error filter, use the `@UseErrorFilters` decorator on the module, controller or handler, and pass the error filter class as an argument.
 
 :::note
-When you specify an error filter as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the error filter instead of a class reference.
+
+-   When you specify an error filter as a class reference, it is instantiated as a singleton by the dependency injection container. This means that the same instance is used for all requests. If you want to use a new instance for each request, you can specify an instance of the error filter instead of a class reference.
+-   If you're using class references, don't forget to add the `@Injectable` decorator and add the guard to the `providers` array in the module.
+
 :::
 
 ```typescript
@@ -47,6 +50,12 @@ export class DeliciousMangoController {
         console.log(`I am eating a ${color} mango`);
     }
 }
+
+@Module({
+    controllers: [DeliciousMangoController],
+    providers: [MangoSpoilFilter],
+})
+export class DeliciousMangoModule {}
 ```
 
 Also, instead of providing a class reference, you can provide an instance of the error filter. However, dependency injection will not work for the error filter instance.
