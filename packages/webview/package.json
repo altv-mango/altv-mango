@@ -24,11 +24,11 @@
     "dependencies": {},
     "devDependencies": {
         "tsup": "^8.0.2",
-        "typescript": "^5.4.2"
+        "typescript": "^5.4.3"
     },
     "peerDependencies": {
         "@altv-mango/core": "workspace:^",
-        "@altv/shared": "^0.0.14",
+        "@altv/shared": "^0.0.16",
         "@altv/webview": "^0.0.6"
     },
     "publishConfig": {

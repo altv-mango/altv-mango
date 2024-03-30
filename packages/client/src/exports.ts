@@ -30,7 +30,7 @@ export { InjectableScope, RPCResultStatus } from '@altv-mango/core/enums';
 // Pipes
 export { DefaultValuePipe } from '@altv-mango/core/pipes';
 // Errors
-export { GuardCancelError, GuardInvalidReturnError, MangoError, TooManyRequests, UnknownError } from '@altv-mango/core';
+export { GuardCancelError, GuardInvalidReturnError, MangoError, TooManyRequests, UnknownError } from '@altv-mango/core/errors';
 // Utils
 export {
     isConstructor,

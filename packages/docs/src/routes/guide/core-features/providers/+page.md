@@ -166,12 +166,14 @@ export class DeliciousMangoController {
 
 ## Manual Provider Instantiation
 
-You can manually instantiate a provider by injecting the `MODULE_CONTAINER` token into a class and using the `ModuleContainer` to get the provider.
+You can manually instantiate a provider by injecting the `MODULE_CONTAINER` token into a class and using the `Container` to get the provider.
 
 ```typescript
+import type { Container } from 'inversify'; // [svp! ~~]
+
 @Controller()
 export class DeliciousMangoController {
-    @Inject(MODULE_CONTAINER) private readonly moduleContainer: ModuleContainer; // [svp! ~~]
+    @Inject(MODULE_CONTAINER) private readonly container: Container; // [svp! ~~]
 
     @On('checkMangoRipeness')
     public onCheckMangoRipeness() {

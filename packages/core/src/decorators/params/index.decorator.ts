@@ -6,7 +6,7 @@ import type { MethodParameter } from '../../app/interfaces';
 import { MethodParamType } from '../../app/enums';
 import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
-import { isNumber } from '../..';
+import { isNumber } from '../../utils';
 
 export function Index(key: number, ...pipes: (Newable<Pipe> | Pipe)[]) {
     return <ParameterDecorator>((target: Object, method: string, index: number) => {
