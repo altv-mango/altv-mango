@@ -13,8 +13,8 @@
     },
     "devDependencies": {
         "@altv-mango/server": "workspace:^",
-        "@swc/core": "^1.4.11",
-        "@types/node": "^20.12.2",
+        "@swc/core": "^1.4.12",
+        "@types/node": "^20.12.4",
         "tsup": "^8.0.2",
         "typescript": "^5.4.3"
     }

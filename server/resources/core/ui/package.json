@@ -17,19 +17,19 @@
         "postcss": "^8.4.38",
         "postcss-load-config": "^5.0.3",
         "svelte": "^4.2.12",
-        "svelte-check": "^3.6.8",
+        "svelte-check": "^3.6.9",
         "sveltekit-superforms": "^2.12.2",
         "tailwindcss": "^3.4.3",
         "tailwindcss-animated": "^1.0.1",
         "tslib": "^2.6.2",
         "typescript": "^5.4.3",
-        "vite": "^5.2.7"
+        "vite": "^5.2.8"
     },
     "dependencies": {
         "@altv-mango/webview": "workspace:^",
-        "bits-ui": "^0.21.1",
+        "bits-ui": "^0.21.2",
         "clsx": "^2.1.0",
-        "lucide-svelte": "^0.363.0",
+        "lucide-svelte": "^0.364.0",
         "tailwind-merge": "^2.2.2",
         "tailwind-variants": "^0.2.1",
         "zod": "^3.22.4"

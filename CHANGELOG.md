@@ -1,3 +1,9 @@
+## [1.3.9] - 2024-04-04
+
+### Fixed
+
+-   Client-side `@OnWebViewRequest` decorator now works correctly with `@Param` and other decorators.
+
 ## [1.3.6] - 2024-03-22
 
 ### Added
