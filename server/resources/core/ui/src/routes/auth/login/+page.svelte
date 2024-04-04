@@ -14,9 +14,10 @@
         goto('/main-menu');
     }
 
-    onMount(() => {
-        window.mango.logger.log('This is a test log');
-        window.mango.event.emitPlayer('TEST_ERROR', { message: 'This is a test error' });
+    onMount(async () => {
+        window.mango.logger.debug('This is a test log');
+        const result = await window.mango.rpc.callPlayer('TEST_RPC', { message: 'This is a test message' });
+        window.mango.logger.debug('RPC response:', result);
     });
 </script>
 

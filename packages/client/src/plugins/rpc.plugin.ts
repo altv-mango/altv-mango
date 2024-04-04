@@ -24,21 +24,21 @@ export class RPCPlugin implements MangoPlugin {
     public beforeLoad() {
         const time = Date.now();
 
-        this.eventService.onServer('RPC::CALL_CLIENT', async (body) => {
-            const rpcHandler = this.rpcService.$serverHandlers.get(body.rpcName);
+        this.eventService.onServer('RPC::CALL_CLIENT', async (payload) => {
+            const rpcHandler = this.rpcService.$serverHandlers.get(payload.rpcName);
             if (isNil(rpcHandler)) {
-                this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
+                this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${payload.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
                 return;
             }
 
             try {
-                const result = await rpcHandler.handler(body.body);
+                const result = await rpcHandler.handler(payload.body);
                 const rpcResult: RPCResult = {
                     success: true,
                     status: RPCResultStatus.Success,
                     body: result,
                 };
-                this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${body.id}`, rpcResult);
+                this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${payload.id}`, rpcResult);
             } catch (error) {
                 if (error instanceof MangoError) {
                     const rpcResult: RPCResult = {
@@ -46,33 +46,33 @@ export class RPCPlugin implements MangoPlugin {
                         status: error.status,
                         error: { message: error.message, details: error.details },
                     };
-                    this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${body.id}`, rpcResult);
+                    this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${payload.id}`, rpcResult);
                     return;
                 }
 
-                this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_UNKNOWN);
+                this.eventService.emitServer(`RPC::RETURN_FROM_CLIENT_${payload.id}`, RPC_RESULT_UNKNOWN);
             }
         });
         this.webViewService.$onCreate((webViewId, webView) => {
-            webView.on('RPC::CALL_CLIENT', async (body) => {
+            webView.on('RPC::CALL_CLIENT', async (payload) => {
                 if (!webView.valid) return;
 
-                const rpcHandler = this.rpcService.$webViewHandlers.get(`${webViewId}::${body.rpcName}`);
+                const rpcHandler = this.rpcService.$webViewHandlers.get(`${webViewId}::${payload.rpcName}`);
                 if (isNil(rpcHandler)) {
-                    webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
+                    webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, RPC_RESULT_HANDLER_NOT_FOUND);
                     return;
                 }
 
                 try {
-                    const result = await rpcHandler.handler(body);
-                    webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, <RPCResult>{
+                    const result = await rpcHandler.handler(payload.body);
+                    webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, <RPCResult>{
                         success: true,
                         status: RPCResultStatus.Success,
                         body: result,
                     });
                 } catch (error) {
                     if (error instanceof MangoError) {
-                        webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, {
+                        webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, {
                             success: false,
                             status: error.status,
                             error: { message: error.message, details: error.details },
@@ -80,12 +80,12 @@ export class RPCPlugin implements MangoPlugin {
                         return;
                     }
 
-                    webView.emit(`RPC::RETURN_FROM_CLIENT_${body.id}`, RPC_RESULT_UNKNOWN);
+                    webView.emit(`RPC::RETURN_FROM_CLIENT_${payload.id}`, RPC_RESULT_UNKNOWN);
                 }
             });
 
-            webView.on('RPC::CALL_SERVER', (body) => {
-                this.eventService.emitServer('RPC::CALL_SERVER', <RPCPayload>{ ...body, webViewId });
+            webView.on('RPC::CALL_SERVER', (payload) => {
+                this.eventService.emitServer('RPC::CALL_SERVER', <RPCPayload>{ ...payload, webViewId });
             });
         });
 
