@@ -46,4 +46,4 @@ export {
     generateRandomId,
 } from '@altv-mango/core/utils';
 // Services
-export { ReflectorService } from '@altv-mango/core/services';
+export { ReflectorService, TimerService } from '@altv-mango/core/services';

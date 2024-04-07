@@ -1,5 +1,4 @@
-import type { CronJobParams } from 'cron';
-import type { CronOptions } from '../../../interfaces';
+import type { CronOptions } from 'croner';
 
 export type TimerMetadata = CronTimerMetadata | EveryTickTimerMetadata | TimeoutTimerMetadata | IntervalTimerMetadata;
 
@@ -7,7 +6,7 @@ export interface CronTimerMetadata {
     type: 'cron';
     name: string;
     method: string;
-    options: CronOptions & { cronTime: CronJobParams['cronTime'] };
+    options: CronOptions & { pattern: string | Date };
 }
 
 export interface EveryTickTimerMetadata {

@@ -1,7 +1,6 @@
-import type { CronJobParams } from 'cron';
-import type { CronOptions } from '../../interfaces';
+import type { CronOptions } from 'croner';
 import { createTimerDecorator } from '../create-timer.decorator';
 
-export function Cron(cronTime: CronJobParams['cronTime'], options: CronOptions = {}) {
-    return createTimerDecorator('cron', options.name, { cronTime, ...options });
+export function Cron(pattern: string | Date, options: CronOptions = {}) {
+    return createTimerDecorator('cron', options.name, { pattern, ...options });
 }

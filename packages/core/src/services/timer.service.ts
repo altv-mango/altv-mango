@@ -1,15 +1,14 @@
 import { injectable } from 'inversify';
 import { Timers } from '@altv/shared';
 import { isString } from '../utils';
-import { type CronCallback, CronJob, type CronJobParams } from 'cron';
-import type { CronOptions } from '../interfaces';
+import { Cron, type CronOptions } from 'croner';
 
 @injectable()
 export class TimerService {
     private readonly $everyticks = new Map<string, Timer>();
     private readonly $intervals = new Map<string, Timer>();
     private readonly $timeouts = new Map<string, Timer>();
-    private readonly $cronJobs = new Map<string, CronJob>();
+    private readonly $crons = new Map<string, Cron>();
 
     public get all() {
         return Timers.all;
@@ -27,8 +26,8 @@ export class TimerService {
         return [...this.$timeouts.values()];
     }
 
-    public get cronJobs() {
-        return [...this.$cronJobs.values()];
+    public get crons() {
+        return [...this.$crons.values()];
     }
 
     public set warningThreshold(value: number) {
@@ -47,13 +46,13 @@ export class TimerService {
         return Timers.sourceLocationFrameSkipCount;
     }
 
-    public createCronJob(callback: Function, options: CronOptions & { cronTime: CronJobParams['cronTime'] }) {
-        const { name, disabled, ...cronOptions } = options;
+    public createCronJob(callback: Function, options: CronOptions & { pattern: string | Date }) {
+        const { pattern, ...cronOptions } = options;
 
-        const cronJob = CronJob.from({ ...cronOptions, onTick: callback as CronCallback<null, false>, start: !disabled });
-        if (isString(name)) this.$cronJobs.set(name, cronJob);
+        const cron = Cron(pattern, cronOptions, callback);
+        if (isString(options.name)) this.$crons.set(options.name, cron);
 
-        return cronJob;
+        return cron;
     }
 
     public createInterval(callback: Function, interval: number, name?: string) {
@@ -77,10 +76,10 @@ export class TimerService {
     public delete(type: 'cron' | 'everytick' | 'timeout' | 'interval', name: string) {
         switch (type) {
             case 'cron':
-                const cronJob = this.$cronJobs.get(name);
+                const cronJob = this.$crons.get(name);
                 if (cronJob) {
                     cronJob.stop();
-                    this.$cronJobs.delete(name);
+                    this.$crons.delete(name);
                 }
                 break;
             case 'everytick':
@@ -110,7 +109,7 @@ export class TimerService {
     public getByName(type: 'cron' | 'everytick' | 'timeout' | 'interval', name: string) {
         switch (type) {
             case 'cron':
-                return this.$cronJobs.get(name);
+                return this.$crons.get(name);
             case 'everytick':
                 return this.$everyticks.get(name);
             case 'interval':

@@ -1,11 +1,12 @@
-import { Controller, Inject, Interval, LOGGER_SERVICE, Module, type LoggerService } from '@altv-mango/server';
+import { Controller, Cron, Inject, LOGGER_SERVICE, Module, type LoggerService } from '@altv-mango/server';
 
 @Controller()
 export class RootController {
     @Inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
 
-    @Interval(1000)
+    @Cron('*/5 * * * * *')
     public async testInterval() {
+        // console.log('Interval test', this);
         this.loggerService.debug('Interval test');
     }
 }

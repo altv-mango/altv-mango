@@ -72,7 +72,7 @@ export class AppRuntime {
                 timerService.everyticks.forEach((timer) => timer.destroy());
                 timerService.intervals.forEach((timer) => timer.destroy());
                 timerService.timeouts.forEach((timer) => timer.destroy());
-                timerService.cronJobs.forEach((cronJob) => cronJob.stop());
+                timerService.crons.forEach((cron) => cron.stop());
 
                 // Destroy all script event handlers.
                 controller.eventHandlers.forEach((handler) => handler.destroy());
@@ -144,13 +144,17 @@ export class AppRuntime {
 
         controller.metadata.timers.forEach((timer) => {
             if (timer.type === 'cron') {
-                timerService.createCronJob(controller.instance[timer.method]!, timer.options);
+                timerService.createCronJob(controller.instance[timer.method]!.bind(controller.instance), timer.options);
             } else if (timer.type === 'everytick') {
-                timerService.createEveryTick(controller.instance[timer.method]!, timer.name);
+                timerService.createEveryTick(controller.instance[timer.method]!.bind(controller.instance), timer.name);
             } else if (timer.type === 'interval') {
-                timerService.createInterval(controller.instance[timer.method]!, timer.options.timeout, timer.name);
+                timerService.createInterval(
+                    controller.instance[timer.method]!.bind(controller.instance),
+                    timer.options.timeout,
+                    timer.name,
+                );
             } else if (timer.type === 'timeout') {
-                timerService.createTimeout(controller.instance[timer.method]!, timer.options.timeout, timer.name);
+                timerService.createTimeout(controller.instance[timer.method]!.bind(controller.instance), timer.options.timeout, timer.name);
             }
         });
     }
