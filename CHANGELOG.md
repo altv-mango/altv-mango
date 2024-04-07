@@ -1,3 +1,19 @@
+## [1.4.0] - 2024-04-07
+
+### Added
+
+-   `@EveryTick`, `@Interval`, `@Timeout` decorators.
+-   `@Cron` decorator using the [`croner`](https://github.com/hexagon/croner) npm package.
+-   To have more control over the timers and cron jobs, the `TimerService` service has been added, which can be injected using the `TIMER_SERVICE` token.
+
+### Fixed
+
+-   `onModuleInit` is now called after the module is initialised. Before they were called before all the modules were initialised.
+
+### Note
+
+-   Don't forget to put `@altv/shared` as an external library in your compiler options.
+
 ## [1.3.9] - 2024-04-04
 
 ### Fixed
