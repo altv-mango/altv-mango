@@ -16,4 +16,6 @@ export enum CoreMetadataKey {
     // Error
     Catch = 'mango:catch',
     ErrorFilters = 'mango:error-filters',
+    //
+    Timers = 'mango:timers',
 }

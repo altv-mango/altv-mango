@@ -6,7 +6,8 @@
         "dev": "tsup --watch"
     },
     "dependencies": {
-        "@altv/client": "^0.0.33"
+        "@altv/client": "^0.0.33",
+        "@altv/shared": "^0.0.16"
     },
     "devDependencies": {
         "@abraham/reflection": "^0.12.0",

@@ -1,7 +1,9 @@
+import type { MyEvent } from '../src/enums';
+
 declare module '@altv/shared' {
-    export namespace RPC {
-        export interface CustomClientToServerRPC {
-            EAT_MANGO: (body: { mangoId: number }) => boolean;
+    export namespace Events {
+        export interface CustomServerToWebViewEvent {
+            [MyEvent.EatMango]: (body: { mangoId: number }) => boolean;
         }
     }
 }

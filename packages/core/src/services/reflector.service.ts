@@ -1,8 +1,10 @@
+import { injectable } from 'inversify';
 import { SetMetadata } from '../decorators';
 import type { CreateDecoratorOptions, CreateDecoratorWithTransformOptions, ReflectableDecorator } from '../interfaces';
 import type { Newable } from '../types';
 import { generateRandomId, isEmpty, isObject } from '../utils';
 
+@injectable()
 export class ReflectorService {
     public get<TResult = unknown, TKey extends string | symbol = string>(metadataKey: TKey, target: Newable | Function) {
         return Reflect.getMetadata<TResult>(metadataKey, target);

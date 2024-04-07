@@ -65,4 +65,7 @@ export enum ErrorMessage {
     InvalidParameterDecoratorUsage = 'Each parameter must have their its own decorator.',
     ResponseDecoratorNotAllowedOnEvents = 'The @Response() decorator is not allowed on events.',
     PlayerDecoratorNotAllowedOnClientEvents = 'The @Player() decorator is not allowed on client events.',
+
+    // Timers
+    TimerNameMustBeString = 'The timer name must be a string.',
 }

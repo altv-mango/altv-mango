@@ -4,6 +4,7 @@ export * from './events';
 export * from './params';
 export * from './pipeline';
 export * from './rpc';
+export * from './timers';
 
 export * from './apply-decorator.util';
 export * from './create-event-decorator';

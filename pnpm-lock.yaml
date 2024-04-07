@@ -97,6 +97,9 @@ importers:
       '@types/node':
         specifier: ^20.12.4
         version: 20.12.4
+      croner:
+        specifier: ^8.0.1
+        version: 8.0.1
       tsup:
         specifier: ^8.0.2
         version: 8.0.2(@microsoft/api-extractor@7.43.0)(@swc/core@1.4.12)(typescript@5.4.3)
@@ -210,6 +213,9 @@ importers:
       '@altv/client':
         specifier: ^0.0.33
         version: 0.0.33
+      '@altv/shared':
+        specifier: ^0.0.16
+        version: 0.0.16
     devDependencies:
       '@abraham/reflection':
         specifier: ^0.12.0
@@ -235,6 +241,9 @@ importers:
       '@altv/server':
         specifier: ^0.0.38
         version: 0.0.38
+      '@altv/shared':
+        specifier: ^0.0.16
+        version: 0.0.16
       axios:
         specifier: ^1.6.8
         version: 1.6.8
@@ -4253,6 +4262,11 @@ packages:
     resolution: {integrity: sha512-sftHa5qUJY3rs9Zht1WEnmkvXputCyDBczPnr7QDgL8n3qrF3CMXY4VPSYtOLLiOUJcah2WNXREd48iOl6mQIw==}
     dependencies:
       browserslist: 4.23.0
+    dev: true
+
+  /croner@8.0.1:
+    resolution: {integrity: sha512-Hq1+lXVgjJjcS/U+uk6+yVmtxami0r0b+xVtlGyABgdz110l/kOnHWvlSI7nVzrTl8GCdZHwZS4pbBFT7hSL/g==}
+    engines: {node: '>=18.0'}
     dev: true
 
   /cross-spawn@5.1.0:

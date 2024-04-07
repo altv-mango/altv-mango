@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import type { Guard, Interceptor, ErrorFilter } from '../interfaces';
+import type { Guard, Interceptor, ErrorFilter, TimerMetadata } from '../interfaces';
 import type { Newable } from '../../types';
 import type { ControllerMetadata, EventMetadata, MethodParameter, RPCMetadata } from '../interfaces';
 import { AppEnviroment, CoreMetadataKey } from '../enums';
@@ -19,6 +19,7 @@ export class ControllerMetadataReader {
             <Pick<ControllerMetadata, 'prefix'>>{};
         const events = this.getEvents(classRef);
         const rpcs = this.getRPCs(classRef);
+        const timers = this.getTimers(classRef);
 
         return <ControllerMetadata>{
             ...options,
@@ -26,6 +27,7 @@ export class ControllerMetadataReader {
             events,
             rpcs,
             ...this.getPipeline(classRef),
+            timers,
         };
     }
 
@@ -106,5 +108,9 @@ export class ControllerMetadataReader {
         const errorFilters = Reflect.getMetadata<Newable<ErrorFilter>[]>(CoreMetadataKey.ErrorFilters, target, method) ?? [];
 
         return { guards, interceptors, pipes, errorFilters };
+    }
+
+    private getTimers(classRef: Newable) {
+        return Reflect.getMetadata<TimerMetadata[]>(CoreMetadataKey.Timers, classRef.prototype) ?? [];
     }
 }

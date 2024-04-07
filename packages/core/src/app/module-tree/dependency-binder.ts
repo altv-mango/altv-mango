@@ -4,8 +4,9 @@ import { isObject } from '../../utils';
 import { CONTAINER_OPTIONS, GLOBAL_APP_CONTAINER } from '../constants';
 import { Module, ModuleContainer } from '../module';
 import { Container, inject, injectable, optional, type interfaces } from 'inversify';
-import { LOGGER_SERVICE, MODULE_CONTAINER } from '../../constants';
+import { LOGGER_SERVICE, MODULE_CONTAINER, TIMER_SERVICE } from '../../constants';
 import type { Tree } from '../utils';
+import { TimerService } from '../../services';
 
 @injectable()
 export class ModuleDependencyBinder {
@@ -54,6 +55,9 @@ export class ModuleDependencyBinder {
             for (const classRef of module.metadata.controllers) {
                 module.container.bind(classRef).toSelf().inSingletonScope();
             }
+
+            // Bind services to the container.
+            module.container.bind(TIMER_SERVICE).to(TimerService).inSingletonScope();
 
             this.loggerService.log(
                 `~lw~Module ~lb~${module.metadata.classRef.name} ~lw~dependencies binded ~lk~(${Date.now() - startTime}ms)`,

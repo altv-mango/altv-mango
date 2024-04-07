@@ -4,6 +4,7 @@
     import Icon from '@iconify/svelte';
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
+    import { MyEvent } from '@shared/enums';
 
     let loading = false;
 
@@ -18,6 +19,8 @@
         window.mango.logger.debug('This is a test log');
         const result = await window.mango.rpc.callPlayer('TEST_RPC', { message: 'This is a test message' });
         window.mango.logger.debug('RPC response:', result);
+
+        window.mango.event.onServer(MyEvent.EatMango, (body) => {});
     });
 </script>
 

@@ -8,6 +8,7 @@
     "dependencies": {
         "@abraham/reflection": "^0.12.0",
         "@altv/server": "^0.0.38",
+        "@altv/shared": "^0.0.16",
         "axios": "^1.6.8",
         "dotenv": "^16.4.5"
     },

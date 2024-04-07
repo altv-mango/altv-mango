@@ -1,21 +1,21 @@
 import type { Newable } from '../../types';
 import { isNil, isObject } from '../../utils';
 import { ENABLE_SHUTDOWN_HOOKS, GLOBAL_ERROR_FILTERS, GLOBAL_GUARDS, GLOBAL_INTERCEPTORS, GLOBAL_PIPES } from '../constants';
-import type { ErrorFilter, Guard, Interceptor, InternalEventService } from '../interfaces';
+import type { ErrorFilter, Guard, Interceptor } from '../interfaces';
 import { Module } from '../module';
 import { inject, injectable, optional } from 'inversify';
 import { Controller, ControllerEventHandler, ControllerRPCHandler } from '../controller';
-import { EVENT_SERVICE, LOGGER_SERVICE } from '../../constants';
+import { LOGGER_SERVICE, TIMER_SERVICE } from '../../constants';
 import { CoreMetadataKey } from '../enums';
 import { ErrorMessage } from '../../enums';
 import type { LoggerService, Pipe } from '../../interfaces';
 import type { Tree } from '../utils';
+import type { TimerService } from '../../services';
 
 @injectable()
 export class AppRuntime {
     @inject(ControllerEventHandler) private readonly eventHandler: ControllerEventHandler;
     @inject(ControllerRPCHandler) private readonly rpcHandler: ControllerRPCHandler;
-    @inject(EVENT_SERVICE) private readonly eventService: InternalEventService;
     @inject(GLOBAL_GUARDS) private readonly globalGuards: (Newable<Guard> | Guard)[];
     @inject(GLOBAL_INTERCEPTORS) private readonly globalInterceptors: (Newable<Interceptor> | Interceptor)[];
     @inject(GLOBAL_PIPES) private readonly globalPipes: (Newable<Pipe> | Pipe)[];
@@ -38,18 +38,20 @@ export class AppRuntime {
 
             // Log module loaded.
             this.loggerService.log(`~lw~Module ~lb~${module.metadata.classRef.name} ~lw~loaded ~lk~(${Date.now() - startTime}ms)`);
+            await this.runLifecycleMethod(module, 'onModuleInit');
         });
-        this.runLifecycleMethods(resolvedTree, 'onModuleInit');
-        this.runLifecycleMethods(resolvedTree, 'onAppBootstrap');
+        // await this.runLifecycleMethods(resolvedTree, 'onModuleInit');
+        await this.runLifecycleMethods(resolvedTree, 'onAppBootstrap');
 
         // Register event and rpc listeners.
         resolvedTree.traverse((node) => {
             const module = node.value;
             module.controllers.forEach((controller) => {
                 const time = Date.now();
+                this.registerTimers(controller);
                 this.registerListeners(controller);
                 this.loggerService.log(
-                    `~lw~Controller ~lc~${controller.metadata.classRef.name} ~lw~listeners registered ~lk~(${Date.now() - time}ms)`,
+                    `~lw~Controller ~lc~${controller.metadata.classRef.name} ~lw~timers and listeners registered ~lk~(${Date.now() - time}ms)`,
                 );
             });
         });
@@ -57,17 +59,40 @@ export class AppRuntime {
 
     public async shutdown(resolvedTree: Tree<Module>) {
         if (this.enableShutdownHooks) {
-            this.runLifecycleMethods(resolvedTree, 'onModuleDestroy');
-            this.runLifecycleMethods(resolvedTree, 'beforeAppShutdown');
+            await this.runLifecycleMethods(resolvedTree, 'onModuleDestroy');
+            await this.runLifecycleMethods(resolvedTree, 'beforeAppShutdown');
         }
 
-        // Destroy all script event handlers.
-        this.eventService.$localHandlers.forEach((handler) => handler.destroy());
-        this.eventService.$internalHandlers.forEach((handler) => handler.destroy());
-        this.eventService.$remoteHandlers.forEach((handler) => handler.destroy());
+        await resolvedTree.asyncTraverse(async (node) => {
+            const module = node.value;
+            module.controllers.forEach((controller) => {
+                const timerService = controller.owner.container.get<TimerService>(TIMER_SERVICE);
+
+                // Destroy all timers.
+                timerService.everyticks.forEach((timer) => timer.destroy());
+                timerService.intervals.forEach((timer) => timer.destroy());
+                timerService.timeouts.forEach((timer) => timer.destroy());
+                timerService.cronJobs.forEach((cronJob) => cronJob.stop());
+
+                // Destroy all script event handlers.
+                controller.eventHandlers.forEach((handler) => handler.destroy());
+                controller.rpcHandlers.forEach((handler) => handler.destroy());
+            });
+        });
+
+        // // Destroy all timers.
+        // this.timerService.everyticks.forEach((timer) => timer.destroy());
+        // this.timerService.intervals.forEach((timer) => timer.destroy());
+        // this.timerService.timeouts.forEach((timer) => timer.destroy());
+        // this.timerService.cronJobs.forEach((cronJob) => cronJob.stop());
+
+        // // Destroy all script event handlers.
+        // this.eventService.$localHandlers.forEach((handler) => handler.destroy());
+        // this.eventService.$internalHandlers.forEach((handler) => handler.destroy());
+        // this.eventService.$remoteHandlers.forEach((handler) => handler.destroy());
 
         if (this.enableShutdownHooks) {
-            this.runLifecycleMethods(resolvedTree, 'onAppShutdown');
+            await this.runLifecycleMethods(resolvedTree, 'onAppShutdown');
         }
     }
 
@@ -114,6 +139,22 @@ export class AppRuntime {
         });
     }
 
+    public registerTimers(controller: Controller) {
+        const timerService = controller.owner.container.get<TimerService>(TIMER_SERVICE);
+
+        controller.metadata.timers.forEach((timer) => {
+            if (timer.type === 'cron') {
+                timerService.createCronJob(controller.instance[timer.method]!, timer.options);
+            } else if (timer.type === 'everytick') {
+                timerService.createEveryTick(controller.instance[timer.method]!, timer.name);
+            } else if (timer.type === 'interval') {
+                timerService.createInterval(controller.instance[timer.method]!, timer.options.timeout, timer.name);
+            } else if (timer.type === 'timeout') {
+                timerService.createTimeout(controller.instance[timer.method]!, timer.options.timeout, timer.name);
+            }
+        });
+    }
+
     private mapErrorFilters(errorFilters: (Newable<ErrorFilter> | ErrorFilter)[]) {
         const filterMap: [unknown | 'MANGO_ANY_ERROR', Newable<ErrorFilter> | ErrorFilter][] = [];
 
@@ -138,23 +179,27 @@ export class AppRuntime {
         resolvedTree: Tree<Module>,
         method: 'onModuleInit' | 'onModuleDestroy' | 'onAppBootstrap' | 'beforeAppShutdown' | 'onAppShutdown',
     ) {
-        return resolvedTree.asyncTraverse(async (node) => {
-            const module = node.value;
-            await Promise.all(
-                module.controllers.map(async (controller) => {
-                    if (!isObject(controller.instance) || isNil(controller.instance[method])) return;
-                    await controller.instance[method]!();
-                }),
-            );
-            await Promise.all(
-                [...module.metadata.internalProviders, ...module.metadata.externalProviders].map(async ([token]) => {
-                    const providerInstance = <{ [key: string]: Function }>module.container.get(token);
-                    if (!isObject(providerInstance) || isNil(providerInstance[method])) return;
-                    await providerInstance[method]!();
-                }),
-            );
-            if (!isObject(module.instance) || isNil(module.instance[method])) return;
-            await module.instance[method]!();
-        });
+        return resolvedTree.asyncTraverse(async (node) => await this.runLifecycleMethod(node.value, method));
+    }
+
+    private async runLifecycleMethod(
+        module: Module,
+        method: 'onModuleInit' | 'onModuleDestroy' | 'onAppBootstrap' | 'beforeAppShutdown' | 'onAppShutdown',
+    ) {
+        await Promise.all(
+            module.controllers.map(async (controller) => {
+                if (!isObject(controller.instance) || isNil(controller.instance[method])) return;
+                await controller.instance[method]!();
+            }),
+        );
+        await Promise.all(
+            [...module.metadata.internalProviders, ...module.metadata.externalProviders].map(async ([token]) => {
+                const providerInstance = <{ [key: string]: Function }>module.container.get(token);
+                if (!isObject(providerInstance) || isNil(providerInstance[method])) return;
+                await providerInstance[method]!();
+            }),
+        );
+        if (!isObject(module.instance) || isNil(module.instance[method])) return;
+        await module.instance[method]!();
     }
 }

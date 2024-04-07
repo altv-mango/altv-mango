@@ -74,14 +74,7 @@ export class ControllerEventHandler {
         body: unknown,
         player?: Player,
     ) {
-        const request = this.createMangoRequest(
-            body,
-            player,
-            // this.appEnv === AppEnviroment.Server &&
-            //     (event.type === 'onPlayer' || event.type === 'oncePlayer' || event.type === 'onWebView' || event.type === 'onceWebView')
-            //     ? player
-            //     : undefined,
-        );
+        const request = this.createMangoRequest(body, player);
         const executionContext = this.createExecutionContext(
             ExecutionContextType.Event,
             controller.metadata.classRef,
@@ -162,8 +155,8 @@ export class ControllerEventHandler {
             const instance = isFunction(errorGroup[1])
                 ? controller.owner.container.get(errorGroup[1])
                 : isObject(errorGroup[1]) && isFunction(errorGroup[1]['catch'])
-                ? errorGroup[1]
-                : null;
+                  ? errorGroup[1]
+                  : null;
             if (isNil(instance)) {
                 this.loggerService.error('An error occurred while trying to go through error filters.');
                 throw new Error(ErrorMessage.InvalidErrorFilterDefinition);
