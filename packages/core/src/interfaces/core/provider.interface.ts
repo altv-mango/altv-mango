@@ -2,12 +2,7 @@ import type { InjectableScope } from '../../enums';
 import type { InjectionToken, Newable } from '../../types';
 import type { OptionalFactoryDependency } from './optional-factory-dependency.interface';
 
-export type Provider<T = unknown> =
-    | Newable<T>
-    | ClassProvider<T>
-    | ValueProvider<T>
-    | FactoryProvider<T>
-    | ExistingProvider;
+export type Provider<T = unknown> = Newable<T> | ClassProvider<T> | ValueProvider<T> | FactoryProvider<T> | ExistingProvider;
 
 export interface ClassProvider<T = unknown> {
     provide: InjectionToken;
@@ -22,7 +17,7 @@ export interface ValueProvider<T = unknown> {
 
 export interface FactoryProvider<T = unknown> {
     provide: InjectionToken;
-    useFactory: (...args: unknown[]) => T | Promise<T>;
+    useFactory: (...args: any[]) => T | Promise<T>;
     inject?: (InjectionToken | OptionalFactoryDependency)[];
     scope?: `${InjectableScope}`;
 }

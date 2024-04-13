@@ -1,0 +1,19 @@
+import { Global, Module } from '@altv-mango/core';
+import { CONFIGURATION_SERVICE_TOKEN, CONFIGURATION_TOKEN } from './config.constants';
+import { ConfigService } from './config.service';
+
+@Global()
+@Module({
+    providers: [
+        {
+            provide: CONFIGURATION_TOKEN,
+            useFactory: () => ({}),
+        },
+        {
+            provide: CONFIGURATION_SERVICE_TOKEN,
+            useClass: ConfigService,
+        },
+    ],
+    exports: [CONFIGURATION_TOKEN, CONFIGURATION_SERVICE_TOKEN],
+})
+export class ConfigHostModule {}
