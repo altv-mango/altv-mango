@@ -4,9 +4,7 @@ import fs from 'fs';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import set from 'lodash/set';
-import { Subject } from 'rxjs';
 import { CONFIGURATION_TOKEN, VALIDATED_ENV_PROPNAME } from './config.constants';
-import type { ConfigChangeEvent } from './interfaces/config-change-event.interface';
 import type { NoInferType, Path, PathValue } from './types';
 
 type ValidatedResult<WasValidated extends boolean, T> = WasValidated extends true ? T : T | undefined;
@@ -28,7 +26,6 @@ export class ConfigService<K = Record<string, unknown>, WasValidated extends boo
     }
 
     private readonly cache: Partial<K> = {} as any;
-    private readonly _changes$ = new Subject<ConfigChangeEvent>();
     private _isCacheEnabled = false;
     private envFilePaths: string[] = [];
 
@@ -37,10 +34,6 @@ export class ConfigService<K = Record<string, unknown>, WasValidated extends boo
         @Inject(CONFIGURATION_TOKEN)
         private readonly internalConfig: Record<string, any> = {},
     ) {}
-
-    public get changes$() {
-        return this._changes$.asObservable();
-    }
 
     public get<T = any>(propertyPath: KeyOf<K>): ValidatedResult<WasValidated, T>;
     public get<T = K, P extends Path<T> = any, R = PathValue<T, P>>(
@@ -101,7 +94,6 @@ export class ConfigService<K = Record<string, unknown>, WasValidated extends boo
     }
 
     public set<T = any>(propertyPath: KeyOf<K>, value: T): void {
-        const oldValue = this.get(propertyPath);
         set(this.internalConfig, propertyPath, value);
 
         if (typeof propertyPath === 'string') {
@@ -112,12 +104,6 @@ export class ConfigService<K = Record<string, unknown>, WasValidated extends boo
         if (this.isCacheEnabled) {
             this.setInCacheIfDefined(propertyPath, value);
         }
-
-        this._changes$.next({
-            path: propertyPath as string,
-            oldValue,
-            newValue: value,
-        });
     }
 
     public setEnvFilePaths(paths: string[]): void {

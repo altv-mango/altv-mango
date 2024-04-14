@@ -1,9 +1,6 @@
 import type { ConfigFactory } from './config-factory.interface';
 import type { DotenvExpandOptions } from 'dotenv-expand';
 
-/**
- * @publicApi
- */
 export interface ConfigModuleOptions {
     cache?: boolean;
     isGlobal?: boolean;

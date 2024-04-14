@@ -36,6 +36,7 @@ export class PipelineHandler {
         executionContext: ExecutionContextBase,
         interceptors: (Newable<Interceptor> | Interceptor)[],
         container: ModuleContainer,
+        callHandler: () => unknown,
     ) {
         const postInterceptors = [];
 
@@ -43,13 +44,13 @@ export class PipelineHandler {
             const instance = isFunction(interceptor)
                 ? container.get(interceptor)
                 : isObject(interceptor) && isFunction(interceptor['intercept'])
-                ? interceptor
-                : null;
+                  ? interceptor
+                  : null;
             if (isNil(instance)) {
                 this.loggerService.error('An error occurred while trying to go through interceptors.');
                 throw new Error(ErrorMessage.InvalidInterceptorDefinition);
             }
-            const postInterceptor = await instance.intercept(executionContext);
+            const postInterceptor = await instance.intercept(executionContext, callHandler);
             if (!isFunction(postInterceptor)) {
                 this.loggerService.error('An error occurred while trying to go through interceptors.');
                 throw new Error(ErrorMessage.InvalidInterceptorReturnValue);

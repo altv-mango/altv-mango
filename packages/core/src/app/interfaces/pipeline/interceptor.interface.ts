@@ -7,7 +7,5 @@ export interface Interceptor<
     TRequest extends MangoRequest = MangoRequest,
     TResponse extends MangoResponse = MangoResponse,
 > {
-    intercept(
-        context: ExecutionContext<TRequest, TResponse>,
-    ): (result: THandlerResult) => void | Promise<void> | Promise<(result: THandlerResult) => void | Promise<void>>;
+    intercept(context: ExecutionContext<TRequest, TResponse>, handler: () => THandlerResult): void | Promise<void>;
 }

@@ -12,6 +12,7 @@ import { ExecutionContextBase, type MangoRequestBase } from '../pipeline';
 import type { Player } from '@altv/server';
 import { ErrorMessage } from '../../enums';
 import type { LoggerService, Pipe } from '../../interfaces';
+import { isAsyncFunction } from 'util/types';
 
 @injectable()
 export class ControllerEventHandler {
@@ -84,68 +85,17 @@ export class ControllerEventHandler {
 
         try {
             await this.pipelineHandler.goTroughGuards(executionContext, guards, controller.owner.container);
-            const postInterceptors = await this.pipelineHandler.goThroughInterceptors(
-                executionContext,
-                interceptors,
-                controller.owner.container,
-            );
-            const params = await Promise.all(
-                event.params.map(async (param) => {
-                    const argumentMetadata = {
-                        type: param.type,
-                        data: param.data,
-                        metatype: param.metatype,
-                    };
+            const args = await this.createArgs(executionContext, controller, event, pipes, player);
+            const controllerMethod = controller.instance[event.method]!;
+            const callHandler = isAsyncFunction(controllerMethod)
+                ? () => controllerMethod(...args)
+                : () => Promise.resolve(controllerMethod(...args));
 
-                    if (param.type === 'body') {
-                        // Body
-                        return this.pipelineHandler.goTroughPipes(
-                            body,
-                            [...pipes, ...(param?.pipes ?? [])],
-                            argumentMetadata,
-                            controller.owner.container,
-                        );
-                    } else if (param.type === 'param') {
-                        // Param
-                        if (!isObject(body)) return undefined;
-                        return this.pipelineHandler.goTroughPipes(
-                            (<Record<string, unknown>>body)[param.data],
-                            [...pipes, ...(param?.pipes ?? [])],
-                            argumentMetadata,
-                            controller.owner.container,
-                        );
-                    } else if (param.type === 'index') {
-                        if (!Array.isArray(body)) return undefined;
-                        return this.pipelineHandler.goTroughPipes(
-                            body[param.data],
-                            [...pipes, ...(param?.pipes ?? [])],
-                            argumentMetadata,
-                            controller.owner.container,
-                        );
-                    } else if (param.type === 'request') {
-                        return request;
-                    } else if (param.type === 'custom') {
-                        // Custom
-                        return this.pipelineHandler.goTroughPipes(
-                            param.factory(param.data, executionContext),
-                            [...pipes, ...(param?.pipes ?? [])],
-                            argumentMetadata,
-                            controller.owner.container,
-                        );
-                    } else if (param.type === 'player' && this.appEnv === AppEnviroment.Server) {
-                        // Player (Server)
-                        return this.pipelineHandler.goTroughPipes(
-                            param.data ? player![<keyof Player>param.data] : player,
-                            [...pipes, ...(param?.pipes ?? [])],
-                            argumentMetadata,
-                            controller.owner.container,
-                        );
-                    }
-                    return undefined;
-                }),
-            );
-            const result = await Promise.resolve(controller.instance[event.method]!(...params));
-            for (const postInterceptor of postInterceptors) await Promise.resolve(postInterceptor(result));
+            if (interceptors.length > 0) {
+                await this.pipelineHandler.goThroughInterceptors(executionContext, interceptors, controller.owner.container, callHandler);
+            } else {
+                await callHandler();
+            }
         } catch (error) {
             const errorGroup = mappedErrorFilters.find(
                 ([errorType]) =>
@@ -163,5 +113,69 @@ export class ControllerEventHandler {
             }
             await Promise.resolve(instance.catch(error, executionContext));
         }
+    }
+
+    private async createArgs(
+        executionContext: ExecutionContextBase,
+        controller: Controller,
+        event: EventMetadata,
+        pipes: (Newable<Pipe> | Pipe)[],
+        player?: Player,
+    ) {
+        return Promise.all(
+            event.params.map(async (param) => {
+                const argumentMetadata = {
+                    type: param.type,
+                    data: param.data,
+                    metatype: param.metatype,
+                };
+
+                if (param.type === 'body') {
+                    // Body
+                    return this.pipelineHandler.goTroughPipes(
+                        executionContext.request.body,
+                        [...pipes, ...(param?.pipes ?? [])],
+                        argumentMetadata,
+                        controller.owner.container,
+                    );
+                } else if (param.type === 'param') {
+                    // Param
+                    if (!isObject(executionContext.request.body)) return undefined;
+                    return this.pipelineHandler.goTroughPipes(
+                        (<Record<string, unknown>>executionContext.request.body)[param.data],
+                        [...pipes, ...(param?.pipes ?? [])],
+                        argumentMetadata,
+                        controller.owner.container,
+                    );
+                } else if (param.type === 'index') {
+                    if (!Array.isArray(executionContext.request.body)) return undefined;
+                    return this.pipelineHandler.goTroughPipes(
+                        executionContext.request.body[param.data],
+                        [...pipes, ...(param?.pipes ?? [])],
+                        argumentMetadata,
+                        controller.owner.container,
+                    );
+                } else if (param.type === 'request') {
+                    return executionContext.request;
+                } else if (param.type === 'custom') {
+                    // Custom
+                    return this.pipelineHandler.goTroughPipes(
+                        param.factory(param.data, executionContext),
+                        [...pipes, ...(param?.pipes ?? [])],
+                        argumentMetadata,
+                        controller.owner.container,
+                    );
+                } else if (param.type === 'player' && this.appEnv === AppEnviroment.Server) {
+                    // Player (Server)
+                    return this.pipelineHandler.goTroughPipes(
+                        param.data ? player![<keyof Player>param.data] : player,
+                        [...pipes, ...(param?.pipes ?? [])],
+                        argumentMetadata,
+                        controller.owner.container,
+                    );
+                }
+                return undefined;
+            }),
+        );
     }
 }
