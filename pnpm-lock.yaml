@@ -201,6 +201,37 @@ importers:
         specifier: ^5.4.4
         version: 5.4.4
 
+  packages/v1-client:
+    dependencies:
+      '@altv/client':
+        specifier: ^0.0.33
+        version: 0.0.33
+      '@altv/natives':
+        specifier: ^0.0.8
+        version: 0.0.8
+      '@altv/shared':
+        specifier: ^0.0.16
+        version: 0.0.16
+      '@altv/types-client':
+        specifier: ^16.2.2
+        version: 16.2.2(@altv/types-shared@16.2.1)(@altv/types-worker@16.2.0)
+      '@altv/types-shared':
+        specifier: ^16.2.1
+        version: 16.2.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.5
+        version: 20.12.5
+      esbuild:
+        specifier: ^0.20.2
+        version: 0.20.2
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(@microsoft/api-extractor@7.43.0)(@swc/core@1.4.12)(typescript@5.4.4)
+      typescript:
+        specifier: ^5.4.4
+        version: 5.4.4
+
   packages/webview:
     dependencies:
       '@altv-mango/core':
@@ -522,6 +553,28 @@ packages:
 
   /@altv/shared@0.0.16:
     resolution: {integrity: sha512-x5qmoKTGYxIh2RbXo/1bc6Sfb6cfp6V082Ckpps7/tLLrYF+DyuBXLnIzStiWLa6ajgaWZUVacpanR15ZJrpYg==}
+    dev: false
+
+  /@altv/types-client@16.2.2(@altv/types-shared@16.2.1)(@altv/types-worker@16.2.0):
+    resolution: {integrity: sha512-LH8j7zY8hg1+UoQyXeGsao+H58Wg55AVjM7xM+fUT4HXux5YCZbNIIWd/FvOL91/1gct5/WEnHXveCrmOUNhtw==}
+    peerDependencies:
+      '@altv/types-shared': ^16.2.0
+      '@altv/types-worker': ^16.2.0
+    dependencies:
+      '@altv/types-shared': 16.2.1
+      '@altv/types-worker': 16.2.0(@altv/types-client@16.2.2)
+    dev: false
+
+  /@altv/types-shared@16.2.1:
+    resolution: {integrity: sha512-qQ6z58dqwmAV5UcDh5nWBaieOuhDaXNgzj63XJ3MJiR6z7ShI4onZszzEX9ALaLGdakPupWs+0pm/MJV7diZQQ==}
+    dev: false
+
+  /@altv/types-worker@16.2.0(@altv/types-client@16.2.2):
+    resolution: {integrity: sha512-l2cy7xFn4QE+XCHJyu1dJB8cziwAfi4x4S8JbpymRAAnXkMHvrZixjpyeUzNRnQGn4dNhQz6QLyUYx+LEXDtyA==}
+    peerDependencies:
+      '@altv/types-client': ^16.2.0
+    dependencies:
+      '@altv/types-client': 16.2.2(@altv/types-shared@16.2.1)(@altv/types-worker@16.2.0)
     dev: false
 
   /@altv/webview@0.0.6(@altv/shared@0.0.16):
@@ -6763,6 +6816,22 @@ packages:
       camelcase-css: 2.0.1
       postcss: 8.4.38
 
+  /postcss-load-config@4.0.2:
+    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 3.0.0
+      yaml: 2.3.4
+    dev: true
+
   /postcss-load-config@4.0.2(postcss@8.4.38):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
     engines: {node: '>= 14'}
@@ -6777,7 +6846,7 @@ packages:
     dependencies:
       lilconfig: 3.0.0
       postcss: 8.4.38
-      yaml: 2.3.4
+      yaml: 2.4.1
 
   /postcss-load-config@5.0.3(postcss@8.4.38):
     resolution: {integrity: sha512-90pBBI5apUVruIEdCxZic93Wm+i9fTrp7TXbgdUCH+/L+2WnfpITSpq5dFU/IPvbv7aNiMlQISpUkAm3fEcvgQ==}
@@ -8119,7 +8188,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 4.0.2(postcss@8.4.38)
+      postcss-load-config: 4.0.2
       resolve-from: 5.0.0
       rollup: 4.14.1
       source-map: 0.8.0-beta.0
@@ -8919,12 +8988,12 @@ packages:
   /yaml@2.3.4:
     resolution: {integrity: sha512-8aAvwVUSHpfEqTQ4w/KMlf3HcRdt50E5ODIQJBw1fQ5RL34xabzxtUlzTXVqc4rkZsPbvrXKWnABCD7kWSmocA==}
     engines: {node: '>= 14'}
+    dev: true
 
   /yaml@2.4.1:
     resolution: {integrity: sha512-pIXzoImaqmfOrL7teGUBt/T7ZDnyeGBWyXQBvOVhLkWLN37GXv8NMLK406UY6dS51JfcQHsmcW5cJ441bHg6Lg==}
     engines: {node: '>= 14'}
     hasBin: true
-    dev: true
 
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}

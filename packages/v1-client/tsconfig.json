@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "module": "ESNext",
+        "target": "ESNext",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "Bundler",
+        "allowUnusedLabels": false,
+        "allowUnreachableCode": false,
+        "exactOptionalPropertyTypes": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "checkJs": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false,
+        "verbatimModuleSyntax": true,
+        "typeRoots": ["./node_modules/@types", "./node_modules/@altv", "./node_modules/@abraham", "./node_modules/@altv-mango"],
+        "stripInternal": true
+    },
+    "include": ["./src/**/*.ts", "./types/**/*.d.ts"],
+    "exclude": ["./node_modules", "./dist"]
+}

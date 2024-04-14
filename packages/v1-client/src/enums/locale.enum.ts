@@ -1,0 +1,34 @@
+export enum Locale {
+    ARABIC = 'ar',
+    BELARUSIAN = 'by',
+    CZECH = 'cz',
+    GERMAN = 'de',
+    ENGLISH = 'en',
+    SPANISH = 'es',
+    FARSI = 'fa',
+    FRENCH = 'fr',
+    HEBREW = 'he',
+    HUNGARIAN = 'hu',
+    INDONESIAN = 'id',
+    HINDI = 'in_hd', // Wrong tag (hi_in)
+    MALAYALAM = 'in_ml', // Wrong tag (ml_in)
+    TELUGU = 'in_tl', // Wrong tag (te_in)
+    TAMIL = 'in_tm', // Wrong tag (ta_in)
+    ITALIAN = 'it',
+    LITHUANIAN = 'lt',
+    LATVIAN = 'lv',
+    NORWEGIAN_BOKMAL = 'nb_no',
+    NORWEGIAN_NYNORSK = 'nn_no',
+    POLISH = 'pl',
+    PORTUGESE = 'pt',
+    BRAZILIAN_PORTUGUESE = 'pt_br',
+    ROMANIAN = 'ro',
+    SERBIAN = 'rs', // Wrong tag (sr)
+    RUSSIAN = 'ru',
+    SLOVAK = 'sk',
+    THAI = 'th',
+    TURKISH = 'tr',
+    UKRAINIAN = 'ua', // Wrong tag (uk)
+    CHINESE_SIMPLIFIED = 'zh_cn',
+    CHINESE_TRADITIONAL = 'zh_tw',
+}
