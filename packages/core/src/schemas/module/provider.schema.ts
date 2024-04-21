@@ -27,9 +27,9 @@ const ExistingProviderSchema = z.object({
 });
 
 export const ProviderSchema = z.union([
-    z.custom<Newable>((val) => isFunction(val)),
-    ClassProviderSchema,
-    ValueProviderSchema,
     FactoryProviderSchema,
     ExistingProviderSchema,
+    ClassProviderSchema,
+    ValueProviderSchema,
+    z.custom<Newable>((val) => isFunction(val)),
 ]);

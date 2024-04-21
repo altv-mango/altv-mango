@@ -12,7 +12,7 @@ import { ExecutionContextBase, type MangoRequestBase } from '../pipeline';
 import type { Player } from '@altv/server';
 import { ErrorMessage } from '../../enums';
 import type { LoggerService, Pipe } from '../../interfaces';
-import { isAsyncFunction } from 'util/types';
+import { isAsyncFunction } from '../../utils';
 
 @injectable()
 export class ControllerEventHandler {
@@ -89,7 +89,7 @@ export class ControllerEventHandler {
             const controllerMethod = controller.instance[event.method]!;
             const callHandler = isAsyncFunction(controllerMethod)
                 ? () => controllerMethod(...args)
-                : () => Promise.resolve(controllerMethod(...args));
+                : () => Promise.resolve((<Function>controllerMethod)(...args));
 
             if (interceptors.length > 0) {
                 await this.pipelineHandler.goThroughInterceptors(executionContext, interceptors, controller.owner.container, callHandler);

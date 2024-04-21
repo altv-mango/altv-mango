@@ -1,5 +1,5 @@
 {
-    "name": "@altv-mango/v1-client",
+    "name": "v1-client",
     "version": "1.4.0",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
