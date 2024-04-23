@@ -1544,13 +1544,23 @@ export abstract class Checkpoint extends ColShape {
     static getByScriptID(scriptId: number): Checkpoint | null;
 }
 
-export abstract class Entity extends WorldObject<Entity, altClient.Entity> {
-    readonly scriptID: number;
+export abstract class Entity<TClass, TRaw extends altClient.Entity> extends WorldObject<TClass, TRaw> {
+    get scriptID(): number {
+        return this.$raw.scriptID;
+    }
 
-    get model(): number;
-    readonly netOwner?: Player;
-    readonly visible: boolean;
-    readonly isStreamedIn: boolean;
+    get model(): number {
+        return this.$raw.model;
+    }
+    get netOwner(): Player {
+        return this.$raw.netOwner;
+    }
+    get visible(): boolean {
+        return this.$raw.visible;
+    }
+    get isStreamedIn(): boolean {
+        return this.$raw.isSpawned;
+    }
 
     readonly syncedMeta: Readonly<EntitySyncedMeta & Record<string, unknown>>;
     readonly streamSyncedMeta: Readonly<EntityStreamSyncedMeta & Record<string, unknown>>;
@@ -1721,7 +1731,7 @@ export class HttpClient extends BaseObject<HttpClient, altClient.HttpClient> {
     }
 }
 
-export abstract class Object extends Entity {
+export class Object extends Entity {
     readonly alpha: number;
     readonly textureVariation: number;
     readonly lodDistance: number;
@@ -1734,7 +1744,7 @@ export abstract class Object extends Entity {
     static getByScriptID(id: number): Object | null;
 }
 
-export abstract class LocalObject extends Object {
+export class LocalObject extends Object {
     get model(): number;
     set model(value: number | string);
     declare alpha: number;
@@ -1781,7 +1791,7 @@ export abstract class LocalObject extends Object {
     static getByScriptID(scriptId: number): LocalObject | null;
 }
 
-export abstract class Ped extends Entity {
+export class Ped extends Entity {
     readonly health: number;
     readonly maxHealth: number;
     readonly armour: number;
@@ -1799,7 +1809,7 @@ export abstract class Ped extends Entity {
     static getByScriptID(scriptID: number): Ped | LocalPed | null;
 }
 
-export abstract class LocalPed extends Ped {
+export class LocalPed extends Ped {
     get model(): number;
     set model(value: number | string);
     readonly streamingDistance: number;
@@ -1816,7 +1826,7 @@ export abstract class LocalPed extends Ped {
     static getByScriptID(scriptId: number): LocalPed | null;
 }
 
-export abstract class LocalPlayer extends Player {
+export class LocalPlayer extends Player {
     readonly currentAmmo: number;
     stamina: number;
     maxStamina: number;
@@ -1828,7 +1838,7 @@ export abstract class LocalPlayer extends Player {
     getWeaponComponents(wepaonHash: number | string): ReadonlyArray<number> | undefined;
 }
 
-export abstract class LocalVehicle extends Vehicle {
+export class LocalVehicle extends Vehicle {
     get model(): number;
     set model(value: number | string);
 
@@ -1844,7 +1854,7 @@ export abstract class LocalVehicle extends Vehicle {
     static getByScriptID(scriptId: number): LocalVehicle | null;
 }
 
-export abstract class Player extends Entity {
+export class Player extends Entity {
     readonly name: string;
 
     readonly isTalking: boolean;
@@ -1905,7 +1915,7 @@ export abstract class Player extends Entity {
     static getByRemoteID(id: number): Player | null;
 }
 
-export abstract class RmlDocument extends RmlElement {
+export class RmlDocument extends RmlElement {
     title: string;
     readonly sourceUrl: string;
     declare readonly isVisible: boolean;
@@ -1928,7 +1938,7 @@ export abstract class RmlDocument extends RmlElement {
 }
 
 // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
-export abstract class RmlElement extends BaseObject {
+export class RmlElement extends BaseObject {
     readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
     readonly relativeOffset: Vector2;
@@ -2018,7 +2028,7 @@ export abstract class RmlElement extends BaseObject {
     static getByID(id: string): RmlElement | null;
 }
 
-export abstract class TextLabel extends WorldObject {
+export class TextLabel extends WorldObject {
     readonly isStreamedIn: boolean;
     readonly isGlobal: boolean;
     readonly target: Entity;
@@ -2045,7 +2055,7 @@ export abstract class TextLabel extends WorldObject {
     // static getByRemoteID(id: number): TextLabel | null;
 }
 
-export abstract class Vehicle extends Entity {
+export class Vehicle extends Entity {
     readonly neon: Readonly<VehicleNeonState>;
 
     readonly driver?: Player;
@@ -2224,17 +2234,39 @@ export class WeaponData {
     headshotDamageModifier: number;
     playerDamageModifier: number;
 
-    static readonly all: ReadonlyArray<WeaponData>;
+    static readonly all: Array<WeaponData> = [];
 
     static get(weaponHash: number | string): WeaponData | undefined;
 }
 
-export class WebSocketClient extends BaseObject {
-    url: string;
-    autoReconnect: boolean;
-    perMessageDeflate: boolean;
-    pingInterval: number;
-    readonly readyState: boolean;
+export class WebSocketClient extends BaseObject<WebSocketClient, altClient.WebSocketClient> {
+    public get url(): string {
+        return this.$raw.url;
+    }
+    public set url(value: string) {
+        this.$raw.url = value;
+    }
+    public get autoReconnect(): boolean {
+        return this.$raw.autoReconnect;
+    }
+    public set autoReconnect(value: boolean) {
+        this.$raw.autoReconnect = value;
+    }
+    public get perMessageDeflate(): boolean {
+        return this.$raw.perMessageDeflate;
+    }
+    public set perMessageDeflate(value: boolean) {
+        this.$raw.perMessageDeflate = value;
+    }
+    public get pingInterval(): number {
+        return this.$raw.pingInterval;
+    }
+    public set pingInterval(value: number) {
+        this.$raw.pingInterval = value;
+    }
+    public get readyState(): boolean {
+        return this.$raw.readyState;
+    }
 
     on<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
     on<E extends string>(
@@ -2256,17 +2288,31 @@ export class WebSocketClient extends BaseObject {
 
     readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
-    start(): void;
-    stop(): void;
+    start(): void {
+        this.$raw.start();
+    }
+    stop(): void {
+        this.$raw.stop();
+    }
 
-    send(message: string | altShared.Buffer): boolean;
+    send(message: string | altShared.Buffer): boolean {
+        return this.$raw.send(message);
+    }
 
-    addSubProtocol(protocol: string): void;
-    getSubProtocols(): ReadonlyArray<string>;
-    setExtraHeader(name: string, value: string): void;
-    getExtraHeaders(): Readonly<Record<string, string>>;
+    addSubProtocol(protocol: string): void {
+        this.$raw.addSubProtocol(protocol);
+    }
+    getSubProtocols(): ReadonlyArray<string> {
+        return this.$raw.getSubProtocols();
+    }
+    setExtraHeader(name: string, value: string): void {
+        this.$raw.setExtraHeader(name, value);
+    }
+    getExtraHeaders(): Readonly<Record<string, string>> {
+        return this.$raw.getExtraHeaders();
+    }
 
-    static readonly all: ReadonlyArray<WebSocketClient>;
+    static readonly all: Array<WebSocketClient> = [];
 
     static create(options: WebSocketClientCreateOptions): WebSocketClient;
     static getByID(id: number): WebSocketClient | null;
@@ -2299,75 +2345,110 @@ export class TextDecoder {
     }
 }
 
-export abstract class WebView extends BaseObject {
-    focused: boolean;
-    url: string;
-    visible: boolean;
+export class WebView extends BaseObject<WebView, altClient.WebView> {
+    public get focused(): boolean {
+        return this.$raw.focused;
+    }
+    public set focused(value: boolean) {
+        this.$raw.focused = value;
+    }
+    public get url(): string {
+        return this.$raw.url;
+    }
+    public set url(value: string) {
+        this.$raw.url = value;
+    }
+    public get visible(): boolean {
+        return this.$raw.isVisible;
+    }
+    public set visible(value: boolean) {
+        this.$raw.isVisible = value;
+    }
 
-    readonly isOverlay: boolean;
-    readonly isLoaded: boolean;
-    readonly isReady: boolean;
+    public get isOverlay(): boolean {
+        return this.$raw.isOverlay;
+    }
+    public get isLoaded(): boolean {
+        throw new Error('Not implemented');
+    }
+    public get isReady(): boolean {
+        return this.$raw.isReady;
+    }
 
     readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
-    size: Vector2;
-    pos: Vector2;
+    public get size(): Vector2 {
+        return new Vector2(this.$raw.size.x, this.$raw.size.y);
+    }
+    public set size(value: Vector2) {
+        this.$raw.size = new altClient.Vector2(value.x, value.y);
+    }
+    public get pos(): Vector2 {
+        return new Vector2(this.$raw.pos.x, this.$raw.pos.y);
+    }
+    public set pos(value: Vector2) {
+        throw new Error('Not implemented');
+    }
 
     readonly outputs: ReadonlyArray<AudioOutput>;
 
-    emit<E extends keyof altShared.Events.CustomClientToWebViewEvent>(
-        eventName: E,
-        ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>
-    ): void;
-    emit<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>, ...args: unknown[]): void;
+    emit(eventName: string, ...args: unknown[]): void {
+        this.$raw.emit(eventName, ...args);
+    }
 
-    emitRaw<E extends keyof altShared.Events.CustomClientToWebViewEvent>(
-        eventName: E,
-        ...args: Parameters<altShared.Events.CustomClientToWebViewEvent[E]>
-    ): void;
-    emitRaw<E extends string>(eventName: Exclude<E, keyof altShared.Events.CustomClientToWebViewEvent>, ...args: unknown[]): void;
+    emitRaw(eventName: string, ...args: unknown[]): void {
+        this.$raw.emit(eventName, ...args);
+    }
 
-    setExtraHeader(name: string, value: string): void;
-    setZoomLevel(value: number): void;
-    reload(ignoreCache: boolean): void;
+    setExtraHeader(name: string, value: string): void {
+        this.$raw.setExtraHeader(name, value);
+    }
+    setZoomLevel(value: number): void {
+        this.$raw.setZoomLevel(value);
+    }
+    reload(ignoreCache: boolean): void {
+        this.$raw.reload(ignoreCache);
+    }
 
-    addOutput(output: AudioOutput): void;
-    removeOutput(output: AudioOutput): void;
+    addOutput(output: AudioOutput): void {
+        this.$raw.addOutput(output.$raw);
+    }
+    removeOutput(output: AudioOutput): void {
+        this.$raw.removeOutput(output.$raw);
+    }
 
-    on<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
-        eventName: E,
-        listener: altShared.Events.CustomWebViewToClientEvent[E],
-    ): void;
-    on<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
-        listener: Events.CustomEventCallback<unknown[]>,
-    ): void;
+    on(eventName: string, listener: Events.CustomEventCallback<unknown[]>): void {
+        this.$raw.on(eventName, listener);
+    }
 
-    once<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
-        eventName: E,
-        listener: altShared.Events.CustomWebViewToClientEvent[E],
-    ): void;
-    once<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
-        listener: Events.CustomEventCallback<unknown[]>,
-    ): void;
+    once(eventName: string, listener: Events.CustomEventCallback<unknown[]>): void {
+        this.$raw.once(eventName, listener);
+    }
 
-    off<E extends keyof altShared.Events.CustomWebViewToClientEvent>(
-        eventName: E,
-        listener: altShared.Events.CustomWebViewToClientEvent[E],
-    ): void;
-    off<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.CustomWebViewToClientEvent>,
-        listener: Events.CustomEventCallback<unknown[]>,
-    ): void;
+    off(eventName: string, listener: Events.CustomEventCallback<unknown[]>): void {
+        this.$raw.off(eventName, listener);
+    }
 
-    static readonly all: ReadonlyArray<WebView>;
-    static readonly isGpuAccelerationActive: boolean;
+    static readonly all: Array<WebView> = [];
+    static get isGpuAccelerationActive(): boolean {
+        return altClient.WebView.gpuAccelerationActive;
+    }
 
     static create(options: _WebViewCreateOptionsDrawable): WebView;
-    static create(options: _WebViewCreateOptionsOverlay): WebView;
+    static create(options: _WebViewCreateOptionsOverlay): WebView {
+        const webView = new WebView();
+        webView.$raw = new altClient.WebView(options.url, options.isOverlay, options.targetTexture);
+        this.all.push(webView);
+        return webView;
+    }
 
-    static getByID(id: number): WebView | null;
+    static getByID(id: number): WebView | null {
+        const webView = altClient.WebView.getByID(id);
+        if (!webView) return null;
+        const instance = new WebView();
+        instance.$raw = webView;
+        return instance;
+    }
 }
 
 export class ColShapeSphere extends ColShape<ColShapeSphere, altClient.ColshapeSphere> {
@@ -2405,7 +2486,7 @@ export class ColShapeCircle extends ColShape<ColShapeCircle, altClient.ColshapeC
         return this.$raw.radius;
     }
 
-    public static create(opts: ColShapeCircleCreateOptions): ColShapeCircle {
+    public static override create(opts: ColShapeCircleCreateOptions): ColShapeCircle {
         const colShape = new ColShapeCircle();
         colShape.$raw = new altClient.ColshapeCircle(opts.pos.x, opts.pos.y, opts.radius);
         this.all.push(colShape);
