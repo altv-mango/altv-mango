@@ -16,8 +16,6 @@ import type {
     ColShapeRectangleCreateOptions,
     ColShapeSphereCreateOptions,
     Data,
-    EntityStreamSyncedMeta,
-    EntitySyncedMeta,
     HttpResponse,
     IRGBA,
     IVector2,
@@ -27,10 +25,6 @@ import type {
     LocalPedCreateOptions,
     LocalVehicleCreateOptions,
     MarkerCreateOptions,
-    PedStreamSyncedMeta,
-    PedSyncedMeta,
-    PlayerStreamSyncedMeta,
-    PlayerSyncedMeta,
     PointBlipCreateOptions,
     Quaternion,
     RadiusBlipCreateOptions,
@@ -40,7 +34,10 @@ import type {
     VehicleNeonState,
     VehicleStreamSyncedMeta,
     VirtualEntityCreateOptions,
+    VirtualEntityGroupCreateOptions,
     VirtualEntityMeta,
+    VirtualEntityStreamSyncedMeta,
+    VirtualEntitySyncedMeta,
     WeatherCycle,
     WebSocketClientCreateOptions,
     _WebViewCreateOptionsDrawable,
@@ -749,9 +746,20 @@ export class BaseObject<TClass, TRaw extends altClient.BaseObject> {
     // readonly syncedMeta: Readonly<BaseObjectSyncedMeta & Record<string, unknown>>;
 }
 
-export abstract class WorldObject<TClass, TRaw extends altClient.BaseObject> extends BaseObject<TClass, TRaw> {
-    public dimension: number;
-    public pos: Vector3;
+export class WorldObject<TClass = any, TRaw extends altClient.WorldObject = altClient.WorldObject> extends BaseObject<TClass, TRaw> {
+    get dimension() {
+        return this.$raw.dimension;
+    }
+    set dimension(value: number) {
+        this.$raw.dimension = value;
+    }
+    get pos() {
+        const pos = this.$raw.pos;
+        return new Vector3(pos.x, pos.y, pos.z);
+    }
+    set pos(value: Vector3) {
+        this.$raw.pos = new altClient.Vector3(value.x, value.y, value.z);
+    }
 }
 
 export class Audio {
@@ -1519,32 +1527,116 @@ export class ColShape<TClass = any, TRaw extends altClient.Colshape = altClient.
     }
 }
 
-export abstract class Checkpoint extends ColShape {
-    readonly scriptID: number;
-    readonly isStreamedIn: boolean;
+export class Checkpoint extends ColShape<Checkpoint, altClient.Checkpoint> {
+    get scriptID(): number {
+        return this.$raw.scriptID;
+    }
+    get isStreamedIn(): boolean {
+        return this.$raw.isStreamedIn;
+    }
 
-    checkpointType: number;
-    radius: number;
-    height: number;
-    color: RGBA;
-    iconColor: RGBA;
-    nextPos: IVector3;
-    readonly streamingDistance: number;
-    visible: boolean;
+    get checkpointType(): Enums.CheckpointType {
+        return this.$raw.checkpointType as unknown as Enums.CheckpointType;
+    }
+    set checkpointType(value: Enums.CheckpointType) {
+        this.$raw.checkpointType = value as number;
+    }
+    get radius(): number {
+        return this.$raw.radius;
+    }
+    set radius(value: number) {
+        this.$raw.radius = value;
+    }
+    get height(): number {
+        return this.$raw.height;
+    }
+    set height(value: number) {
+        this.$raw.height = value;
+    }
+    get color(): RGBA {
+        const color = this.$raw.color;
+        return new RGBA(color.r, color.g, color.b, color.a);
+    }
+    set color(value: RGBA) {
+        this.$raw.color = new altClient.RGBA(value.r, value.g, value.b, value.a);
+    }
+    get iconColor(): RGBA {
+        const color = this.$raw.iconColor;
+        return new RGBA(color.r, color.g, color.b, color.a);
+    }
+    set iconColor(value: RGBA) {
+        this.$raw.iconColor = new altClient.RGBA(value.r, value.g, value.b, value.a);
+    }
+    get nextPos(): IVector3 {
+        const pos = this.$raw.nextPos;
+        return { x: pos.x, y: pos.y, z: pos.z };
+    }
+    set nextPos(value: IVector3) {
+        this.$raw.nextPos = new altClient.Vector3(value.x, value.y, value.z);
+    }
+    get streaminDistance(): number {
+        return this.$raw.streamingDistance;
+    }
+    get visible(): boolean {
+        return this.$raw.visible;
+    }
+    set visible(value: boolean) {
+        this.$raw.visible = value;
+    }
 
-    isEntityIn(entity: Entity): boolean;
-    isEntityIdIn(id: number): boolean;
-    isPointIn(point: Vector3): boolean;
+    override isEntityIn(entity: Entity): boolean {
+        return this.$raw.isEntityIn(entity.$raw);
+    }
+    override isEntityIdIn(id: number): boolean {
+        const entity = altClient.Entity.getByID(Enums.BaseObjectType.CHECKPOINT as number, id) as altClient.Entity;
+        if (!entity) return false;
+        return this.$raw.isEntityIn(entity);
+    }
+    override isPointIn(point: Vector3): boolean {
+        return this.$raw.isPointIn(point);
+    }
 
-    static readonly all: ReadonlyArray<Checkpoint>;
+    static override readonly all: Array<Checkpoint> = [];
 
-    static create(opts: CheckpointCreateOptions): Checkpoint;
-    static getByID(id: number): Checkpoint | null;
-    static getByRemoteID(id: number): Checkpoint | null;
-    static getByScriptID(scriptId: number): Checkpoint | null;
+    static override create(opts: CheckpointCreateOptions): Checkpoint {
+        const checkpoint = new Checkpoint();
+        checkpoint.$raw = new altClient.Checkpoint(
+            opts.type,
+            opts.pos,
+            opts.nextPos,
+            opts.radius,
+            opts.height,
+            opts.color,
+            opts.iconColor,
+            opts.streamingDistance,
+        );
+        this.all.push(checkpoint);
+        return checkpoint;
+    }
+    static override getByID(id: number): Checkpoint | null {
+        const checkpoint = altClient.Checkpoint.getByID(id);
+        if (!checkpoint) return null;
+        const instance = new Checkpoint();
+        instance.$raw = checkpoint;
+        return instance;
+    }
+    static override getByRemoteID(id: number): Checkpoint | null {
+        const checkpoint = altClient.Checkpoint.getByRemoteID(Enums.BaseObjectType.CHECKPOINT as number, id) as altClient.Checkpoint;
+        if (!checkpoint) return null;
+        const instance = new Checkpoint();
+        instance.$raw = checkpoint;
+        return instance;
+    }
+    static override getByScriptID(scriptId: number): Checkpoint | null {
+        const checkpoint = altClient.Checkpoint.getByScriptID(scriptId);
+        if (!checkpoint) return null;
+        const instance = new Checkpoint();
+        instance.$raw = checkpoint;
+        return instance;
+    }
 }
 
-export abstract class Entity<TClass, TRaw extends altClient.Entity> extends WorldObject<TClass, TRaw> {
+export class Entity<TClass = any, TRaw extends altClient.Entity = altClient.Entity> extends WorldObject<TClass, TRaw> {
     get scriptID(): number {
         return this.$raw.scriptID;
     }
@@ -1562,16 +1654,35 @@ export abstract class Entity<TClass, TRaw extends altClient.Entity> extends Worl
         return this.$raw.isSpawned;
     }
 
-    readonly syncedMeta: Readonly<EntitySyncedMeta & Record<string, unknown>>;
-    readonly streamSyncedMeta: Readonly<EntityStreamSyncedMeta & Record<string, unknown>>;
+    // readonly syncedMeta: Readonly<EntitySyncedMeta & Record<string, unknown>>;
+    // readonly streamSyncedMeta: Readonly<EntityStreamSyncedMeta & Record<string, unknown>>;
 
-    frozen: boolean;
-    rot: Vector3;
+    get frozen(): boolean {
+        return this.$raw.frozen;
+    }
+    set frozen(value: boolean) {
+        this.$raw.frozen = value;
+    }
+    get rot(): Vector3 {
+        const rot = this.$raw.rot;
+        return new Vector3(rot.x, rot.y, rot.z);
+    }
+    set rot(value: Vector3) {
+        this.$raw.rot = new altClient.Vector3(value.x, value.y, value.z);
+    }
 
-    getSyncInfo(): Data.ISyncInfo;
+    getSyncInfo(): Data.ISyncInfo {
+        return this.$raw.getSyncInfo();
+    }
 
-    static readonly all: ReadonlyArray<Entity>;
-    static getByScriptID(scriptId: number): Entity | null;
+    static readonly all: Array<Entity> = [];
+    static getByScriptID(scriptId: number): Entity | null {
+        const entity = altClient.Entity.getByScriptID(scriptId);
+        if (!entity) return null;
+        const instance = new Entity();
+        instance.$raw = entity;
+        return instance;
+    }
 }
 
 export class Font extends BaseObject<Font, altClient.Font> {
@@ -1731,111 +1842,484 @@ export class HttpClient extends BaseObject<HttpClient, altClient.HttpClient> {
     }
 }
 
-export class Object extends Entity {
-    readonly alpha: number;
-    readonly textureVariation: number;
-    readonly lodDistance: number;
+export class Object<TClass = any, TRaw extends altClient.Object = altClient.Object> extends Entity<TClass, TRaw> {
+    get alpha(): number {
+        return this.$raw.alpha;
+    }
+    get textureVariation(): number {
+        return this.$raw.textureVariation;
+    }
+    get lodDistance(): number {
+        return this.$raw.lodDistance;
+    }
 
-    static readonly all: ReadonlyArray<Object>;
-    static readonly streamedIn: ReadonlyArray<Object>;
+    static override readonly all: Array<Object> = [];
+    static readonly streamedIn: Array<Object> = [];
 
-    static getByID(id: number): Object | null;
-    static getByRemoteID(id: number): Object | null;
-    static getByScriptID(id: number): Object | null;
+    static override getByID(id: number): Object | null {
+        const object = altClient.Object.getByID(id);
+        if (!object) return null;
+        const instance = new Object();
+        instance.$raw = object;
+        return instance;
+    }
+    static override getByRemoteID(id: number): Object | null {
+        const object = altClient.Object.getByRemoteID(id);
+        if (!object) return null;
+        const instance = new Object();
+        instance.$raw = object;
+        return instance;
+    }
+    static override getByScriptID(id: number): Object | null {
+        const object = altClient.Object.getByScriptID(id);
+        if (!object) return null;
+        const instance = new Object();
+        instance.$raw = object;
+        return instance;
+    }
 }
 
-export class LocalObject extends Object {
-    get model(): number;
-    set model(value: number | string);
-    declare alpha: number;
-    readonly isDynamic: boolean;
-    declare lodDistance: number;
-    hasGravity: number;
-    readonly isCollisionEnabled: boolean;
-    positionFrozen: boolean;
-    declare textureVariation: number;
-    readonly isWorldObject: boolean;
-    readonly isWeaponObject: boolean;
-    readonly useStreaming: boolean;
-    readonly streamingDistance: number;
-    declare visible: boolean;
+export class LocalObject extends Object<LocalObject, altClient.LocalObject> {
+    override get model(): number {
+        return this.$raw.model;
+    }
+    override set model(value: number | string) {
+        this.$raw.model = value;
+    }
+    override get alpha(): number {
+        return this.$raw.alpha;
+    }
+    override set alpha(value: number) {
+        this.$raw.alpha = value;
+    }
+    get isDynamic(): boolean {
+        return this.$raw.dynamic;
+    }
+    override get lodDistance(): number {
+        return this.$raw.lodDistance;
+    }
+    override set lodDistance(value: number) {
+        this.$raw.lodDistance = value;
+    }
+    get hasGravity(): boolean {
+        return this.$raw.hasGravity;
+    }
+    set hasGravity(value: boolean) {
+        this.$raw.hasGravity = value;
+    }
+    get isCollisionEnabled(): boolean {
+        return this.$raw.isCollisionEnabled;
+    }
+    get positionFrozen(): boolean {
+        return this.$raw.positionFrozen;
+    }
+    set positionFrozen(value: boolean) {
+        this.$raw.positionFrozen = value;
+    }
+    override get textureVariation(): number {
+        return this.$raw.textureVariation;
+    }
+    override set textureVariation(value: number) {
+        this.$raw.textureVariation = value;
+    }
+    get isWorldObject(): boolean {
+        return this.$raw.isWorldObject;
+    }
+    get isWeaponObject(): boolean {
+        throw new Error('Not implemented');
+    }
+    get useStreaming(): boolean {
+        return this.$raw.useStreaming;
+    }
+    get streamingDistance(): number {
+        return this.$raw.streamingDistance;
+    }
+    override get visible(): boolean {
+        return this.$raw.visible;
+    }
+    override set visible(value: boolean) {
+        this.$raw.visible = value;
+    }
 
     // WeaponObject related
-    weaponTintIndex: number;
-    setWeaponComponentTintIndex(componentType: number, tintIndex: number): void;
-    getWeaponComponentTintIndex(componentType: number): number;
-    giveWeaponComponent(componentType: number): void;
-    removeWeaponComponent(componentType: number): void;
+    get weaponTintIndex(): number {
+        throw new Error('Not implemented');
+    }
+    set weaponTintIndex(value: number) {
+        throw new Error('Not implemented');
+    }
+    setWeaponComponentTintIndex(componentType: number, tintIndex: number): void {
+        throw new Error('Not implemented');
+    }
+    getWeaponComponentTintIndex(componentType: number): number {
+        throw new Error('Not implemented');
+    }
+    giveWeaponComponent(componentType: number): void {
+        throw new Error('Not implemented');
+    }
+    removeWeaponComponent(componentType: number): void {
+        throw new Error('Not implemented');
+    }
 
-    resetAlpha(): void;
+    resetAlpha(): void {
+        this.$raw.resetAlpha();
+    }
     attachTo(
         target: number | Entity,
         boneIndex: number,
-        pos: altShared.Vector3,
-        rot: altShared.Vector3,
+        pos: Vector3,
+        rot: Vector3,
         useSoftPinning: boolean,
         collision: boolean,
         fixedRot: boolean,
-    ): void;
-    detach(dynamic: boolean): void;
-    toggleCollision(toggle: boolean, keepPhysics: boolean): void;
-    placeOnGroundProperly(): void;
-    activatePhysics(): void;
+    ): void {
+        this.$raw.attachToEntity(target, boneIndex, pos, rot, useSoftPinning, collision, fixedRot);
+    }
+    detach(dynamic: boolean): void {
+        this.$raw.detach(dynamic);
+    }
+    toggleCollision(toggle: boolean, keepPhysics: boolean): void {
+        this.$raw.toggleCollision(toggle, keepPhysics);
+    }
+    placeOnGroundProperly(): void {
+        this.$raw.placeOnGroundProperly();
+    }
+    activatePhysics(): void {
+        this.$raw.activatePhysics();
+    }
 
-    public waitForSpawn(timeout?: number): Promise<void>;
+    public waitForSpawn(timeout?: number): Promise<void> {
+        return this.$raw.waitForSpawn(timeout);
+    }
 
-    static readonly allWorld: ReadonlyArray<LocalObject>;
+    static readonly allWorld: Array<LocalObject> = [];
 
-    static create(options: LocalObjectCreateOptions): LocalObject;
-    static getByID(id: number): LocalObject | null;
-    static getByScriptID(scriptId: number): LocalObject | null;
+    static create(options: LocalObjectCreateOptions): LocalObject {
+        const object = new LocalObject();
+        object.$raw = new altClient.LocalObject(
+            options.model,
+            options.pos,
+            options.rot,
+            options.noOffset,
+            options.dynamic,
+            options.useStreaming,
+            options.streamingDistance,
+        );
+        return object;
+    }
+    static override getByID(id: number): LocalObject | null {
+        const object = altClient.LocalObject.getByID(id);
+        if (!object) return null;
+        const instance = new LocalObject();
+        instance.$raw = object;
+        return instance;
+    }
+    static override getByScriptID(scriptId: number): LocalObject | null {
+        const object = altClient.LocalObject.getByScriptID(scriptId);
+        if (!object) return null;
+        const instance = new LocalObject();
+        instance.$raw = object;
+        return instance;
+    }
 }
 
-export class Ped extends Entity {
-    readonly health: number;
-    readonly maxHealth: number;
-    readonly armour: number;
-    readonly currentWeapon: number;
+export class Ped<TClass = any, TRaw extends altClient.Ped = altClient.Ped> extends Entity<TClass, TRaw> {
+    get health(): number {
+        return this.$raw.health;
+    }
+    get maxHealth(): number {
+        return this.$raw.maxHealth;
+    }
+    get armour(): number {
+        return this.$raw.armour;
+    }
+    get currentWeapon(): number {
+        return this.$raw.currentWeapon;
+    }
 
-    readonly meta: PedMeta & Record<string, unknown>;
-    declare readonly syncedMeta: Readonly<PedSyncedMeta & Record<string, unknown>>;
-    declare readonly streamSyncedMeta: Readonly<PedStreamSyncedMeta & Record<string, unknown>>;
+    // readonly meta: PedMeta & Record<string, unknown>;
+    // declare readonly syncedMeta: Readonly<PedSyncedMeta & Record<string, unknown>>;
+    // declare readonly streamSyncedMeta: Readonly<PedStreamSyncedMeta & Record<string, unknown>>;
 
-    static readonly all: ReadonlyArray<Ped>;
-    static readonly streamedIn: ReadonlyArray<Ped>;
+    static override readonly all: Array<Ped> = [];
+    static readonly streamedIn: Array<Ped> = [];
 
-    static getByID(id: number): Ped | null;
-    static getByRemoteID(id: number): Ped | null;
-    static getByScriptID(scriptID: number): Ped | LocalPed | null;
+    static override getByID(id: number): Ped | null {
+        const ped = altClient.Ped.getByID(id);
+        if (!ped) return null;
+        const instance = new Ped();
+        instance.$raw = ped;
+        return instance;
+    }
+    static override getByRemoteID(id: number): Ped | null {
+        const ped = altClient.Ped.getByRemoteID(Enums.BaseObjectType.PED as number, id);
+        if (!ped) return null;
+        const instance = new Ped();
+        instance.$raw = ped;
+        return instance;
+    }
+    static override getByScriptID(scriptID: number): Ped | LocalPed | null {
+        const ped = altClient.Ped.getByScriptID(scriptID);
+        if (!ped) return null;
+        const instance = new Ped();
+        instance.$raw = ped;
+        return instance;
+    }
 }
 
-export class LocalPed extends Ped {
-    get model(): number;
-    set model(value: number | string);
-    readonly streamingDistance: number;
-    declare visible: boolean;
-    declare readonly scriptID: number;
-    declare readonly isStreamedIn: boolean;
+export class LocalPed extends Ped<LocalPed, altClient.LocalPed> {
+    override get model(): number {
+        return this.$raw.model;
+    }
+    override set model(value: number | string) {
+        throw new Error('Not implemented');
+    }
+    get streamingDistance(): number {
+        return this.$raw.streamingDistance;
+    }
+    override get visible(): boolean {
+        return this.$raw.visible;
+    }
+    override get scriptID(): number {
+        return this.$raw.scriptID;
+    }
+    override get isStreamedIn(): boolean {
+        return this.$raw.isStreamedIn;
+    }
 
-    public waitForSpawn(timeout?: number): Promise<void>;
+    public waitForSpawn(timeout?: number): Promise<void> {
+        return this.$raw.waitForSpawn(timeout);
+    }
 
-    static readonly all: ReadonlyArray<Ped>;
+    static override readonly all: Array<Ped> = [];
 
-    static create(options: LocalPedCreateOptions): LocalPed;
-    static getByID(id: number): LocalPed | null;
-    static getByScriptID(scriptId: number): LocalPed | null;
+    static create(options: LocalPedCreateOptions): LocalPed {
+        const ped = new LocalPed();
+        ped.$raw = new altClient.LocalPed(
+            options.model,
+            options.dimension,
+            options.pos,
+            options.pos,
+            options.useStreaming ?? true,
+            options.streamingDistance,
+        );
+        return ped;
+    }
+    static override getByID(id: number): LocalPed | null {
+        const ped = altClient.LocalPed.getByID(id);
+        if (!ped) return null;
+        const instance = new LocalPed();
+        instance.$raw = ped;
+        return instance;
+    }
+    static override getByScriptID(scriptId: number): LocalPed | null {
+        const ped = altClient.LocalPed.getByScriptID(scriptId);
+        if (!ped) return null;
+        const instance = new LocalPed();
+        instance.$raw = ped;
+        return instance;
+    }
 }
 
-export class LocalPlayer extends Player {
-    readonly currentAmmo: number;
-    stamina: number;
-    maxStamina: number;
-    readonly currentWeaponData: WeaponData;
+export class Player<TClass = any, TRaw extends altClient.Player = altClient.Player> extends Entity<TClass, TRaw> {
+    get name(): string {
+        return this.$raw.name;
+    }
+
+    get isTalking(): boolean {
+        return this.$raw.isTalking;
+    }
+    get micLevel(): number {
+        return this.$raw.micLevel;
+    }
+    get taskData(): string {
+        return this.$raw.taskData;
+    }
+    get spatialVolume(): number {
+        return this.$raw.spatialVolume;
+    }
+    get nonSpatialVolume(): number {
+        return this.$raw.nonSpatialVolume;
+    }
+    get filter(): AudioFilter {
+        return this.$raw.filter;
+    }
+
+    get health(): number {
+        return this.$raw.health;
+    }
+    get maxHealth(): number {
+        return this.$raw.maxHealth;
+    }
+    get currentWeaponComponents(): ReadonlyArray<number> {
+        return this.$raw.currentWeaponComponents;
+    }
+    get currentWeaponTintIndex(): number {
+        return this.$raw.currentWeaponTintIndex;
+    }
+    get currentWeapon(): number {
+        return this.$raw.currentWeapon;
+    }
+    get isDead(): boolean {
+        return this.$raw.isDead;
+    }
+    get isJumping(): boolean {
+        throw new Error('Not implemented');
+    }
+    get isInRagdoll(): boolean {
+        return this.$raw.isInRagdoll;
+    }
+    get isAiming(): boolean {
+        return this.$raw.isAiming;
+    }
+    get isShooting(): boolean {
+        throw new Error('Not implemented');
+    }
+    get isReloading(): boolean {
+        return this.$raw.isReloading;
+    }
+    get isEnteringVehicle(): boolean {
+        return this.$raw.isEnteringVehicle;
+    }
+    get isLeavingVehicle(): boolean {
+        return this.$raw.isLeavingVehicle;
+    }
+    get isOnLadder(): boolean {
+        return this.$raw.isOnLadder;
+    }
+    get isInMelee(): boolean {
+        return this.$raw.isInMelee;
+    }
+    get isInCover(): boolean {
+        return this.$raw.isInCover;
+    }
+    get isParachuting(): boolean {
+        return this.$raw.isParachuting;
+    }
+    get armour(): number {
+        return this.$raw.armour;
+    }
+    get maxArmour(): number {
+        return this.$raw.maxArmour;
+    }
+    get moveSpeed(): number {
+        return this.$raw.moveSpeed;
+    }
+    get aimPos(): Vector3 {
+        const pos = this.$raw.aimPos;
+        return new Vector3(pos.x, pos.y, pos.z);
+    }
+    get headRotation(): Vector3 {
+        const rot = this.$raw.headRot;
+        return new Vector3(rot.x, rot.y, rot.z);
+    }
+    get isInVehicle(): boolean {
+        return this.$raw.vehicle !== null;
+    }
+    get vehicle(): Vehicle | null {
+        return this.$raw.vehicle;
+    }
+    get seat(): number {
+        return this.$raw.seat;
+    }
+    get entityAimingAt(): Entity {
+        return this.$raw.entityAimingAt;
+    }
+    get entityAimOffset(): Vector3 {
+        const offset = this.$raw.entityAimOffset;
+        return new Vector3(offset.x, offset.y, offset.z);
+    }
+    get isFlashlightActive(): boolean {
+        return this.$raw.flashlightActive;
+    }
+    get isSuperJumpEnabled(): boolean {
+        throw new Error('Not implemented');
+    }
+    get isCrouching(): boolean {
+        return this.$raw.isCrouching;
+    }
+    get isStealthy(): boolean {
+        return this.$raw.isStealthy;
+    }
+    get currentAnimationDict(): number {
+        throw new Error('Not implemented');
+    }
+    get currentAnimationName(): number {
+        throw new Error('Not implemented');
+    }
+    get isSpawned(): boolean {
+        return this.$raw.isSpawned;
+    }
+    get forwardSpeed(): number {
+        return this.$raw.forwardSpeed;
+    }
+    get strafeSpeed(): number {
+        return this.$raw.strafeSpeed;
+    }
+
+    getWeaponTintIndex(weaponHash: number | string): number | undefined {
+        return this.$raw.getWeaponTintIndex(weaponHash);
+    }
+    hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean {
+        return this.$raw.hasWeaponComponent(weaponHash, componentHash);
+    }
+
+    // declare readonly syncedMeta: Readonly<PlayerSyncedMeta & Record<string, unknown>>;
+    // declare readonly streamSyncedMeta: Readonly<PlayerStreamSyncedMeta & Record<string, unknown>>;
+
+    static get local(): LocalPlayer {
+        return altClient.Player.local;
+    }
+    static override readonly all: Array<Player> = [];
+    static readonly streamedIn: ReadonlyArray<Player> = [];
+
+    static override getByID(id: number): Player | null {
+        const player = altClient.Player.getByID(id);
+        if (!player) return null;
+        const instance = new Player();
+        instance.$raw = player;
+        return instance;
+    }
+
+    static override getByRemoteID(id: number): Player | null {
+        const player = altClient.Player.getByRemoteID(id);
+        if (!player) return null;
+        const instance = new Player();
+        instance.$raw = player;
+        return instance;
+    }
+}
+
+export class LocalPlayer extends Player<LocalPlayer, altClient.LocalPlayer> {
+    get currentAmmo(): number {
+        return this.$raw.currentAmmo;
+    }
+    get stamina(): number {
+        return this.$raw.stamina;
+    }
+    set stamina(value: number) {
+        this.$raw.stamina = value;
+    }
+    get maxStamina(): number {
+        return this.$raw.maxStamina;
+    }
+    set maxStamina(value: number) {
+        this.$raw.maxStamina = value;
+    }
+    get currentWeaponData(): WeaponData {
+        return this.$raw.currentWeaponData;
+    }
     readonly weapons: ReadonlyArray<{ hash: number; tintIndex: number; components: ReadonlyArray<number> }>;
 
-    getWeaponAmmo(wepaonHash: number | string): number | undefined;
-    hasWeapon(wepaonHash: number | string): boolean;
-    getWeaponComponents(wepaonHash: number | string): ReadonlyArray<number> | undefined;
+    getWeaponAmmo(wepaonHash: number | string): number | undefined {
+        return this.$raw.getWeaponAmmo(wepaonHash);
+    }
+    hasWeapon(wepaonHash: number | string): boolean {
+        return this.$raw.hasWeapon(wepaonHash);
+    }
+    getWeaponComponents(wepaonHash: number | string): ReadonlyArray<number> | undefined {
+        return this.$raw.getWeaponComponents(wepaonHash);
+    }
 }
 
 export class LocalVehicle extends Vehicle {
@@ -1854,91 +2338,8 @@ export class LocalVehicle extends Vehicle {
     static getByScriptID(scriptId: number): LocalVehicle | null;
 }
 
-export class Player extends Entity {
-    readonly name: string;
-
-    readonly isTalking: boolean;
-    readonly micLevel: number;
-    readonly taskData: string;
-    spatialVolume: number;
-    nonSpatialVolume: number;
-    readonly filter: AudioFilter;
-
-    readonly health: number;
-    readonly maxHealth: number;
-    readonly currentWeaponComponents: ReadonlyArray<number>;
-    readonly currentWeaponTintIndex: number;
-    get currentWeapon(): number;
-    readonly isDead: boolean;
-    readonly isJumping: boolean;
-    readonly isInRagdoll: boolean;
-    readonly isAiming: boolean;
-    readonly isShooting: boolean;
-    readonly isReloading: boolean;
-    readonly isEnteringVehicle: boolean;
-    readonly isLeavingVehicle: boolean;
-    readonly isOnLadder: boolean;
-    readonly isInMelee: boolean;
-    readonly isInCover: boolean;
-    readonly isParachuting: boolean;
-    readonly armour: number;
-    readonly maxArmour: number;
-    readonly moveSpeed: number;
-    readonly aimPos: Vector3;
-    readonly headRotation: Vector3;
-    readonly isInVehicle: boolean;
-    readonly vehicle?: Vehicle;
-    readonly seat: number;
-    readonly entityAimingAt: Entity;
-    readonly entityAimOffset: Vector3;
-    readonly isFlashlightActive: boolean;
-    readonly isSuperJumpEnabled: boolean;
-    readonly isCrouching: boolean;
-    readonly isStealthy: boolean;
-    readonly currentAnimationDict: number;
-    readonly currentAnimationName: number;
-    readonly isSpawned: boolean;
-    readonly forwardSpeed: number;
-    readonly strafeSpeed: number;
-
-    getWeaponTintIndex(weaponHash: number | string): number | undefined;
-    hasWeaponComponent(weaponHash: number | string, componentHash: number | string): boolean;
-
-    declare readonly syncedMeta: Readonly<PlayerSyncedMeta & Record<string, unknown>>;
-    declare readonly streamSyncedMeta: Readonly<PlayerStreamSyncedMeta & Record<string, unknown>>;
-
-    static readonly local: LocalPlayer;
-    static readonly all: ReadonlyArray<Player>;
-    static readonly streamedIn: ReadonlyArray<Player>;
-
-    static getByID(id: number): Player | null;
-    static getByRemoteID(id: number): Player | null;
-}
-
-export class RmlDocument extends RmlElement {
-    title: string;
-    readonly sourceUrl: string;
-    declare readonly isVisible: boolean;
-    readonly isModal: boolean;
-
-    readonly body: RmlElement;
-
-    show(isModal?: boolean, focused?: boolean): void;
-    hide(): void;
-    update(): void;
-
-    createElement(tag: string): RmlElement;
-    createTextNode(text: string): RmlElement;
-
-    static readonly all: ReadonlyArray<RmlDocument>;
-
-    static create(options: RmlDocumentCreateOptions): RmlDocument;
-
-    static getByID(id: string): RmlDocument | null;
-}
-
 // @ts-ignore - Suppresses "Class static side incorrectly extends base class static side"
-export class RmlElement extends BaseObject {
+export class RmlElement extends BaseObject<RmlElement, altClient.RmlElement> {
     readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
     readonly relativeOffset: Vector2;
@@ -2028,7 +2429,29 @@ export class RmlElement extends BaseObject {
     static getByID(id: string): RmlElement | null;
 }
 
-export class TextLabel extends WorldObject {
+export class RmlDocument extends RmlElement {
+    title: string;
+    readonly sourceUrl: string;
+    declare readonly isVisible: boolean;
+    readonly isModal: boolean;
+
+    readonly body: RmlElement;
+
+    show(isModal?: boolean, focused?: boolean): void;
+    hide(): void;
+    update(): void;
+
+    createElement(tag: string): RmlElement;
+    createTextNode(text: string): RmlElement;
+
+    static readonly all: ReadonlyArray<RmlDocument>;
+
+    static create(options: RmlDocumentCreateOptions): RmlDocument;
+
+    static getByID(id: string): RmlDocument | null;
+}
+
+export class TextLabel extends WorldObject<TextLabel, altClient.TextLabel> {
     readonly isStreamedIn: boolean;
     readonly isGlobal: boolean;
     readonly target: Entity;
@@ -2055,39 +2478,101 @@ export class TextLabel extends WorldObject {
     // static getByRemoteID(id: number): TextLabel | null;
 }
 
-export class Vehicle extends Entity {
-    readonly neon: Readonly<VehicleNeonState>;
+export class Vehicle extends Entity<Vehicle, altClient.Vehicle> {
+    get neon(): Readonly<VehicleNeonState> {
+        return this.getNeonActive();
+    }
 
-    readonly driver?: Player;
-    readonly isDestroyed: boolean;
-    readonly modKitsCount: number;
-    readonly modKit: number;
-    readonly IsPrimaryColorRGB: boolean;
-    readonly primaryColor: number;
-    readonly primaryColorRGB: RGBA;
-    readonly isSecondaryColorRGB: boolean;
-    readonly secondaryColor: number;
-    readonly secondaryColorRGB: RGBA;
-    readonly pearlColor: number;
-    readonly wheelColor: number;
-    readonly interiorColor: number;
-    readonly dashboardColor: number;
-    readonly isTireSmokeColorCustom: boolean;
-    readonly tireSmokeColor: RGBA;
-    readonly wheelType: number;
-    readonly wheelVariation: number;
-    readonly customTires: boolean;
-    readonly specialDarkness: number;
-    readonly numberplateIndex: number;
-    readonly numberplateText: string;
-    readonly windowTint: number;
-    readonly dirtLevel: number;
-    readonly isNeonActive: boolean;
-    readonly neonColor: RGBA;
-    readonly livery: number;
-    readonly roofLivery: number;
-    readonly appearanceDataBase64: string;
-    readonly engineOn: boolean;
+    get driver(): Player | null {
+        throw new Error('Not implemented');
+    }
+    get isDestroyed(): boolean {
+        throw new Error('Not implemented');
+    }
+    get modKitsCount(): number {
+        throw new Error('Not implemented');
+    }
+    get modKit(): number {
+        throw new Error('Not implemented');
+    }
+    get isPrimaryColorRGB(): boolean {
+        throw new Error('Not implemented');
+    }
+    get primaryColor(): number {
+        return this.primaryColor;
+    }
+    get primaryColorRGB(): RGBA {
+        return this.primaryColorRGB;
+    }
+    get isSecondaryColorRGB(): boolean {
+        return this.isSecondaryColorRGB;
+    }
+    get secondaryColor(): number {
+        return this.secondaryColor;
+    }
+    get secondaryColorRGB(): RGBA {
+        return this.secondaryColorRGB;
+    }
+    get pearlColor(): number {
+        return this.pearlColor;
+    }
+    get wheelColor(): number {
+        return this.wheelColor;
+    }
+    get interiorColor(): number {
+        return this.interiorColor;
+    }
+    get dashboardColor(): number {
+        return this.dashboardColor;
+    }
+    get isTireSmokeColorCustom(): boolean {
+        return this.isTireSmokeColorCustom;
+    }
+    get tireSmokeColor(): RGBA {
+        return this.tireSmokeColor;
+    }
+    get wheelType(): number {
+        return this.wheelType;
+    }
+    get wheelVariation(): number {
+        return this.wheelVariation;
+    }
+    get customTires(): boolean {
+        return this.customTires;
+    }
+    get specialDarkness(): number {
+        return this.specialDarkness;
+    }
+    get numberplateIndex(): number {
+        return this.numberplateIndex;
+    }
+    get numberplateText(): string {
+        return this.numberplateText;
+    }
+    get windowTint(): number {
+        return this.windowTint;
+    }
+    get dirtLevel(): number {
+        return this.dirtLevel;
+    }
+    get isNeonActive(): boolean {
+        return this.isNeonActive;
+    }
+    get neonColor(): RGBA {
+        return this.neonColor;
+    }
+    get livery(): number {
+        return this.livery;
+    }
+    get roofLivery(): number {
+        return this.roofLivery;
+    }
+    get appearanceDataBase64(): string {
+        return this.appearanceDataBase64;
+    }
+    get engineOn(): boolean {
+        return this.engineOn;
+    }
     readonly isHandbrakeActive: boolean;
     readonly headlightColor: number;
     readonly radioStationIndex: number;
@@ -2137,14 +2622,28 @@ export class Vehicle extends Entity {
     batteryLightState: boolean;
     suspensionHeight: number;
 
-    getNeonActive(): VehicleNeonState;
+    getNeonActive(): VehicleNeonState {
+        throw new Error('Not implemented');
+    }
 
-    getMod(category: number): number;
-    getModsCount(category: number): number;
-    isExtraOn(extraId: number): boolean;
-    getDoorState(doorId: number): number;
-    isWindowOpened(windowId: number): boolean;
-    isWheelBurst(wheelId: number): boolean;
+    getMod(category: number): number {
+        throw new Error('Not implemented');
+    }
+    getModsCount(category: number): number {
+        throw new Error('Not implemented');
+    }
+    isExtraOn(extraId: number): boolean {
+        throw new Error('Not implemented');
+    }
+    getDoorState(doorId: number): number {
+        throw new Error('Not implemented');
+    }
+    isWindowOpened(windowId: number): boolean {
+        throw new Error('Not implemented');
+    }
+    isWheelBurst(wheelId: number): boolean {
+        throw new Error('Not implemented');
+    }
     getWheelHasTire(wheelId: number): boolean;
     isWheelDetached(wheelId: number): boolean;
     isWheelOnFire(wheelId: number): boolean;
@@ -2188,23 +2687,40 @@ export class Vehicle extends Entity {
     static getByScriptID(scriptId: number): Vehicle | null;
 }
 
-export abstract class VirtualEntityGroup extends BaseObject {
-    readonly maxEntitiesInStream: number;
+export class VirtualEntityGroup extends BaseObject<VirtualEntityGroup, altClient.VirtualEntityGroup> {
+    get maxEntitiesInStream(): number {
+        return this.$raw.maxEntitiesInStream;
+    }
 
-    static create(opts: altShared.VirtualEntityGroupCreateOptions): VirtualEntityGroup;
+    static create(opts: VirtualEntityGroupCreateOptions): VirtualEntityGroup {
+        const group = new VirtualEntityGroup();
+        group.$raw = new altClient.VirtualEntityGroup(opts.maxEntitiesInStream);
+        return group;
+    }
 }
 
-export abstract class VirtualEntity extends WorldObject {
-    readonly isStreamedIn: boolean;
+export class VirtualEntity extends WorldObject<VirtualEntity, altClient.VirtualEntity> {
+    get isStreamedIn(): boolean {
+        return this.$raw.isStreamedIn;
+    }
 
-    readonly group: VirtualEntityGroup;
-    readonly streamingDistance: number;
+    get group(): VirtualEntityGroup {
+        return this.$raw.group;
+    }
+    get streamingDistance(): number {
+        throw new Error('Not implemented');
+    }
 
-    visible: boolean;
+    get visible(): boolean {
+        return this.$raw.visible;
+    }
+    set visible(value: boolean) {
+        this.$raw.visible = value;
+    }
 
-    readonly meta: VirtualEntityMeta & Record<string, unknown>;
-    readonly syncedMeta: altShared.VirtualEntitySyncedMeta & Record<string, unknown>;
-    readonly streamSyncedMeta: Readonly<altShared.VirtualEntityStreamSyncedMeta & Record<string, unknown>>;
+    // readonly meta: VirtualEntityMeta & Record<string, unknown>;
+    // readonly syncedMeta: VirtualEntitySyncedMeta & Record<string, unknown>;
+    // readonly streamSyncedMeta: Readonly<VirtualEntityStreamSyncedMeta & Record<string, unknown>>;
 
     static readonly all: ReadonlyArray<VirtualEntity>;
     static readonly streamedIn: ReadonlyArray<VirtualEntity>;
@@ -2216,27 +2732,105 @@ export abstract class VirtualEntity extends WorldObject {
 }
 
 export class WeaponData {
-    readonly modelHash: number;
-    readonly nameHash: number;
+    $raw: altClient.WeaponData;
 
-    recoilShakeAmplitude: number;
-    recoilAccuracyMax: number;
-    recoilAccuracyToAllowHeadshotPlayer: number;
-    recoilRecoveryRate: number;
-    animReloadRate: number;
-    vehicleReloadTime: number;
-    lockOnRange: number;
-    accuracySpread: number;
-    range: number;
-    damage: number;
-    readonly clipSize: number;
-    readonly timeBetweenShots: number;
-    headshotDamageModifier: number;
-    playerDamageModifier: number;
+    get modelHash(): number {
+        return this.$raw.modelHash;
+    }
+    get nameHash(): number {
+        return this.$raw.nameHash;
+    }
+
+    get recoilShakeAmplitude(): number {
+        return this.$raw.recoilShakeAmplitude;
+    }
+    set recoilShakeAmplitude(value: number) {
+        this.$raw.recoilShakeAmplitude = value;
+    }
+    get recoilAccuracyMax(): number {
+        return this.$raw.recoilAccuracyMax;
+    }
+    set recoilAccuracyMax(value: number) {
+        this.$raw.recoilAccuracyMax = value;
+    }
+    get recoilAccuracyToAllowHeadshotPlayer(): number {
+        return this.$raw.recoilAccuracyToAllowHeadshotPlayer;
+    }
+    set recoilAccuracyToAllowHeadshotPlayer(value: number) {
+        this.$raw.recoilAccuracyToAllowHeadshotPlayer = value;
+    }
+
+    get recoilRecoveryRate(): number {
+        return this.$raw.recoilRecoveryRate;
+    }
+    set recoilRecoveryRate(value: number) {
+        this.$raw.recoilRecoveryRate = value;
+    }
+    get animReloadRate(): number {
+        return this.$raw.animReloadRate;
+    }
+    set animReloadRate(value: number) {
+        this.$raw.animReloadRate = value;
+    }
+    get vehicleReloadTime(): number {
+        return this.$raw.vehicleReloadTime;
+    }
+    set vehicleReloadTime(value: number) {
+        this.$raw.vehicleReloadTime = value;
+    }
+    get lockOnRange(): number {
+        return this.$raw.lockOnRange;
+    }
+    set lockOnRange(value: number) {
+        this.$raw.lockOnRange = value;
+    }
+    get accuracySpread(): number {
+        return this.$raw.accuracySpread;
+    }
+    set accuracySpread(value: number) {
+        this.$raw.accuracySpread = value;
+    }
+    get range(): number {
+        return this.$raw.range;
+    }
+    set range(value: number) {
+        this.$raw.range = value;
+    }
+    get damage(): number {
+        return this.$raw.damage;
+    }
+    set damage(value: number) {
+        this.$raw.damage = value;
+    }
+    get clipSize(): number {
+        return this.$raw.clipSize;
+    }
+    get timeBetweenShots(): number {
+        return this.$raw.timeBetweenShots;
+    }
+    get headshotDamageModifier(): number {
+        return this.$raw.headshotDamageModifier;
+    }
+    set headshotDamageModifier(value: number) {
+        this.$raw.headshotDamageModifier = value;
+    }
+    get playerDamageModifier(): number {
+        return this.$raw.playerDamageModifier;
+    }
+    set playerDamageModifier(value: number) {
+        this.$raw.playerDamageModifier = value;
+    }
 
     static readonly all: Array<WeaponData> = [];
 
-    static get(weaponHash: number | string): WeaponData | undefined;
+    static get(weaponHash: number | string): WeaponData | undefined {
+        if (typeof weaponHash === 'string') weaponHash = altClient.hash(weaponHash);
+        const weapon = altClient.WeaponData.getForHash(weaponHash);
+        if (!weapon) return undefined;
+        const instance = new WeaponData();
+        instance.$raw = weapon;
+        return instance;
+    }
 }
 
 export class WebSocketClient extends BaseObject<WebSocketClient, altClient.WebSocketClient> {
@@ -2268,23 +2862,17 @@ export class WebSocketClient extends BaseObject<WebSocketClient, altClient.WebSo
         return this.$raw.readyState;
     }
 
-    on<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
-    on<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>,
-        listener: Events.CustomEventCallback<unknown[]>,
-    ): void;
+    on(eventName: string, listener: Events.CustomEventCallback<unknown[]>): void {
+        this.$raw.on(eventName, listener);
+    }
 
-    once<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
-    once<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>,
-        listener: Events.CustomEventCallback<unknown[]>,
-    ): void;
+    once<E extends string>(eventName: string, listener: Events.CustomEventCallback<unknown[]>): void {
+        throw new Error('Not implemented');
+    }
 
-    off<E extends keyof altShared.Events.WebSocketClientEvent>(eventName: E, listener: altShared.Events.WebSocketClientEvent[E]): void;
-    off<E extends string>(
-        eventName: Exclude<E, keyof altShared.Events.WebSocketClientEvent>,
-        listener: Events.CustomEventCallback<unknown[]>,
-    ): void;
+    off<E extends string>(eventName: string, listener: Events.CustomEventCallback<unknown[]>): void {
+        this.$raw.off(eventName, listener);
+    }
 
     readonly listeners: ReadonlyMap<string, Array<(...args: unknown[]) => Promise<void> | void>>;
 
@@ -2295,7 +2883,7 @@ export class WebSocketClient extends BaseObject<WebSocketClient, altClient.WebSo
         this.$raw.stop();
     }
 
-    send(message: string | altShared.Buffer): boolean {
+    send(message: string | Buffer): boolean {
         return this.$raw.send(message);
     }
 
@@ -2435,14 +3023,15 @@ export class WebView extends BaseObject<WebView, altClient.WebView> {
     }
 
     static create(options: _WebViewCreateOptionsDrawable): WebView;
+    static create(options: _WebViewCreateOptionsOverlay): WebView;
     static create(options: _WebViewCreateOptionsOverlay): WebView {
         const webView = new WebView();
-        webView.$raw = new altClient.WebView(options.url, options.isOverlay, options.targetTexture);
+        webView.$raw = new altClient.WebView(options.url, options.overlay, options.targetTexture);
         this.all.push(webView);
         return webView;
     }
 
-    static getByID(id: number): WebView | null {
+    static override getByID(id: number): WebView | null {
         const webView = altClient.WebView.getByID(id);
         if (!webView) return null;
         const instance = new WebView();
