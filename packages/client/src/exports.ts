@@ -16,7 +16,7 @@ export type {
     ValueProvider,
     OptionalFactoryDependency,
 } from '@altv-mango/core/interfaces';
-export type { Pipe, ArgumentMetadata } from '@altv-mango/core/interfaces';
+export type { Pipe, ArgumentMetadata, CallHandler } from '@altv-mango/core/interfaces';
 export type { BeforeAppShutdown, OnAppBootstrap, OnAppShutdown, OnModuleDestroy, OnModuleInit } from '@altv-mango/core/interfaces';
 export type { LoggerService } from '@altv-mango/core/interfaces';
 export type { RPCCallOptions, RPCError, RPCResult, ScriptRPCHandler } from '@altv-mango/core/interfaces';
