@@ -10,14 +10,16 @@ import { AppEnviroment, ExecutionContextType } from '../enums';
 import { ExecutionContextBase, type MangoRequestBase, type MangoResponseBase } from '../pipeline';
 import type { Player } from '@altv/server';
 import { ErrorMessage } from '../../enums';
-import type { LoggerService, Pipe } from '../../interfaces';
+import type { CallHandler, LoggerService, Pipe } from '../../interfaces';
 import type { Controller } from './controller';
+import { ControllerFlowHandler } from './controller-flow.handler';
 
 @injectable()
 export class ControllerRPCHandler {
     @inject(APP_ENVIROMENT) private readonly appEnv: AppEnviroment;
     @inject(RPC_SERVICE) private readonly rpcService: InternalRPCService;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
+    @inject(ControllerFlowHandler) private readonly controllerFlowHandler: ControllerFlowHandler;
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (data: unknown, player?: Player) => MangoRequestBase;
     @inject(MANGO_RESPONSE_FACTORY) private readonly createMangoResponse: () => MangoResponseBase;
@@ -91,21 +93,23 @@ export class ControllerRPCHandler {
 
             try {
                 await this.pipelineHandler.goTroughGuards(executionContext, guards, controller.owner.container);
-                const args = await this.createArgs(executionContext, controller, rpc, pipes, player);
+                const args = await this.controllerFlowHandler.createArgs(controller, executionContext, rpc, pipes, player);
                 const controllerMethod = controller.instance[rpc.method]!;
-                const callHandler = isAsyncFunction(controllerMethod)
+                const handle = isAsyncFunction(controllerMethod)
                     ? () => {
-                          const result = controllerMethod(...args);
-                          if (!response.$isSent) {
-                              response.send(result);
-                          }
+                          const result = controller.instance[rpc.method]!.apply(controller.instance, args);
+                          response.send(result);
+                          return result;
                       }
                     : async () => {
-                          const result = await (<Function>controllerMethod)(...args);
-                          if (!response.$isSent) {
-                              response.send(result);
-                          }
+                          const result = await controller.instance[rpc.method]!.apply(controller.instance, args);
+                          response.send(result);
+                          return result;
                       };
+                const callHandler: CallHandler = {
+                    handle,
+                    return: (value: unknown) => response.send(value),
+                };
 
                 if (interceptors.length > 0) {
                     await this.pipelineHandler.goThroughInterceptors(
@@ -115,7 +119,7 @@ export class ControllerRPCHandler {
                         callHandler,
                     );
                 } else {
-                    await Promise.resolve(callHandler);
+                    await callHandler.handle();
                 }
             } catch (error) {
                 const errorGroup = mappedErrorFilters.find(
@@ -131,72 +135,8 @@ export class ControllerRPCHandler {
                 if (isNil(instance)) {
                     return this.loggerService.error(ErrorMessage.InvalidErrorFilterDefinition);
                 }
-                await Promise.resolve(instance.catch(error, executionContext));
+                await Promise.resolve(instance.catch.call(instance, error, executionContext));
             }
         });
-    }
-
-    private async createArgs(
-        executionContext: ExecutionContextBase,
-        controller: Controller,
-        event: RPCMetadata,
-        pipes: (Newable<Pipe> | Pipe)[],
-        player?: Player,
-    ) {
-        return Promise.all(
-            event.params.map(async (param) => {
-                const argumentMetadata = {
-                    type: param.type,
-                    data: param.data,
-                    metatype: param.metatype,
-                };
-
-                if (param.type === 'body') {
-                    // Body
-                    return this.pipelineHandler.goTroughPipes(
-                        executionContext.request.body,
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'param') {
-                    // Param
-                    if (!isObject(executionContext.request.body)) return undefined;
-                    return this.pipelineHandler.goTroughPipes(
-                        (<Record<string, unknown>>executionContext.request.body)[param.data],
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'index') {
-                    if (!Array.isArray(executionContext.request.body)) return undefined;
-                    return this.pipelineHandler.goTroughPipes(
-                        executionContext.request.body[param.data],
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'request') {
-                    return executionContext.request;
-                } else if (param.type === 'custom') {
-                    // Custom
-                    return this.pipelineHandler.goTroughPipes(
-                        param.factory(param.data, executionContext),
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'player' && this.appEnv === AppEnviroment.Server) {
-                    // Player (Server)
-                    return this.pipelineHandler.goTroughPipes(
-                        param.data ? player![<keyof Player>param.data] : player,
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                }
-                return undefined;
-            }),
-        );
     }
 }

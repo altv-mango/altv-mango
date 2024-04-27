@@ -11,13 +11,15 @@ import { AppEnviroment, ExecutionContextType } from '../enums';
 import { ExecutionContextBase, type MangoRequestBase } from '../pipeline';
 import type { Player } from '@altv/server';
 import { ErrorMessage } from '../../enums';
-import type { LoggerService, Pipe } from '../../interfaces';
+import type { CallHandler, LoggerService, Pipe } from '../../interfaces';
 import { isAsyncFunction } from '../../utils';
+import { ControllerFlowHandler } from './controller-flow.handler';
 
 @injectable()
 export class ControllerEventHandler {
     @inject(APP_ENVIROMENT) private readonly appEnv: AppEnviroment;
     @inject(EVENT_SERVICE) private readonly eventService: InternalEventService;
+    @inject(ControllerFlowHandler) private readonly controllerFlowHandler: ControllerFlowHandler;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
     @inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
     @inject(MANGO_REQUEST_FACTORY) private readonly createMangoRequest: (body: unknown, player?: Player) => MangoRequestBase;
@@ -85,16 +87,23 @@ export class ControllerEventHandler {
 
         try {
             await this.pipelineHandler.goTroughGuards(executionContext, guards, controller.owner.container);
-            const args = await this.createArgs(executionContext, controller, event, pipes, player);
+            const args = await this.controllerFlowHandler.createArgs(controller, executionContext, event, pipes, player);
             const controllerMethod = controller.instance[event.method]!;
-            const callHandler = isAsyncFunction(controllerMethod)
-                ? () => controllerMethod(...args)
-                : () => Promise.resolve((<Function>controllerMethod)(...args));
+            const handle = isAsyncFunction(controllerMethod)
+                ? (): unknown => controller.instance[event.method]!.apply(controller.instance, args)
+                : (): Promise<unknown> => controller.instance[event.method]!.apply(controller.instance, args);
+            const callHandler: CallHandler = {
+                handle,
+                return: () => {
+                    this.loggerService.error('An error occurred while trying to return a value from an event.');
+                    throw new Error(ErrorMessage.InvalidReturnInEvent);
+                },
+            };
 
             if (interceptors.length > 0) {
                 await this.pipelineHandler.goThroughInterceptors(executionContext, interceptors, controller.owner.container, callHandler);
             } else {
-                await callHandler();
+                await callHandler.handle();
             }
         } catch (error) {
             const errorGroup = mappedErrorFilters.find(
@@ -111,71 +120,7 @@ export class ControllerEventHandler {
                 this.loggerService.error('An error occurred while trying to go through error filters.');
                 throw new Error(ErrorMessage.InvalidErrorFilterDefinition);
             }
-            await Promise.resolve(instance.catch(error, executionContext));
+            await Promise.resolve(instance.catch.call(instance, error, executionContext));
         }
-    }
-
-    private async createArgs(
-        executionContext: ExecutionContextBase,
-        controller: Controller,
-        event: EventMetadata,
-        pipes: (Newable<Pipe> | Pipe)[],
-        player?: Player,
-    ) {
-        return Promise.all(
-            event.params.map(async (param) => {
-                const argumentMetadata = {
-                    type: param.type,
-                    data: param.data,
-                    metatype: param.metatype,
-                };
-
-                if (param.type === 'body') {
-                    // Body
-                    return this.pipelineHandler.goTroughPipes(
-                        executionContext.request.body,
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'param') {
-                    // Param
-                    if (!isObject(executionContext.request.body)) return undefined;
-                    return this.pipelineHandler.goTroughPipes(
-                        (<Record<string, unknown>>executionContext.request.body)[param.data],
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'index') {
-                    if (!Array.isArray(executionContext.request.body)) return undefined;
-                    return this.pipelineHandler.goTroughPipes(
-                        executionContext.request.body[param.data],
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'request') {
-                    return executionContext.request;
-                } else if (param.type === 'custom') {
-                    // Custom
-                    return this.pipelineHandler.goTroughPipes(
-                        param.factory(param.data, executionContext),
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                } else if (param.type === 'player' && this.appEnv === AppEnviroment.Server) {
-                    // Player (Server)
-                    return this.pipelineHandler.goTroughPipes(
-                        param.data ? player![<keyof Player>param.data] : player,
-                        [...pipes, ...(param?.pipes ?? [])],
-                        argumentMetadata,
-                        controller.owner.container,
-                    );
-                }
-                return undefined;
-            }),
-        );
     }
 }

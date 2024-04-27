@@ -7,4 +7,4 @@ export const isConstructor = (val: any): boolean => val === 'constructor';
 export const isNil = (val: any): val is null | undefined => isUndefined(val) || val === null;
 export const isEmpty = (array: any): boolean => !(array && array.length > 0);
 export const isSymbol = (val: any): val is symbol => typeof val === 'symbol';
-export const isAsyncFunction = (val: any): val is Function => isFunction(val) && val.constructor.name === 'AsyncFunction';
+export const isAsyncFunction = (val: any): boolean => isFunction(val) && val.constructor.name === 'AsyncFunction';

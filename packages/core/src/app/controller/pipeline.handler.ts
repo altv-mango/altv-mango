@@ -5,7 +5,7 @@ import { GuardCancelError, GuardInvalidReturnError } from '../../errors';
 import { isFunction, isNil, isObject } from '../../utils';
 import type { ExecutionContextBase } from '../pipeline';
 import { ErrorMessage } from '../../enums';
-import type { ArgumentMetadata, LoggerService, Pipe } from '../../interfaces';
+import type { ArgumentMetadata, CallHandler, LoggerService, Pipe } from '../../interfaces';
 import { LOGGER_SERVICE } from '../../constants';
 import type { ModuleContainer } from '../module';
 
@@ -21,7 +21,7 @@ export class PipelineHandler {
                 this.loggerService.error('An error occurred while trying to go through guards.');
                 throw new Error(ErrorMessage.InvalidGuardDefinition);
             }
-            const canActivate = await instance.canActivate(executionContext);
+            const canActivate = await instance.canActivate.call(instance, executionContext);
             if (typeof canActivate !== 'boolean') {
                 this.loggerService.error('An error occurred while trying to go through guards.');
                 throw new GuardInvalidReturnError();
@@ -36,7 +36,7 @@ export class PipelineHandler {
         executionContext: ExecutionContextBase,
         interceptors: (Newable<Interceptor> | Interceptor)[],
         container: ModuleContainer,
-        callHandler: () => unknown,
+        callHandler: CallHandler,
     ) {
         const postInterceptors = [];
 
@@ -50,7 +50,7 @@ export class PipelineHandler {
                 this.loggerService.error('An error occurred while trying to go through interceptors.');
                 throw new Error(ErrorMessage.InvalidInterceptorDefinition);
             }
-            const postInterceptor = await instance.intercept(executionContext, callHandler);
+            const postInterceptor = await instance.intercept.call(instance, executionContext, callHandler);
             if (!isFunction(postInterceptor)) {
                 this.loggerService.error('An error occurred while trying to go through interceptors.');
                 throw new Error(ErrorMessage.InvalidInterceptorReturnValue);
@@ -73,7 +73,7 @@ export class PipelineHandler {
                 this.loggerService.error('An error occurred while trying to go through pipes.');
                 throw new Error(ErrorMessage.InvalidPipeDefinition);
             }
-            value = await Promise.resolve(instance.transform(value, argumentMetadata));
+            value = await Promise.resolve(instance.transform.call(instance, value, argumentMetadata));
         }
 
         return value;

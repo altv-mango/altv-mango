@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import type { Controller } from './controller';
 import type { ExecutionContextBase } from '../pipeline';
-import type { EventMetadata } from '../interfaces';
+import type { EventMetadata, RPCMetadata } from '../interfaces';
 import type { Newable } from '../../types';
 import type { Pipe } from '../../interfaces';
 import type { Player } from '@altv/server';
@@ -18,12 +18,12 @@ export class ControllerFlowHandler {
     public async createArgs(
         controller: Controller,
         executionContext: ExecutionContextBase,
-        event: EventMetadata,
+        metadata: RPCMetadata | EventMetadata,
         pipes: (Newable<Pipe> | Pipe)[],
         player?: Player,
     ) {
         return Promise.all(
-            event.params.map(async (param) => {
+            metadata.params.map(async (param) => {
                 const argumentMetadata = {
                     type: param.type,
                     data: param.data,

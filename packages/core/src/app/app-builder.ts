@@ -21,7 +21,13 @@ import { App } from './app';
 import type { ErrorFilter, Guard, Interceptor, MangoPlugin } from './interfaces';
 import { ErrorFilterSchema } from '../schemas';
 import type { Pipe } from '../interfaces';
-import { ControllerEventHandler, ControllerMetadataReader, ControllerRPCHandler, PipelineHandler } from './controller';
+import {
+    ControllerEventHandler,
+    ControllerFlowHandler,
+    ControllerMetadataReader,
+    ControllerRPCHandler,
+    PipelineHandler,
+} from './controller';
 import { Module, ModuleMetadataReader } from './module';
 import { AppRuntime, ModuleDependencyBinder, ModuleTreeScanner } from './module-tree';
 import { Controller } from './controller';
@@ -102,6 +108,7 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
         // Controller bindings
         this.internalAppContainer.bind(Controller).toSelf().inTransientScope();
         this.internalAppContainer.bind(ControllerMetadataReader).toSelf().inSingletonScope();
+        this.internalAppContainer.bind(ControllerFlowHandler).toSelf().inSingletonScope();
         this.internalAppContainer.bind(ControllerEventHandler).toSelf().inSingletonScope();
         this.internalAppContainer.bind(ControllerRPCHandler).toSelf().inSingletonScope();
 

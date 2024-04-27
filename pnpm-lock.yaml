@@ -157,6 +157,9 @@ importers:
       '@altv/shared':
         specifier: ^0.0.16
         version: 0.0.16
+      cache-manager:
+        specifier: ^5.5.1
+        version: 5.5.1
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -4103,6 +4106,15 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /cache-manager@5.5.1:
+    resolution: {integrity: sha512-QYZFOjZTTennYdN3NNCKh+yq452+wQ4ChyL40jkEyghIgg5Ugwb4YO8ARIIF1fvTBkgDLlLTYFaxZVaPGmQ92A==}
+    dependencies:
+      eventemitter3: 5.0.1
+      lodash.clonedeep: 4.5.0
+      lru-cache: 10.2.0
+      promise-coalesce: 1.1.2
+    dev: false
+
   /cacheable-lookup@5.0.4:
     resolution: {integrity: sha512-2/kNscPhpcxrOigMZzbiWF7dz8ilhb/nIHU3EyZiXWXpeq/au8qJ8VhdftMkty3n7Gj6HIGalQG8oiBNB3AJgA==}
     engines: {node: '>=10.6.0'}
@@ -4767,6 +4779,10 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
+    dev: false
 
   /execa@0.7.0:
     resolution: {integrity: sha512-RztN09XglpYI7aBBrJCPW95jEH7YF1UEPOoX9yDhUTPdp7mK+CQvnLTuD10BNXZ3byLTu2uehZ8EcKT/4CGiFw==}
@@ -5791,6 +5807,10 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lodash.clonedeep@4.5.0:
+    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
+    dev: false
 
   /lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
@@ -6921,6 +6941,11 @@ packages:
     resolution: {integrity: sha512-mQUvGU6aUFQ+rNvTIAcZuWGRT9a6f6Yrg9bHs4ImKF+HZCEK+plBvnAZYSIQztknZF2qnzNtr6F8s0+IuptdlQ==}
     engines: {node: ^14.13.1 || >=16.0.0}
     dev: true
+
+  /promise-coalesce@1.1.2:
+    resolution: {integrity: sha512-zLaJ9b8hnC564fnJH6NFSOGZYYdzrAJn2JUUIwzoQb32fG2QAakpDNM+CZo1km6keXkRXRM+hml1BFAPVnPkxg==}
+    engines: {node: '>=16'}
+    dev: false
 
   /property-expr@2.0.6:
     resolution: {integrity: sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==}

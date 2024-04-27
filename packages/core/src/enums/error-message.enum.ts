@@ -8,6 +8,7 @@ export enum ErrorMessage {
     EventNotAllowedInServer = 'The event is not allowed in the server environment.',
     InvalidEventType = 'Invalid event type.',
     InvalidInternalEventName = 'The name of the internal event is invalid.',
+    InvalidReturnInEvent = 'Cannot return a value from an event.',
 
     // RPC
     RPCNameMustBeString = 'The RPC name must be a string.',
