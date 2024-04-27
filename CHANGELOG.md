@@ -1,3 +1,9 @@
+## [1.5.1] - 2024-04-27
+
+### Fixed
+
+-   Removed unnecessary code that passes through interceptors and causes a fake error to be logged.
+
 ## [1.5.0] - 2024-04-27
 
 ### Fixed

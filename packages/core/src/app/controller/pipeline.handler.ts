@@ -38,8 +38,6 @@ export class PipelineHandler {
         container: ModuleContainer,
         callHandler: CallHandler,
     ) {
-        const postInterceptors = [];
-
         for (const interceptor of interceptors) {
             const instance = isFunction(interceptor)
                 ? container.get(interceptor)
@@ -50,15 +48,8 @@ export class PipelineHandler {
                 this.loggerService.error('An error occurred while trying to go through interceptors.');
                 throw new Error(ErrorMessage.InvalidInterceptorDefinition);
             }
-            const postInterceptor = await instance.intercept.call(instance, executionContext, callHandler);
-            if (!isFunction(postInterceptor)) {
-                this.loggerService.error('An error occurred while trying to go through interceptors.');
-                throw new Error(ErrorMessage.InvalidInterceptorReturnValue);
-            }
-            postInterceptors.push(postInterceptor);
+            await instance.intercept.call(instance, executionContext, callHandler);
         }
-
-        return postInterceptors;
     }
 
     public async goTroughPipes(
