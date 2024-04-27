@@ -10,14 +10,14 @@
     "devDependencies": {
         "@sveltejs/adapter-node": "^5.0.1",
         "@sveltejs/adapter-static": "^3.0.1",
-        "@sveltejs/adapter-vercel": "^5.2.0",
-        "@sveltejs/kit": "^2.5.5",
-        "@sveltejs/vite-plugin-svelte": "^3.0.2",
-        "@sveltepress/theme-default": "^2.0.2",
+        "@sveltejs/adapter-vercel": "^5.3.0",
+        "@sveltejs/kit": "^2.5.7",
+        "@sveltejs/vite-plugin-svelte": "^3.1.0",
+        "@sveltepress/theme-default": "^2.0.3",
         "@sveltepress/vite": "^0.33.2",
-        "@types/node": "^20.12.5",
-        "svelte": "^4.2.12",
-        "typescript": "^5.4.4",
-        "vite": "^5.2.8"
+        "@types/node": "^20.12.7",
+        "svelte": "^4.2.15",
+        "typescript": "^5.4.5",
+        "vite": "^5.2.10"
     }
 }

@@ -1,3 +1,55 @@
+## [1.5.0] - 2024-04-27
+
+### Fixed
+
+-   `Interceptor` has been changed a bit to be more flexible, as it was implemented incorrectly.
+
+```typescript
+// Server
+@Injectable()
+export class MyInterceptor implements Interceptor<Promise<string>> {
+    public async intercept(context: ExecutionContext, next: CallHandler) {
+        // Do something
+        console.time('doSomething');
+
+        const body = context.request.body;
+        const name = body.name;
+        if (name !== 'Mango') {
+            // Will run MyController.hello method. If the function is not executed, then the function can be run in another interceptor.
+            // If there is no other interceptor and the function is not executed, then the function will never run. So basically RPC call will get a timeout.
+            await next.handle();
+        } else {
+            // OR instead of executing MyController.hello method, you can return a different value.
+            next.return('Eating mangoes');
+        }
+
+        console.timeEnd('doSomething');
+    }
+}
+
+@Controller()
+export class MyController {
+    @UseIntercepors(MyInterceptor)
+    @OnClientRequest('MY_CUSTOM_RPC')
+    public async hello(@Param('name') name: string) {
+        return 'Hello world';
+    }
+}
+
+// Client
+this.rpcService.callServer('MY_CUSTOM_RPC', { name: 'Apple' }).then((response) => {
+    console.log(response.body); // Hello world
+});
+this.rpcService.callServer('MY_CUSTOM_RPC', { name: 'Mango' }).then((response) => {
+    console.log(response.body); // Eating mangoes
+});
+```
+
+### Note
+
+-   In the future, `Interceptor` will likely have integration with `RxJS` observables.
+-   The config and cache modules are almost finished. They will be available in the next update.
+
 ## [1.4.0] - 2024-04-07
 
 ### Added
