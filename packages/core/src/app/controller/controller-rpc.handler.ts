@@ -29,6 +29,7 @@ export class ControllerRPCHandler {
         handler: Function,
         request: MangoRequestBase,
         response: MangoResponseBase,
+        name: string,
     ) => ExecutionContextBase;
 
     public async registerRPC(
@@ -89,6 +90,7 @@ export class ControllerRPCHandler {
                 controller.metadata.classRef.prototype[rpc.method],
                 request,
                 response,
+                rpc.name,
             );
 
             try {

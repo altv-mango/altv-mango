@@ -1,32 +1,34 @@
-import { Controller, Inject, Injectable, LOGGER_SERVICE, Module, type LoggerService, type OnModuleInit } from '@altv-mango/server';
+import {
+    Controller,
+    Inject,
+    LOGGER_SERVICE,
+    Module,
+    OnPlayerConnect,
+    OnPlayerDisconnect,
+    Player,
+    type LoggerService,
+    type OnModuleInit,
+} from '@altv-mango/server';
+import * as alt from '@altv/server';
 
 @Controller()
 export class RootController implements OnModuleInit {
     @Inject(LOGGER_SERVICE) private readonly loggerService: LoggerService;
-    @Inject('TEST_FACTORY') private readonly testFactory: string;
 
-    public onModuleInit() {
-        this.loggerService.log(this.testFactory);
+    @OnPlayerDisconnect()
+    public onPlayerDisconnect(@Player() player: alt.Player) {
+        this.loggerService.debug(`Player ${player.name} disconnected`);
     }
-}
 
-@Injectable()
-class TestClass {}
+    @OnPlayerConnect()
+    public onPlayerConnect(@Player() player: alt.Player) {
+        this.loggerService.debug(`Player ${player.name} connected`);
+    }
+
+    public onModuleInit() {}
+}
 
 @Module({
     controllers: [RootController],
-    providers: [
-        {
-            provide: 'TEST_FACTORY',
-            useFactory: () => {
-                return 'test';
-            },
-            inject: [],
-        },
-        { useClass: TestClass, provide: 'TEST_CLASS' },
-        { useExisting: 'TEST_CLASS', provide: 'TEST_EXISTING' },
-        { useValue: 'TEST_VALUE', provide: 'TEST_VALUE' },
-        TestClass,
-    ],
 })
 export class RootModule {}

@@ -9,4 +9,5 @@ export interface ExecutionContext<TRequest extends MangoRequest = MangoRequest, 
     readonly handler: Function;
     readonly request: TRequest;
     readonly response?: TResponse;
+    readonly name: string;
 }

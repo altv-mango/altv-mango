@@ -8,7 +8,7 @@ import type { EventMetadata } from '../interfaces';
 import { EVENT_SERVICE, LOGGER_SERVICE } from '../../constants';
 import type { Controller } from './controller';
 import { AppEnviroment, ExecutionContextType } from '../enums';
-import { ExecutionContextBase, type MangoRequestBase } from '../pipeline';
+import { ExecutionContextBase, MangoResponseBase, type MangoRequestBase } from '../pipeline';
 import type { Player } from '@altv/server';
 import { ErrorMessage } from '../../enums';
 import type { CallHandler, LoggerService, Pipe } from '../../interfaces';
@@ -28,6 +28,8 @@ export class ControllerEventHandler {
         classRef: Newable,
         handler: Function,
         request: MangoRequestBase,
+        response?: MangoResponseBase,
+        name?: string,
     ) => ExecutionContextBase;
 
     public registerEvent(
@@ -83,6 +85,8 @@ export class ControllerEventHandler {
             controller.metadata.classRef,
             controller.metadata.classRef.prototype[event.method],
             request,
+            undefined,
+            event.name,
         );
 
         try {

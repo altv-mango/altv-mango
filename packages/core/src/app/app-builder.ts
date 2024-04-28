@@ -136,6 +136,7 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
                 handler: Function,
                 request: MangoRequestBase,
                 response: MangoResponseBase,
+                name: string,
             ) => {
                 const executionContext = context.container.get(ExecutionContextBase);
                 executionContext.$type = type;
@@ -143,6 +144,7 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
                 executionContext.$response = response;
                 executionContext.$handler = handler;
                 executionContext.$classRef = classRef;
+                executionContext.$name = name;
                 return executionContext;
             };
         });

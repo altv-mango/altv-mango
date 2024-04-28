@@ -16,6 +16,7 @@ export class ExecutionContextBase<
     public $handler: Function;
     public $request: TRequest;
     public $response?: TResponse;
+    public $name: string;
 
     public get type() {
         return this.$type;
@@ -35,5 +36,9 @@ export class ExecutionContextBase<
 
     public get response() {
         return this.$response!;
+    }
+
+    public get name() {
+        return this.$name;
     }
 }
