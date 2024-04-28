@@ -1,3 +1,9 @@
+## [1.5.2] - 2024-04-28
+
+### Added
+
+-   RPC/event name to execution context.
+
 ## [1.5.1] - 2024-04-27
 
 ### Fixed
