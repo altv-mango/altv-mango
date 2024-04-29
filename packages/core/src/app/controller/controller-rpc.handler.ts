@@ -98,14 +98,18 @@ export class ControllerRPCHandler {
                 const args = await this.controllerFlowHandler.createArgs(controller, executionContext, rpc, pipes, player);
                 const controllerMethod = controller.instance[rpc.method]!;
                 const handle = isAsyncFunction(controllerMethod)
-                    ? () => {
+                    ? (options: { send: boolean } = { send: true }) => {
                           const result = controller.instance[rpc.method]!.apply(controller.instance, args);
-                          response.send(result);
+                          if (options.send) {
+                              response.send(result);
+                          }
                           return result;
                       }
-                    : async () => {
+                    : async (options: { send: boolean } = { send: true }) => {
                           const result = await controller.instance[rpc.method]!.apply(controller.instance, args);
-                          response.send(result);
+                          if (options.send) {
+                              response.send(result);
+                          }
                           return result;
                       };
                 const callHandler: CallHandler = {

@@ -1,4 +1,4 @@
 export interface CallHandler<T = unknown> {
-    handle(): T;
+    handle(options?: { send: boolean }): T;
     return(value: T): void;
 }
