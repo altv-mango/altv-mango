@@ -1,3 +1,21 @@
+## [1.5.3] - 2024-04-29
+
+### Added
+
+-   `send` option to `CallHandler.handle` to decide whether to send the response or not.
+
+```typescript
+@Injectable()
+export class MyInterceptor implements Interceptor<Promise<string>> {
+    public async intercept(context: ExecutionContext, next: CallHandler) {
+        // ...
+        const result = await next.handle({ send: false });
+        // ...
+        next.return({ body: 'Hello world' });
+    }
+}
+```
+
 ## [1.5.2] - 2024-04-28
 
 ### Added
