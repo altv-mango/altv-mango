@@ -1,1 +1,1 @@
-export * from './controller-options.schema';
+export * from './controller-options.validate';

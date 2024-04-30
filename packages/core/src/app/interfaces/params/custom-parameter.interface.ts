@@ -9,6 +9,5 @@ export interface CustomParameter extends ArgumentMetadata {
     index: number;
     pipes?: (Newable<Pipe> | Pipe)[];
     factory: (data: unknown, context: ExecutionContextBase) => unknown;
-    // metatype?: Newable;
     data?: unknown;
 }

@@ -1,11 +1,12 @@
 import { inject } from 'inversify';
 import type { InjectionToken } from '../../types';
-import { InjectionTokenSchema } from '../../schemas';
 import { ErrorMessage } from '../../enums';
+import { validateInjectionToken } from '../../schemas';
+import { isNil } from '../../utils';
 
 export function Inject<T = unknown>(key?: InjectionToken<T>) {
     return <PropertyDecorator & ParameterDecorator>((target: Object, propertyKey: string, paramIndex?: number) => {
-        if (!InjectionTokenSchema.optional().safeParse(key).success) {
+        if (!isNil(key) && !validateInjectionToken(key).valid) {
             throw new Error(ErrorMessage.InvalidInjectionTokenSpecified);
         }
 

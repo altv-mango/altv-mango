@@ -7,6 +7,5 @@ export interface ParamParameter extends ArgumentMetadata {
     method: string;
     index: number;
     pipes?: (Newable<Pipe> | Pipe)[];
-    // metatype?: Newable;
     data: string;
 }

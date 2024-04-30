@@ -1,3 +1,3 @@
-export * from './dynamic-module.schema';
-export * from './module-options.schema';
-export * from './provider.schema';
+export * from './dynamic-module.validate';
+export * from './module-options.validate';
+export * from './provider.validate';
