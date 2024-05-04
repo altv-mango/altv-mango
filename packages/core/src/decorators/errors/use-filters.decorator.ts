@@ -7,7 +7,7 @@ import { isNil } from '../../utils';
 import { ErrorMessage } from '../../enums';
 
 export function UseFilters(...filters: (Newable<ErrorFilter> | ErrorFilter)[]) {
-    return <ClassDecorator | MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
+    return <ClassDecorator & MethodDecorator>((target: Object, method?: string, descriptor?: PropertyDescriptor) => {
         if (!isNil(descriptor) && !isNil(descriptor.value)) {
             if (filters.length === 0) {
                 throw new Error(ErrorMessage.AtLeastOneFilterRequired);

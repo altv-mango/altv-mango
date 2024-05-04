@@ -9,3 +9,4 @@ export const isEmpty = (array: any): boolean => !(array && array.length > 0);
 export const isSymbol = (val: any): val is symbol => typeof val === 'symbol';
 export const isAsyncFunction = (val: any): boolean => isFunction(val) && val.constructor.name === 'AsyncFunction';
 export const isBoolean = (val: any): val is boolean => typeof val === 'boolean';
+export const isPromise = <T = any>(val: any): val is Promise<T> => val instanceof Promise;

@@ -1,9 +1,10 @@
 import { isFunction, isNil, isObject } from '../../utils';
 import type { ErrorFilter } from '../../app/interfaces';
+import type { Newable } from '../../types';
 
-export function validateErrorFilter(value: unknown) {
+export function validateErrorFilter(value: ErrorFilter | Newable<ErrorFilter>) {
     if (isNil(value)) {
-        return { valid: false, value };
+        return { valid: false, value, error: 'Error filter must be a class or a function' };
     }
 
     if (isFunction(value) && isFunction(value.prototype.catch)) {
@@ -14,5 +15,5 @@ export function validateErrorFilter(value: unknown) {
         return { valid: true, value };
     }
 
-    return { valid: false, value };
+    return { valid: false, value, error: 'Error filter must be a class or a function' };
 }

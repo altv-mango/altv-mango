@@ -7,12 +7,12 @@ export function validateInjectableMetadata(metadata: unknown) {
     }
 
     if (!isObject(metadata)) {
-        return { valid: false, value: { scope: InjectableScope.Singleton } };
+        return { valid: false, value: { scope: InjectableScope.Singleton }, error: 'Injectable metadata must be an object' };
     }
 
     if ('scope' in metadata && isString(metadata.scope) && Object.keys(InjectableScope).includes(metadata.scope)) {
         return { valid: true, value: metadata };
     }
 
-    return { valid: false, value: { scope: InjectableScope.Singleton } };
+    return { valid: false, value: { scope: InjectableScope.Singleton }, error: 'Invalid injectable metadata' };
 }

@@ -33,6 +33,7 @@
     },
     "dependencies": {},
     "devDependencies": {
+        "@abraham/reflection": "^0.12.0",
         "@rollup/plugin-commonjs": "^25.0.7",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@types/node": "^20.12.7",
@@ -43,13 +44,11 @@
         "typescript": "^5.4.5"
     },
     "peerDependencies": {
-        "@abraham/reflection": "^0.12.0",
         "@altv-mango/core": "workspace:^",
         "@altv/client": "^0.0.34",
         "@altv/natives": "^0.0.8",
         "@altv/shared": "^0.0.16",
-        "inversify": "^6.0.2",
-        "zod": "^3.23.4"
+        "inversify": "^6.0.2"
     },
     "publishConfig": {
         "access": "public",
