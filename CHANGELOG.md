@@ -1,3 +1,14 @@
+## [1.5.4] - 2024-05-11
+
+### Fixed
+
+-   `DynamicModule` is now properly validated when used in `ModuleOptions.imports`.
+-   `@UseFilters` now doesn't throw an error when is used on class and method level.
+
+### Removed
+
+-   `zod` from `peerDependencies` and is no longer used for validation.
+
 ## [1.5.3] - 2024-04-29
 
 ### Added
