@@ -1,8 +1,13 @@
-import type { DynamicModule, ModuleOptions, Provider } from '../../interfaces';
+import type { DynamicModule, ModuleOptions } from '../../interfaces';
 import { validateProvider } from './provider.validate';
 import { isBoolean, isFunction, isNil, isObject, isPromise } from '../../utils';
+import type { InjectionToken, Nullable } from '../../types';
+import { validateInjectionToken } from '../injection-token.validate';
 
-export function validateModuleOptions(value: ModuleOptions | DynamicModule, isDynamic = false) {
+export function validateModuleOptions(
+    value?: ModuleOptions | DynamicModule,
+    isDynamic = false,
+): { valid: boolean; value: ModuleOptions | DynamicModule; error?: Nullable<string> } {
     if (isNil(value)) {
         value = {
             controllers: [],
@@ -21,10 +26,10 @@ export function validateModuleOptions(value: ModuleOptions | DynamicModule, isDy
             return { valid: false, value, error: 'Dynamic module must have a module function' };
         }
 
-        if (!('global' in value) && !isBoolean(value.global)) {
-            return { valid: false, value, error: 'Global property must be a boolean' };
-        } else if (!('global' in value)) {
+        if (!('global' in value)) {
             value.global = false;
+        } else if (!('global' in value) && !isBoolean(value.global)) {
+            return { valid: false, value, error: 'Dynamic module must have a global property' };
         }
     }
 
@@ -54,13 +59,13 @@ export function validateModuleOptions(value: ModuleOptions | DynamicModule, isDy
 
     for (const imported of value.imports) {
         if (!isFunction(imported) && !isObject(imported) && !isPromise(imported)) {
-            return { valid: false, value };
+            return { valid: false, value, error: 'Import must be a function, object, or promise' };
         }
 
-        if (isObject(imported)) {
-            const optionsValidate = validateModuleOptions(imported, true);
-            if (!optionsValidate.valid) {
-                // return { valid: false, value, error: optionsValidate.error };
+        if (isObject(imported) && !isPromise(imported)) {
+            const { valid, error } = validateModuleOptions(<DynamicModule>imported, true);
+            if (!valid) {
+                return { valid, value, error };
             }
         }
     }
@@ -79,12 +84,16 @@ export function validateModuleOptions(value: ModuleOptions | DynamicModule, isDy
     }
 
     for (const exportItem of value.exports) {
-        if (!isFunction(exportItem) && !isObject(exportItem)) {
-            return { valid: false, value, error: 'Export must be a function or an object' };
+        const { valid, error } = validateInjectionToken(<InjectionToken>exportItem);
+        if (!valid) {
+            return { valid, value, error };
         }
 
-        if (isObject(exportItem)) {
-            const { valid } = validateProvider(<Provider>exportItem);
+        if (
+            isObject(exportItem) &&
+            ('useClass' in exportItem || 'useFactory' in exportItem || 'useValue' in exportItem || 'useExisting' in exportItem)
+        ) {
+            const { valid } = validateProvider(exportItem);
             if (!valid) {
                 return { valid: false, value, error: 'Export must be a provider object' };
             }

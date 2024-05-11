@@ -1,11 +1,9 @@
 import { injectable } from 'inversify';
-import { ZodError } from 'zod';
 import type { Newable } from '../../types';
 import { CoreMetadataKey } from '../../app/enums';
 import type { InjectableOptions } from '../../interfaces';
-import { InjectableMetadataSchema } from '../../schemas';
-import type { InjectableMetadata } from '../../app/interfaces';
 import { ErrorMessage } from '../../enums';
+import { validateInjectableMetadata } from '../../schemas';
 
 export function Injectable<T extends Newable>(options?: InjectableOptions) {
     return (target: T) => {
@@ -13,14 +11,9 @@ export function Injectable<T extends Newable>(options?: InjectableOptions) {
             throw new Error(ErrorMessage.DuplicateDecoratorUsage);
         }
 
-        try {
-            const parsedOptions = <InjectableMetadata>InjectableMetadataSchema.parse(options);
-            Reflect.defineMetadata(CoreMetadataKey.Injectable, parsedOptions, target);
-        } catch (error) {
-            if (error instanceof ZodError) {
-                throw new Error(ErrorMessage.InvalidInjectableOptions);
-            }
-        }
+        const { valid, value, error } = validateInjectableMetadata(options);
+        if (!valid) throw new Error(error);
+        Reflect.defineMetadata(CoreMetadataKey.Injectable, value, target);
 
         return injectable()(target);
     };

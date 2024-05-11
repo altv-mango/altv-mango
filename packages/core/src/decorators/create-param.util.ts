@@ -1,17 +1,19 @@
-import { z } from 'zod';
 import type { ExecutionContext, MethodParameter } from '../app/interfaces';
 import { CoreMetadataKey } from '../app/enums';
 import type { Newable } from '../types';
-import { PipeSchema } from '../schemas';
 import { MethodParamType } from '../app/enums';
 import { ErrorMessage } from '../enums';
 import type { Pipe } from '../interfaces';
+import { validatePipe } from '../schemas';
 
 export function createParamDecorator<TInput = unknown, TOutput = unknown>(factory: (data: TInput, ctx: ExecutionContext) => TOutput) {
     return <TInput = unknown>(data?: TInput, ...pipes: (Newable<Pipe> | Pipe)[]) => {
         return <ParameterDecorator>((target: Object, method: string, index: number) => {
-            if (!z.array(PipeSchema).safeParse(pipes).success) {
-                throw new Error(ErrorMessage.InvalidPipeDefinition);
+            const validatedPipes: (Newable<Pipe> | Pipe)[] = [];
+            for (const pipe of pipes) {
+                const { valid, value, error } = validatePipe(pipe);
+                if (!valid) throw new Error(error);
+                validatedPipes.push(value);
             }
 
             const params = Reflect.getMetadata<MethodParameter[]>(CoreMetadataKey.ControllerParams, target, method) ?? [];
@@ -30,7 +32,7 @@ export function createParamDecorator<TInput = unknown, TOutput = unknown>(factor
                     {
                         index,
                         method,
-                        pipes,
+                        pipes: validatedPipes,
                         type: MethodParamType.Custom,
                         factory: <(data: unknown, context: ExecutionContext) => unknown>factory,
                         data,

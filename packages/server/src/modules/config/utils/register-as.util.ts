@@ -1,5 +1,5 @@
-import { ConfigModule } from '..';
 import { AS_PROVIDER_METHOD_KEY, PARTIAL_CONFIGURATION_KEY, PARTIAL_CONFIGURATION_PROPNAME } from '../config.constants';
+import { ConfigModule } from '../config.module';
 import type { ConfigFactory } from '../interfaces';
 import type { ConfigObject } from '../types';
 import { getConfigToken } from './get-config-token.util';

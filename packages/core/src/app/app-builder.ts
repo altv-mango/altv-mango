@@ -1,5 +1,4 @@
-import { z } from 'zod';
-import { GuardSchema, InterceptorSchema, PipeSchema } from '../schemas/events';
+import { validateErrorFilter, validateGuard, validateInterceptor, validatePipe } from '../schemas/events';
 import {
     INTERNAL_APP_CONTAINER,
     GLOBAL_ERROR_FILTERS,
@@ -19,7 +18,6 @@ import type { Newable } from '../types';
 import { inject, Container, injectable, type interfaces } from 'inversify';
 import { App } from './app';
 import type { ErrorFilter, Guard, Interceptor, MangoPlugin } from './interfaces';
-import { ErrorFilterSchema } from '../schemas';
 import type { Pipe } from '../interfaces';
 import {
     ControllerEventHandler,
@@ -44,26 +42,50 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
     private globalContainerOptions: interfaces.ContainerOptions = {};
 
     public useGlobalGuards(...guards: (Newable<G> | G)[]) {
-        const parsedGuards = z.array(GuardSchema).parse(guards);
-        this.internalAppContainer.bind(GLOBAL_GUARDS).toConstantValue(parsedGuards);
+        const validatedGuards: (Newable<G> | G)[] = [];
+        for (const guard of guards) {
+            const { valid, value, error } = validateGuard(guard);
+            if (!valid) throw new Error(error);
+            validatedGuards.push(value);
+        }
+
+        this.internalAppContainer.bind(GLOBAL_GUARDS).toConstantValue(validatedGuards);
         return this;
     }
 
     public useGlobalInterceptors(...interceptors: (Newable<I> | I)[]) {
-        const parsedInterceptors = z.array(InterceptorSchema).parse(interceptors);
-        this.internalAppContainer.bind(GLOBAL_INTERCEPTORS).toConstantValue(parsedInterceptors);
+        const validatedInterceptors: (Newable<I> | I)[] = [];
+        for (const interceptor of interceptors) {
+            const { valid, value, error } = validateInterceptor(interceptor);
+            if (!valid) throw new Error(error);
+            validatedInterceptors.push(value);
+        }
+
+        this.internalAppContainer.bind(GLOBAL_INTERCEPTORS).toConstantValue(validatedInterceptors);
         return this;
     }
 
     public useGlobalPipes(...pipes: (Newable<Pipe> | Pipe)[]) {
-        const parsedPipes = z.array(PipeSchema).parse(pipes);
-        this.internalAppContainer.bind(GLOBAL_PIPES).toConstantValue(parsedPipes);
+        const validatedPipes: (Newable<Pipe> | Pipe)[] = [];
+        for (const pipe of pipes) {
+            const { valid, value, error } = validatePipe(pipe);
+            if (!valid) throw new Error(error);
+            validatedPipes.push(value);
+        }
+
+        this.internalAppContainer.bind(GLOBAL_PIPES).toConstantValue(validatedPipes);
         return this;
     }
 
     public useGlobalFilters(...filters: (Newable<EF> | EF)[]) {
-        const parsedFilters = z.array(ErrorFilterSchema).parse(filters);
-        this.internalAppContainer.bind(GLOBAL_ERROR_FILTERS).toConstantValue(parsedFilters);
+        const validatedFIlters: (Newable<EF> | EF)[] = [];
+        for (const filter of filters) {
+            const { valid, value, error } = validateErrorFilter(filter);
+            if (!valid) throw new Error(error);
+            validatedFIlters.push(value);
+        }
+
+        this.internalAppContainer.bind(GLOBAL_ERROR_FILTERS).toConstantValue(validatedFIlters);
         return this;
     }
 

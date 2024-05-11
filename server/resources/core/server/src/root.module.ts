@@ -6,6 +6,7 @@ import {
     OnPlayerConnect,
     OnPlayerDisconnect,
     Player,
+    ThrottlerModule,
     type LoggerService,
     type OnModuleInit,
 } from '@altv-mango/server';
@@ -29,6 +30,7 @@ export class RootController implements OnModuleInit {
 }
 
 @Module({
+    imports: [ThrottlerModule.forRoot()],
     controllers: [RootController],
 })
 export class RootModule {}
