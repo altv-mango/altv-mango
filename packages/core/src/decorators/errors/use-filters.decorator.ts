@@ -33,7 +33,7 @@ export function UseFilters(...filters: (Newable<ErrorFilter> | ErrorFilter)[]) {
         }
 
         const classFilters = Reflect.getMetadata<Newable<ErrorFilter>[]>(CoreMetadataKey.ErrorFilters, target) || [];
-        if (isNil(classFilters.find((filter) => filters.includes(filter)))) {
+        if (!isNil(classFilters.find((filter) => filters.includes(filter)))) {
             throw new Error(ErrorMessage.DuplicateErrorFilterDetected);
         }
         Reflect.defineMetadata(CoreMetadataKey.ErrorFilters, [...validatedFilters, ...classFilters], target);

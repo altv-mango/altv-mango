@@ -18,11 +18,12 @@ Error filters can be used to handle errors thrown by guards, pipes, interceptors
 Error filters are classes that implement the `ErrorFilter` interface. The `ErrorFilter` interface has a `catch` method that returns the transformed data.
 
 ```typescript
+@Catch() // Will catch all errors, if no error types are specified
 @Injectable()
 export class MangoSpoilFilter implements ErrorFilter {
-    public catch(error) {
+    public catch(error: unknown, context: ExecurtionContext) {
         console.log('Mango is spoiled!');
-        return error;
+        context.response?.send('Mango is spoiled!');
     }
 }
 ```
