@@ -6,10 +6,11 @@ import {
     REFLECTOR_SERVICE,
     isNil,
     type CallHandler,
+    type ExecutionContext,
+    type Interceptor,
     type LoggerService,
     type ReflectorService,
-} from '@altv-mango/core';
-import type { ExecutionContext, Interceptor } from '../../../interfaces';
+} from '@altv-mango/server';
 import type { CacheOptions } from '../interfaces';
 import type { Cache } from 'cache-manager';
 

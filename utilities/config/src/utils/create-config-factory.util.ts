@@ -1,4 +1,4 @@
-import { generateRandomId, type FactoryProvider } from '@altv-mango/core';
+import { generateRandomId, type FactoryProvider } from '@altv-mango/server';
 import type { ConfigFactory } from '../interfaces';
 import { getConfigToken } from './get-config-token.util';
 import type { ConfigFactoryKeyHost } from './register-as.util';

@@ -1,4 +1,4 @@
-import type { ClassProvider, ExistingProvider, InjectionToken, Provider } from '@altv-mango/core';
+import type { ClassProvider, ExistingProvider, InjectionToken, Provider } from '@altv-mango/server';
 import type { MemoryConfig, MemoryStore, Store, StoreConfig, Stores } from 'cache-manager';
 
 export type CacheModuleOptions<S extends Store = MemoryStore, T extends Record<string, unknown> = MemoryConfig> = StoreConfig & {

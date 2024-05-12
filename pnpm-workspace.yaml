@@ -1,4 +1,4 @@
 packages:
     - 'server/resources/core/*'
     - 'packages/*'
-    # - 'utilities/*'
+    - 'utilities/*'

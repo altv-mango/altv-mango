@@ -393,6 +393,99 @@ importers:
         specifier: ^5.2.10
         version: 5.2.10
 
+  utilities/cache:
+    dependencies:
+      '@altv-mango/core':
+        specifier: workspace:^
+        version: link:../../packages/core
+      '@altv-mango/server':
+        specifier: workspace:^
+        version: link:../../packages/server
+      '@altv/server':
+        specifier: ^0.0.40
+        version: 0.0.40
+      cache-manager:
+        specifier: ^5.5.2
+        version: 5.5.2
+    devDependencies:
+      '@abraham/reflection':
+        specifier: ^0.12.0
+        version: 0.12.0
+      '@types/node':
+        specifier: ^20.12.11
+        version: 20.12.11
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(@microsoft/api-extractor@7.43.4)(@swc/core@1.5.5)(typescript@5.4.5)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
+  utilities/config:
+    dependencies:
+      '@altv-mango/core':
+        specifier: workspace:^
+        version: link:../../packages/core
+      '@altv-mango/server':
+        specifier: workspace:^
+        version: link:../../packages/server
+      '@altv/server':
+        specifier: ^0.0.40
+        version: 0.0.40
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      dotenv-expand:
+        specifier: ^11.0.6
+        version: 11.0.6
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
+      '@abraham/reflection':
+        specifier: ^0.12.0
+        version: 0.12.0
+      '@types/lodash':
+        specifier: ^4.17.1
+        version: 4.17.1
+      '@types/node':
+        specifier: ^20.12.11
+        version: 20.12.11
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(@microsoft/api-extractor@7.43.4)(@swc/core@1.5.5)(typescript@5.4.5)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
+  utilities/throttler:
+    dependencies:
+      '@altv-mango/core':
+        specifier: workspace:^
+        version: link:../../packages/core
+      '@altv-mango/server':
+        specifier: workspace:^
+        version: link:../../packages/server
+      '@altv/server':
+        specifier: ^0.0.40
+        version: 0.0.40
+    devDependencies:
+      '@abraham/reflection':
+        specifier: ^0.12.0
+        version: 0.12.0
+      '@types/lodash':
+        specifier: ^4.17.1
+        version: 4.17.1
+      '@types/node':
+        specifier: ^20.12.11
+        version: 20.12.11
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(@microsoft/api-extractor@7.43.4)(@swc/core@1.5.5)(typescript@5.4.5)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
 packages:
 
   /@abraham/reflection@0.12.0:
@@ -7279,6 +7372,22 @@ packages:
       camelcase-css: 2.0.1
       postcss: 8.4.38
 
+  /postcss-load-config@4.0.2:
+    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 3.0.0
+      yaml: 2.3.4
+    dev: true
+
   /postcss-load-config@4.0.2(postcss@8.4.38):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
     engines: {node: '>= 14'}
@@ -7293,7 +7402,7 @@ packages:
     dependencies:
       lilconfig: 3.0.0
       postcss: 8.4.38
-      yaml: 2.3.4
+      yaml: 2.4.1
 
   /postcss-load-config@5.0.3(postcss@8.4.38):
     resolution: {integrity: sha512-90pBBI5apUVruIEdCxZic93Wm+i9fTrp7TXbgdUCH+/L+2WnfpITSpq5dFU/IPvbv7aNiMlQISpUkAm3fEcvgQ==}
@@ -8666,7 +8775,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 4.0.2(postcss@8.4.38)
+      postcss-load-config: 4.0.2
       resolve-from: 5.0.0
       rollup: 4.17.2
       source-map: 0.8.0-beta.0
@@ -8706,7 +8815,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 4.0.2(postcss@8.4.38)
+      postcss-load-config: 4.0.2
       resolve-from: 5.0.0
       rollup: 4.17.2
       source-map: 0.8.0-beta.0
@@ -9552,12 +9661,12 @@ packages:
   /yaml@2.3.4:
     resolution: {integrity: sha512-8aAvwVUSHpfEqTQ4w/KMlf3HcRdt50E5ODIQJBw1fQ5RL34xabzxtUlzTXVqc4rkZsPbvrXKWnABCD7kWSmocA==}
     engines: {node: '>= 14'}
+    dev: true
 
   /yaml@2.4.1:
     resolution: {integrity: sha512-pIXzoImaqmfOrL7teGUBt/T7ZDnyeGBWyXQBvOVhLkWLN37GXv8NMLK406UY6dS51JfcQHsmcW5cJ441bHg6Lg==}
     engines: {node: '>= 14'}
     hasBin: true
-    dev: true
 
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}

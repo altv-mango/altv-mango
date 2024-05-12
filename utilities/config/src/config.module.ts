@@ -1,4 +1,4 @@
-import { type DynamicModule, Module, type FactoryProvider, isObject } from '@altv-mango/core';
+import { type DynamicModule, Module, type FactoryProvider, isObject } from '@altv-mango/server';
 import * as dotenv from 'dotenv';
 import { type DotenvExpandOptions, expand } from 'dotenv-expand';
 import * as fs from 'fs';

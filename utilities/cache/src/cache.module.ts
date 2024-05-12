@@ -1,5 +1,5 @@
 import { CACHE_MANAGER, CACHE_MANAGER_OPTIONS } from './cache.constants';
-import { Module, isFunction, isObject, isString, type DynamicModule, type Provider } from '@altv-mango/core';
+import { Module, isFunction, isObject, isString, type DynamicModule, type Provider } from '@altv-mango/server';
 import type { CacheModuleOptions } from './interfaces';
 import cacheManager, { type Cache, type FactoryStore, type MemoryConfig, type MemoryStore, type Store, type Stores } from 'cache-manager';
 

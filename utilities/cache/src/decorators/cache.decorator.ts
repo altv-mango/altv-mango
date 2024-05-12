@@ -1,4 +1,4 @@
-import { SetMetadata } from '@altv-mango/core';
+import { SetMetadata } from '@altv-mango/server';
 import { CACHE_METADATA } from '../cache.constants';
 import type { CacheOptions } from '../interfaces';
 

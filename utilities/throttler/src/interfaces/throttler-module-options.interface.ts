@@ -1,4 +1,4 @@
-import type { ExecutionContext } from '../../../interfaces';
+import type { ExecutionContext } from '@altv-mango/server';
 import type { ThrottlerOptions } from './throttler-options.interface';
 
 export type ThrottlerModuleOptions =
