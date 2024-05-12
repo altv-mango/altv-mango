@@ -1,0 +1,52 @@
+{
+    "name": "@altv-mango/throttler",
+    "version": "1.0.0",
+    "homepage": "https://altv-mango.vercel.app",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/altv-mango/altv-mango",
+        "directory": "packages/server"
+    },
+    "license": "MIT",
+    "author": "5exyGuy (Aurėjus Remeika)",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "typecheck": "tsc --noEmit",
+        "types": "tsup --dts-only"
+    },
+    "dependencies": {
+        "cache-manager": "^5.5.2",
+        "dotenv": "^16.4.5",
+        "dotenv-expand": "^11.0.6",
+        "lodash": "^4.17.21"
+    },
+    "devDependencies": {
+        "@abraham/reflection": "^0.12.0",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@types/lodash": "^4.17.1",
+        "@types/node": "^20.12.11",
+        "esbuild": "^0.21.1",
+        "rollup": "^4.17.2",
+        "rollup-plugin-esbuild": "^6.1.1",
+        "tsup": "^8.0.2",
+        "typescript": "^5.4.5"
+    },
+    "peerDependencies": {
+        "@altv-mango/core": "workspace:^",
+        "@altv/server": "^0.0.40",
+        "@altv/shared": "^0.0.16",
+        "inversify": "^6.0.2"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    }
+}
