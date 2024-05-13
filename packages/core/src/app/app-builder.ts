@@ -32,6 +32,8 @@ import { Controller } from './controller';
 import { ExecutionContextBase, MangoRequestBase, MangoResponseBase } from './pipeline';
 import type { ExecutionContextType } from './enums';
 import type { Player } from '@altv/server';
+import { REFLECTOR_SERVICE } from '../constants';
+import { ReflectorService } from '../services';
 
 @injectable()
 export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interceptor, EF extends ErrorFilter = ErrorFilter> {
@@ -110,6 +112,9 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
 
     public async build() {
         const globalAppContainer = new Container(this.globalContainerOptions);
+        // GLobal service bindings
+        globalAppContainer.bind(REFLECTOR_SERVICE).toConstantValue(ReflectorService);
+        globalAppContainer.bind(ReflectorService).toService(REFLECTOR_SERVICE);
 
         // App bindings
         this.internalAppContainer.bind(App).toSelf().inSingletonScope();
