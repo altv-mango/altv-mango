@@ -15,6 +15,7 @@ export async function createAppBuilder<T extends AppBuilder>({
     appBuilderInherit: Newable<T>;
 }) {
     const internalAppContainer = new Container();
+
     internalAppContainer.bind(INTERNAL_APP_CONTAINER).toConstantValue(internalAppContainer);
     internalAppContainer.bind(APP_ENVIROMENT).toConstantValue(enviroment);
     internalAppContainer.bind(PLUGINS).toConstantValue(plugins);

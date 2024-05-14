@@ -1,57 +1,58 @@
 import type { Events as SharedEvents } from '@altv/shared';
 import type { Events as ServerEvents, Player } from '@altv/server';
+import type { ScriptEventHandler } from '@altv-mango/core/app';
 
 export interface EventService {
     on<E extends keyof ServerEvents.CustomServerEvent>(
         eventName: E,
         callback: (body: Parameters<ServerEvents.CustomServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     on<E extends string>(
         eventName: Exclude<E, keyof ServerEvents.CustomServerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     once<E extends keyof ServerEvents.CustomServerEvent>(
         eventName: E,
         callback: (body: Parameters<ServerEvents.CustomServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     once<E extends string>(
         eventName: Exclude<E, keyof ServerEvents.CustomServerEvent>,
         callback: (body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     emit<E extends keyof ServerEvents.CustomServerEvent>(eventName: E, body?: Parameters<ServerEvents.CustomServerEvent[E]>[0]): void;
     emit<E extends string>(eventName: Exclude<E, keyof ServerEvents.CustomServerEvent>, body?: any): void;
     onPlayer<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
         callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onPlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     oncePlayer<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
         callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     oncePlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onRemote<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
         callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onRemote<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onceRemote<E extends keyof SharedEvents.CustomPlayerToServerEvent, U extends Player>(
         eventName: E,
         callback: (player: U, body: Parameters<SharedEvents.CustomPlayerToServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onceRemote<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     emitPlayers<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends Player>(
         player: U[],
         eventName: E,
@@ -86,22 +87,22 @@ export interface EventService {
         id: string | number,
         eventName: E,
         callback: (player: U, body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onWebView<E extends string, U extends Player>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onceWebView<E extends keyof SharedEvents.CustomWebViewToServerEvent, U extends Player>(
         id: string | number,
         eventName: E,
         callback: (player: U, body: Parameters<SharedEvents.CustomWebViewToServerEvent[E]>[0]) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
     onceWebView<E extends string, U extends Player>(
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomWebViewToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
-    ): SharedEvents.ScriptEventHandler;
+    ): ScriptEventHandler;
 
     emitWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent, U extends Player>(
         player: U[],
@@ -140,302 +141,302 @@ export interface EventService {
 
     onScriptRPC<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.ScriptRPCEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceScriptRPC<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.ScriptRPCEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onScriptRPCAnswer<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.ScriptRPCAnswerEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceScriptRPCAnswer<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.ScriptRPCAnswerEventParameters, T>,
-    ): SharedEvents.EventHandler;
-    onServerStarted(callback: ServerEvents.GenericEventCallback): SharedEvents.EventHandler;
-    onceServerStarted(callback: ServerEvents.GenericEventCallback): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onServerStarted(callback: ServerEvents.GenericEventCallback): ScriptEventHandler;
+    onceServerStarted(callback: ServerEvents.GenericEventCallback): ScriptEventHandler;
     onConnectionQueueAdd(
         callback: ServerEvents.GenericEventCallback<ServerEvents.ConnectionQueueEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceConnectionQueueAdd(
         callback: ServerEvents.GenericEventCallback<ServerEvents.ConnectionQueueEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onConnectionQueueRemove(
         callback: ServerEvents.GenericEventCallback<ServerEvents.ConnectionQueueEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceConnectionQueueRemove(
         callback: ServerEvents.GenericEventCallback<ServerEvents.ConnectionQueueEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerConnect<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerConnectEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerConnect<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerConnectEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerConnectDenied(
         callback: ServerEvents.GenericEventCallback<ServerEvents.PlayerConnectDeniedEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerConnectDenied(
         callback: ServerEvents.GenericEventCallback<ServerEvents.PlayerConnectDeniedEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerDisconnect<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDisconnectEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerDisconnect<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDisconnectEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerDamage<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDamageEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerDamage<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDamageEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerDeath<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDeathEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerDeath<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDeathEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerHeal<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerHealEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerHeal<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerHealEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerControlRequest<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerControlRequestEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerControlRequest<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerControlRequestEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerInteriorChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerInteriorChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerInteriorChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerInteriorChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerDimensionChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDimensionChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerDimensionChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerDimensionChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerWeaponChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerWeaponChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerWeaponChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerWeaponChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerSyncedSceneRequest(
         callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.PlayerSyncedSceneRequestEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerSyncedSceneRequest(
         callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.PlayerSyncedSceneRequestEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerSyncedSceneStart<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerSyncedSceneStartEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerSyncedSceneStart<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerSyncedSceneStartEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerSyncedSceneStop<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerSyncedSceneStopEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerSyncedSceneStop<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerSyncedSceneStopEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerSyncedSceneUpdate<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.PlayerSyncedSceneUpdateEventParameters, T>,
-    ): SharedEvents.EventHandler;
-    onPlayerSpawn<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
-    oncePlayerSpawn<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onPlayerSpawn<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
+    oncePlayerSpawn<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
     onPlayerAnimationChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerAnimationChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerAnimationChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerAnimationChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerVehicleEntered<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerVehicleEnteredEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerVehicleEntered<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerVehicleEnteredEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerStartVehicleEnter<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerStartVehicleEnterEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerStartVehicleEnter<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerStartVehicleEnterEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerVehicleLeft<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerVehicleLeftEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerVehicleLeft<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerVehicleLeftEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onPlayerVehicleSeatChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerVehicleSeatChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     oncePlayerVehicleSeatChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerVehicleSeatChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
-    onPlayerStartTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
-    oncePlayerStartTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
-    onPlayerStopTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
-    oncePlayerStopTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): SharedEvents.EventHandler;
-    onPedHeal(callback: ServerEvents.GenericEventCallback<ServerEvents.PedHealEventParameters>): SharedEvents.EventHandler;
-    oncePedHeal(callback: ServerEvents.GenericEventCallback<ServerEvents.PedHealEventParameters>): SharedEvents.EventHandler;
-    onPedDeath(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDeathEventParameters>): SharedEvents.EventHandler;
-    oncePedDeath(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDeathEventParameters>): SharedEvents.EventHandler;
-    onPedDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDamageEventParameters>): SharedEvents.EventHandler;
-    oncePedDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDamageEventParameters>): SharedEvents.EventHandler;
-    onVehicleDestroy(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDestroyEventParameters>): SharedEvents.EventHandler;
-    onceVehicleDestroy(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDestroyEventParameters>): SharedEvents.EventHandler;
-    onVehicleAttach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleAttachEventParameters>): SharedEvents.EventHandler;
-    onceVehicleAttach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleAttachEventParameters>): SharedEvents.EventHandler;
-    onVehicleDetach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDetachEventParameters>): SharedEvents.EventHandler;
-    onceVehicleDetach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDetachEventParameters>): SharedEvents.EventHandler;
-    onVehicleDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDamageEventParameters>): SharedEvents.EventHandler;
-    onceVehicleDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDamageEventParameters>): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onPlayerStartTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
+    oncePlayerStartTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
+    onPlayerStopTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
+    oncePlayerStopTalking<T extends Player>(callback: ServerEvents.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
+    onPedHeal(callback: ServerEvents.GenericEventCallback<ServerEvents.PedHealEventParameters>): ScriptEventHandler;
+    oncePedHeal(callback: ServerEvents.GenericEventCallback<ServerEvents.PedHealEventParameters>): ScriptEventHandler;
+    onPedDeath(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDeathEventParameters>): ScriptEventHandler;
+    oncePedDeath(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDeathEventParameters>): ScriptEventHandler;
+    onPedDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDamageEventParameters>): ScriptEventHandler;
+    oncePedDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.PedDamageEventParameters>): ScriptEventHandler;
+    onVehicleDestroy(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDestroyEventParameters>): ScriptEventHandler;
+    onceVehicleDestroy(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDestroyEventParameters>): ScriptEventHandler;
+    onVehicleAttach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleAttachEventParameters>): ScriptEventHandler;
+    onceVehicleAttach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleAttachEventParameters>): ScriptEventHandler;
+    onVehicleDetach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDetachEventParameters>): ScriptEventHandler;
+    onceVehicleDetach(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDetachEventParameters>): ScriptEventHandler;
+    onVehicleDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDamageEventParameters>): ScriptEventHandler;
+    onceVehicleDamage(callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleDamageEventParameters>): ScriptEventHandler;
     onVehicleSirenStateChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleSirenStateChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceVehicleSirenStateChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.VehicleSirenStateChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onVehicleHornStateChange<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.VehicleHornStateChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceVehicleHornStateChange<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.VehicleHornStateChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onVoiceConnectionCreate(
         callback: ServerEvents.GenericEventCallback<ServerEvents.VoiceConnectionEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceVoiceConnectionCreate(
         callback: ServerEvents.GenericEventCallback<ServerEvents.VoiceConnectionEventParameters>,
-    ): SharedEvents.EventHandler;
-    onClientObjectDelete<T extends Player>(callback: ServerEvents.GenericCancellablePlayerEventCallback<{}, T>): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onClientObjectDelete<T extends Player>(callback: ServerEvents.GenericCancellablePlayerEventCallback<{}, T>): ScriptEventHandler;
     onceClientObjectDelete<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<{}, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onClientObjectRequest<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.ClientObjectEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceClientObjectRequest<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.ClientObjectEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onBaseObjectCreate(
         callback: ServerEvents.GenericEventCallback<ServerEvents.BaseObjectCreateEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceBaseObjectCreate(
         callback: ServerEvents.GenericEventCallback<ServerEvents.BaseObjectCreateEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onBaseObjectRemove(
         callback: ServerEvents.GenericEventCallback<ServerEvents.BaseObjectRemoveEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceBaseObjectRemove(
         callback: ServerEvents.GenericEventCallback<ServerEvents.BaseObjectRemoveEventParameters>,
-    ): SharedEvents.EventHandler;
-    onNetOwnerChange(callback: ServerEvents.GenericEventCallback<ServerEvents.NetOwnerChangeEventParameters>): SharedEvents.EventHandler;
-    onceNetOwnerChange(callback: ServerEvents.GenericEventCallback<ServerEvents.NetOwnerChangeEventParameters>): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onNetOwnerChange(callback: ServerEvents.GenericEventCallback<ServerEvents.NetOwnerChangeEventParameters>): ScriptEventHandler;
+    onceNetOwnerChange(callback: ServerEvents.GenericEventCallback<ServerEvents.NetOwnerChangeEventParameters>): ScriptEventHandler;
     onWeaponDamage(
         callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.WeaponDamageEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceWeaponDamage(
         callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.WeaponDamageEventParameters>,
-    ): SharedEvents.EventHandler;
-    onMetaChange(callback: ServerEvents.GenericEventCallback<ServerEvents.MetaChangeEventParameters>): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onMetaChange(callback: ServerEvents.GenericEventCallback<ServerEvents.MetaChangeEventParameters>): ScriptEventHandler;
     onLocalMetaChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.LocalMetaChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceLocalMetaChange<T extends Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.LocalMetaChangeEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onStreamSyncedMetaChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.StreamSyncedMetaChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceStreamSyncedMetaChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.StreamSyncedMetaChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onGlobalMetaChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.GlobalMetaChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceGlobalMetaChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.GlobalMetaChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onGlobalSyncedMetaChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.GlobalSyncedMetaChangeEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceGlobalSyncedMetaChange(
         callback: ServerEvents.GenericEventCallback<ServerEvents.GlobalSyncedMetaChangeEventParameters>,
-    ): SharedEvents.EventHandler;
-    onConsoleCommand(callback: ServerEvents.GenericEventCallback<ServerEvents.ConsoleCommandEventParameters>): SharedEvents.EventHandler;
-    onceConsoleCommand(callback: ServerEvents.GenericEventCallback<ServerEvents.ConsoleCommandEventParameters>): SharedEvents.EventHandler;
-    onError(callback: ServerEvents.GenericEventCallback<ServerEvents.ErrorEventParameters>): SharedEvents.EventHandler;
-    onceError(callback: ServerEvents.GenericEventCallback<ServerEvents.ErrorEventParameters>): SharedEvents.EventHandler;
-    onColShapeEvent(callback: ServerEvents.GenericEventCallback<ServerEvents.ColShapeEventParameters>): SharedEvents.EventHandler;
-    onceColShapeEvent(callback: ServerEvents.GenericEventCallback<ServerEvents.ColShapeEventParameters>): SharedEvents.EventHandler;
-    onExplosion(callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.ExplosionEventParameters>): SharedEvents.EventHandler;
-    onceExplosion(callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.ExplosionEventParameters>): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
+    onConsoleCommand(callback: ServerEvents.GenericEventCallback<ServerEvents.ConsoleCommandEventParameters>): ScriptEventHandler;
+    onceConsoleCommand(callback: ServerEvents.GenericEventCallback<ServerEvents.ConsoleCommandEventParameters>): ScriptEventHandler;
+    onError(callback: ServerEvents.GenericEventCallback<ServerEvents.ErrorEventParameters>): ScriptEventHandler;
+    onceError(callback: ServerEvents.GenericEventCallback<ServerEvents.ErrorEventParameters>): ScriptEventHandler;
+    onColShapeEvent(callback: ServerEvents.GenericEventCallback<ServerEvents.ColShapeEventParameters>): ScriptEventHandler;
+    onceColShapeEvent(callback: ServerEvents.GenericEventCallback<ServerEvents.ColShapeEventParameters>): ScriptEventHandler;
+    onExplosion(callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.ExplosionEventParameters>): ScriptEventHandler;
+    onceExplosion(callback: ServerEvents.GenericCancellableEventCallback<ServerEvents.ExplosionEventParameters>): ScriptEventHandler;
     onFireStart<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.FireStartEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceFireStart<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.FireStartEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onProjectileStart<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.ProjectileStartEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceProjectileStart<T extends Player>(
         callback: ServerEvents.GenericCancellablePlayerEventCallback<ServerEvents.ProjectileStartEventParameters, T>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onEntityColShapeEnter(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityColShapeEnterEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceEntityColShapeEnter(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityColShapeEnterEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onEntityColShapeLeave(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityColShapeLeaveEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceEntityColShapeLeave(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityColShapeLeaveEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onEntityCheckpointEnter(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityCheckpointEnterEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceEntityCheckpointEnter(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityCheckpointEnterEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onEntityCheckpointLeave(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityCheckpointLeaveEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceEntityCheckpointLeave(
         callback: ServerEvents.GenericEventCallback<ServerEvents.EntityCheckpointLeaveEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onGivePedScriptedTask(
         callback: ServerEvents.GenericEventCallback<ServerEvents.GivePedScriptedTaskEventParameters>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onLocalScriptEvent<T = unknown[]>(
         callback: ServerEvents.GenericEventCallback<ServerEvents.ServerScriptEventParameters<T>>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceLocalScriptEvent<T = unknown[]>(
         callback: ServerEvents.GenericEventCallback<ServerEvents.ServerScriptEventParameters<T>>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onRemoteScriptEvent<T = unknown[], U extends Player = Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerScriptEventParameters<T>, U>,
-    ): SharedEvents.EventHandler;
+    ): ScriptEventHandler;
     onceRemoteScriptEvent<T = unknown[], U extends Player = Player>(
         callback: ServerEvents.GenericPlayerEventCallback<ServerEvents.PlayerScriptEventParameters<T>, U>,
-    ): SharedEvents.EventHandler;
-    onAnyResourceStart(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStartEventParameters>): SharedEvents.EventHandler;
-    onceAnyResourceStart(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStartEventParameters>): SharedEvents.EventHandler;
-    onAnyResourceStop(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStopEventParameters>): SharedEvents.EventHandler;
-    onceAnyResourceStop(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStopEventParameters>): SharedEvents.EventHandler;
-    onResourceStart(callback: ServerEvents.GenericEventCallback): SharedEvents.EventHandler;
-    onceResourceStart(callback: ServerEvents.GenericEventCallback): SharedEvents.EventHandler;
-    onResourceStop(callback: ServerEvents.GenericEventCallback): SharedEvents.EventHandler;
-    onceResourceStop(callback: ServerEvents.GenericEventCallback): SharedEvents.EventHandler;
-    onResourceError(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceErrorEventParameters>): SharedEvents.EventHandler;
-    onceResourceError(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceErrorEventParameters>): SharedEvents.EventHandler;
-    onEvent(callback: ServerEvents.GenericEventCallback<SharedEvents.GenericOnEventParameters>): SharedEvents.GenericEventHandler;
+    ): ScriptEventHandler;
+    onAnyResourceStart(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStartEventParameters>): ScriptEventHandler;
+    onceAnyResourceStart(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStartEventParameters>): ScriptEventHandler;
+    onAnyResourceStop(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStopEventParameters>): ScriptEventHandler;
+    onceAnyResourceStop(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceStopEventParameters>): ScriptEventHandler;
+    onResourceStart(callback: ServerEvents.GenericEventCallback): ScriptEventHandler;
+    onceResourceStart(callback: ServerEvents.GenericEventCallback): ScriptEventHandler;
+    onResourceStop(callback: ServerEvents.GenericEventCallback): ScriptEventHandler;
+    onceResourceStop(callback: ServerEvents.GenericEventCallback): ScriptEventHandler;
+    onResourceError(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceErrorEventParameters>): ScriptEventHandler;
+    onceResourceError(callback: ServerEvents.GenericEventCallback<ServerEvents.ResourceErrorEventParameters>): ScriptEventHandler;
+    onEvent(callback: ServerEvents.GenericEventCallback<SharedEvents.GenericOnEventParameters>): ScriptEventHandler;
 }

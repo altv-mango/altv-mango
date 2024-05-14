@@ -5,3 +5,4 @@ export * from './pipeline';
 export * from './rpc';
 export * from './services';
 export * from './timers';
+export * from './multiplayer';

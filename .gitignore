@@ -16,6 +16,7 @@ vite.config.ts.timestamp-*
 /server/cache
 /server/modules
 /server/data
+/server/libnode.dll
 /server/libnodev2.dll
 /server/altv-server.exe
 /server/altv-crash-handler.exe

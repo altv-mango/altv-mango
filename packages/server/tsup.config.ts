@@ -9,6 +9,6 @@ export default defineConfig({
     format: 'esm',
     bundle: true,
     minify: false,
-    external: [...Object.keys(packageJson.dependencies), ...Object.keys(packageJson.peerDependencies)],
+    external: [...Object.keys(packageJson.dependencies), ...Object.keys(packageJson.peerDependencies), 'alt-server', 'alt-shared'],
     noExternal: [...Object.keys(packageJson.devDependencies)],
 });

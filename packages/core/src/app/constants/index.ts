@@ -22,6 +22,8 @@ export const MANGO_REQUEST_FACTORY = 'MANGO_REQUEST_FACTORY';
 export const MANGO_RESPONSE_FACTORY = 'MANGO_RESPONSE_FACTORY';
 export const EXECUTION_CONTEXT_FACTORY = 'EXECUTION_CONTEXT_FACTORY';
 
+export const MULTIPLAYER_SERVICE = 'MULTIPLAYER_SERVICE';
+
 export const RPC_RESULT_TIMEOUT: RPCResult = {
     success: false,
     error: { message: 'RPC call timed out.' },
