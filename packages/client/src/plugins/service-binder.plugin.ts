@@ -14,20 +14,12 @@ export class ServiceBinderPlugin implements MangoPlugin {
     public async onBuild() {
         const time = Date.now();
 
-        const sharedV1 = await import('alt-shared').catch(() => false);
-        const multiplayerService: ClientMultiplayerService =
-            sharedV1 !== false && typeof sharedV1 !== 'boolean'
-                ? new ClientAltMultiplayerServceV1(sharedV1, await import('alt-client'))
-                : new ClientAltMultiplayerServceV2(await import('@altv/shared'), await import('@altv/client'));
-
-        this.globalAppContainer.bind(MULTIPLAYER_SERVICE).toConstantValue(multiplayerService);
         this.globalAppContainer.bind(LOGGER_SERVICE).to(ClientLoggerService).inSingletonScope();
         this.globalAppContainer.bind(EVENT_SERVICE).to(ClientEventService).inSingletonScope();
         this.globalAppContainer.bind(RPC_SERVICE).to(ClientRPCService).inSingletonScope();
         this.globalAppContainer.bind(WEBVIEW_SERVICE).to(ClientWebViewService).inSingletonScope();
         this.globalAppContainer.bind(WEBVIEW_LIST_SERVICE).to(WebViewListService).inSingletonScope();
 
-        this.internalAppContainer.bind(MULTIPLAYER_SERVICE).toConstantValue(multiplayerService);
         this.internalAppContainer.bind(LOGGER_SERVICE).toConstantValue(this.globalAppContainer.get(LOGGER_SERVICE));
         this.internalAppContainer.bind(EVENT_SERVICE).toConstantValue(this.globalAppContainer.get(EVENT_SERVICE));
         this.internalAppContainer.bind(RPC_SERVICE).toConstantValue(this.globalAppContainer.get(RPC_SERVICE));
