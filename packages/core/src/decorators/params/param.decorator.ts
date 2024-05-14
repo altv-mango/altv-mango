@@ -1,20 +1,22 @@
-import { z } from 'zod';
 import { CoreMetadataKey } from '../../app/enums';
 import type { Newable } from '../../types';
-import { PipeSchema } from '../../schemas';
 import type { MethodParameter } from '../../app/interfaces';
 import { MethodParamType } from '../../app/enums';
 import { isString } from '../../utils';
 import { ErrorMessage } from '../../enums';
 import type { Pipe } from '../../interfaces';
+import { validatePipe } from '../../schemas';
 
 export function Param(key: string, ...pipes: (Newable<Pipe> | Pipe)[]) {
     return <ParameterDecorator>((target: Object, method: string, index: number) => {
         if (!isString(key)) {
             throw new Error(ErrorMessage.ParamKeyMustBeString);
         }
-        if (!z.array(PipeSchema).safeParse(pipes).success) {
-            throw new Error(ErrorMessage.InvalidPipeDefinition);
+        const validatedPipes: (Newable<Pipe> | Pipe)[] = [];
+        for (const pipe of pipes) {
+            const { valid, value, error } = validatePipe(pipe);
+            if (!valid) throw new Error(error);
+            validatedPipes.push(value);
         }
 
         const params = Reflect.getMetadata<MethodParameter[]>(CoreMetadataKey.ControllerParams, target, method) ?? [];
@@ -28,7 +30,7 @@ export function Param(key: string, ...pipes: (Newable<Pipe> | Pipe)[]) {
 
         Reflect.defineMetadata<MethodParameter[]>(
             CoreMetadataKey.ControllerParams,
-            [...params, { index, method, data: key, pipes, type: MethodParamType.Param, metatype }],
+            [...params, { index, method, data: key, pipes: validatedPipes, type: MethodParamType.Param, metatype }],
             target,
             method,
         );

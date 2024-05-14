@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 import { type DotenvExpandOptions, expand } from 'dotenv-expand';
 import * as fs from 'fs';
 import { resolve } from 'path';
-import { ConfigHostModule } from './config-host.module';
 import {
     CONFIGURATION_LOADER,
     CONFIGURATION_SERVICE_TOKEN,
@@ -19,14 +18,21 @@ import { getRegistrationToken } from './utils/get-registration-token.util';
 import { mergeConfigObject } from './utils/merge-configs.util';
 
 @Module({
-    imports: [ConfigHostModule],
     providers: [
+        {
+            provide: CONFIGURATION_TOKEN,
+            useFactory: () => ({}),
+        },
         {
             provide: ConfigService,
             useExisting: CONFIGURATION_SERVICE_TOKEN,
         },
+        {
+            provide: CONFIGURATION_SERVICE_TOKEN,
+            useExisting: ConfigService,
+        },
     ],
-    exports: [ConfigHostModule, ConfigService],
+    exports: [ConfigService],
 })
 export class ConfigModule {
     public static get envVariablesLoaded() {

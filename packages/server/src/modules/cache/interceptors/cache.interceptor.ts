@@ -47,7 +47,6 @@ export class CacheInterceptor implements Interceptor {
             }
         } catch {
             next.handle();
-            return;
         }
     }
 }

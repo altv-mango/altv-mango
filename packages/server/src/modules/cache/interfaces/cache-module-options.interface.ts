@@ -11,5 +11,5 @@ export interface CacheModuleAsyncOptions<T extends Record<string, unknown> = Mem
     useFactory?: (...args: any[]) => Promise<T> | T;
     inject?: InjectionToken[];
     providers?: Provider[];
-    isGlobal?: boolean;
+    global?: boolean;
 }

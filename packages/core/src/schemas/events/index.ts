@@ -1,3 +1,4 @@
+export * from './error-filter.validate';
 export * from './event-metadata.validate';
 export * from './event-parameter.validate';
 export * from './guard.validate';

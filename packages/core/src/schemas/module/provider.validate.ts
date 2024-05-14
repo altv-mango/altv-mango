@@ -17,12 +17,12 @@ export function validateProvider(value: Provider) {
 
     if (isObject(value)) {
         if (!('provide' in value)) {
-            return { valid: false, value, error: 'provide is required' };
+            return { valid: false, value, error: 'Provider must have a provide property' };
         }
 
-        const provideValidation = validateInjectionToken(value.provide);
-        if (!provideValidation.valid) {
-            return { valid: false, value, error: provideValidation.error };
+        const { valid, error } = validateInjectionToken(value.provide);
+        if (!valid) {
+            return { valid: false, value, error };
         }
 
         if ('useClass' in value) {
@@ -34,14 +34,16 @@ export function validateProvider(value: Provider) {
         } else if ('useExisting' in value) {
             return validateExistingProvider(value);
         }
+    } else if (isFunction(value)) {
+        return { valid: true, value };
     }
 
-    return { valid: false, value };
+    return { valid: false, value, error: 'Provider must have a useClass, useValue, useFactory, or useExisting property' };
 }
 
 export function validateClassProvider(value: ClassProvider) {
     if (!('useClass' in value)) {
-        return { valid: false, value, error: 'useClass is required' };
+        return { valid: false, value, error: 'Provider must have a useClass property' };
     }
 
     if (!('scope' in value)) {
@@ -49,7 +51,7 @@ export function validateClassProvider(value: ClassProvider) {
     }
 
     if ('scope' in value && !Object.values<`${InjectableScope}`>(InjectableScope).includes(value.scope)) {
-        return { valid: false, value, error: 'scope must be a valid InjectableScope' };
+        return { valid: false, value, error: 'Provider scope must be a valid injectable scope' };
     }
 
     return { valid: true, value };
@@ -57,7 +59,7 @@ export function validateClassProvider(value: ClassProvider) {
 
 export function validateValueProvider(value: ValueProvider) {
     if (!('useValue' in value)) {
-        return { valid: false, value, error: 'useValue is required' };
+        return { valid: false, value, error: 'Provider must have a useValue property' };
     }
 
     return { valid: true, value };
@@ -65,16 +67,16 @@ export function validateValueProvider(value: ValueProvider) {
 
 function validateOptionalFactoryDependency(value: OptionalFactoryDependency) {
     if (!('optional' in value)) {
-        return { valid: false, value, error: 'optional is required' };
+        return { valid: false, value, error: 'Provider must have an optional property' };
     }
 
     if (!('token' in value)) {
-        return { valid: false, value, error: 'token is required' };
+        return { valid: false, value, error: 'Provider must have a token property' };
     }
 
-    const tokenValidation = validateInjectionToken(value.token);
-    if (!tokenValidation.valid) {
-        return { valid: false, value, error: tokenValidation.error };
+    const { valid, error } = validateInjectionToken(value.token);
+    if (!valid) {
+        return { valid: false, value, error };
     }
 
     return { valid: true, value };
@@ -82,31 +84,36 @@ function validateOptionalFactoryDependency(value: OptionalFactoryDependency) {
 
 export function validateFactoryProvider(value: FactoryProvider) {
     if (!('useFactory' in value)) {
-        return { valid: false, value, error: 'useFactory is required' };
+        return { valid: false, value, error: 'Provider must have a useFactory property' };
+    }
+    if (!isFunction(value.useFactory)) {
+        return { valid: false, value, error: 'Provider useFactory must be a function' };
     }
 
+    if (!('inject' in value)) {
+        value.inject = [];
+    }
     if ('inject' in value && !Array.isArray(value.inject)) {
-        return { valid: false, value, error: 'inject must be an array' };
+        return { valid: false, value, error: 'Provider inject must be an array' };
     }
-
     if ('inject' in value) {
         for (const token of value.inject) {
             if (isObject(token) && 'optional' in token && 'token' in token) {
-                const optionalFactoryDependencyValidation = validateOptionalFactoryDependency(token);
-                if (!optionalFactoryDependencyValidation.valid) {
-                    return { valid: false, value, error: optionalFactoryDependencyValidation.error };
+                const { valid, error } = validateOptionalFactoryDependency(token);
+                if (!valid) {
+                    return { valid, value, error };
                 }
             } else {
-                const tokenValidation = validateInjectionToken(token);
-                if (!tokenValidation.valid) {
-                    return { valid: false, value, error: tokenValidation.error };
+                const { valid, error } = validateInjectionToken(token);
+                if (!valid) {
+                    return { valid, value, error };
                 }
             }
         }
     }
 
     if ('scope' in value && !Object.values<`${InjectableScope}`>(InjectableScope).includes(value.scope)) {
-        return { valid: false, value, error: 'scope must be a valid InjectableScope' };
+        return { valid: false, value, error: 'Provider scope must be a valid injectable scope' };
     }
 
     return { valid: true, value };
@@ -114,7 +121,7 @@ export function validateFactoryProvider(value: FactoryProvider) {
 
 export function validateExistingProvider(value: ExistingProvider) {
     if (!('useExisting' in value)) {
-        return { valid: false, value, error: 'useExisting is required' };
+        return { valid: false, value, error: 'Provider must have a useExisting property' };
     }
 
     return { valid: true, value };
