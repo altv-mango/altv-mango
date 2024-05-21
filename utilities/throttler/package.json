@@ -21,6 +21,7 @@
         "typecheck": "tsc --noEmit",
         "types": "tsup --dts-only"
     },
+    "dependencies": {},
     "devDependencies": {
         "@abraham/reflection": "^0.12.0",
         "@types/lodash": "^4.17.1",

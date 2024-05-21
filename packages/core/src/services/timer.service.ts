@@ -1,17 +1,18 @@
-import { injectable } from 'inversify';
-import { Timers } from '@altv/shared';
+import { inject, injectable } from 'inversify';
 import { isString } from '../utils';
 import { Cron, type CronOptions } from 'croner';
+import { MULTIPLAYER_SERVICE, type MultiplayerService, type MultiplayerTimer } from '../app';
 
 @injectable()
 export class TimerService {
-    private readonly $everyticks = new Map<string, Timer>();
-    private readonly $intervals = new Map<string, Timer>();
-    private readonly $timeouts = new Map<string, Timer>();
+    @inject(MULTIPLAYER_SERVICE) private readonly multiplayerService: MultiplayerService;
+    private readonly $everyticks = new Map<string, MultiplayerTimer>();
+    private readonly $intervals = new Map<string, MultiplayerTimer>();
+    private readonly $timeouts = new Map<string, MultiplayerTimer>();
     private readonly $crons = new Map<string, Cron>();
 
     public get all() {
-        return Timers.all;
+        return this.multiplayerService.Timers.all;
     }
 
     public get everyticks() {
@@ -31,19 +32,19 @@ export class TimerService {
     }
 
     public set warningThreshold(value: number) {
-        Timers.warningThreshold = value;
+        this.multiplayerService.Timers.warningThreshold = value;
     }
 
     public get warningThreshold() {
-        return Timers.warningThreshold;
+        return this.multiplayerService.Timers.warningThreshold;
     }
 
     public set sourceLocationFrameSkipCount(value: number) {
-        Timers.sourceLocationFrameSkipCount = value;
+        this.multiplayerService.Timers.sourceLocationFrameSkipCount = value;
     }
 
     public get sourceLocationFrameSkipCount() {
-        return Timers.sourceLocationFrameSkipCount;
+        return this.multiplayerService.Timers.sourceLocationFrameSkipCount;
     }
 
     public createCronJob(callback: Function, options: CronOptions & { pattern: string | Date }) {
@@ -56,19 +57,19 @@ export class TimerService {
     }
 
     public createInterval(callback: Function, interval: number, name?: string) {
-        const timer = Timers.setInterval(callback, interval);
+        const timer = this.multiplayerService.Timers.setInterval(callback, interval);
         if (isString(name)) this.$intervals.set(name, timer);
         return timer;
     }
 
     public createTimeout(callback: Function, timeout: number, name?: string) {
-        const timer = Timers.setTimeout(callback, timeout);
+        const timer = this.multiplayerService.Timers.setTimeout(callback, timeout);
         if (isString(name)) this.$timeouts.set(name, timer);
         return timer;
     }
 
     public createEveryTick(callback: Function, name?: string) {
-        const timer = Timers.everyTick(callback);
+        const timer = this.multiplayerService.Timers.everyTick(callback);
         if (isString(name)) this.$everyticks.set(name, timer);
         return timer;
     }
@@ -120,14 +121,14 @@ export class TimerService {
     }
 
     public getById(id: number) {
-        return Timers.getByID(id);
+        return this.multiplayerService.Timers.getByID(id);
     }
 
     public time(name?: string) {
-        return Timers.time(name);
+        return this.multiplayerService.Timers.time(name);
     }
 
     public timeEnd(name?: string) {
-        return Timers.timeEnd(name);
+        return this.multiplayerService.Timers.timeEnd(name);
     }
 }
