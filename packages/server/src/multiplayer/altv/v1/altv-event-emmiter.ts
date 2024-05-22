@@ -9,7 +9,18 @@ export class ServerAltVEventEmmiterV1 extends AltVEventEmmiterV1 implements Serv
         altShared: typeof AltShared,
         private readonly altServer: typeof AltServer,
     ) {
-        super(altShared);
+        const mapEvents: Record<string, string> = {
+            "clientObjectRequest": "clientRequestObject",
+            "playerSyncedSceneRequest": "requestSyncedScene",
+            "playerSyncedSceneStart": "startSyncedScene",
+            "playerSyncedSceneStop": "stopSyncedScene",
+            "playerSyncedSceneUpdate": "updateSyncedScene",
+            "playerVehicleLeft": "playerLeftVehicle",
+            "playerVehicleEntered": "playerEnteredVehicle",
+            "playerStartVehicleEnter": "playerEnteringVehicle",
+            "playerVehicleSeatChange": "playerChangedVehicleSeat",
+        }
+        super(altShared, mapEvents);
     }
    
     public emitAllPlayersRaw(eventName: string, ...args: any[]): void {

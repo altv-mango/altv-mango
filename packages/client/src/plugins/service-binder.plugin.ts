@@ -3,8 +3,6 @@ import { GLOBAL_APP_CONTAINER, INTERNAL_APP_CONTAINER, MULTIPLAYER_SERVICE, type
 import { EVENT_SERVICE, LOGGER_SERVICE, RPC_SERVICE } from '@altv-mango/core';
 import { ClientEventService, ClientLoggerService, ClientRPCService, ClientWebViewService, WebViewListService } from '../services';
 import { WEBVIEW_LIST_SERVICE, WEBVIEW_SERVICE } from '../constants';
-import type { ClientMultiplayerService } from '../interfaces';
-import { ClientAltMultiplayerServceV1, ClientAltMultiplayerServceV2 } from '../multiplayer';
 
 @injectable()
 export class ServiceBinderPlugin implements MangoPlugin {
