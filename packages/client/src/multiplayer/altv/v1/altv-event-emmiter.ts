@@ -6,7 +6,18 @@ import { AltVEventEmmiterV1 } from '@altv-mango/core/app';
 
 export class ClientAltVEventEmmiterV1 extends AltVEventEmmiterV1 implements ClientEventEmmiter {
     constructor(altShared: typeof AltShared, private readonly altClient: typeof AltClient) {
-        super(altShared);
+        const mapEvents: Record<string, string> = {
+            "keyUp": "keyup",
+            "keyDown": "keydown",
+            "playerVehicleLeft": "leftVehicle",
+            "playerVehicleEntered": "enteredVehicle",
+            "playerStartVehicleEnter": "startEnteringVehicle",
+            "playerVehicleSeatChange": "changedVehicleSeat",
+            "projectileStart": "startProjectile",
+            "vehicleSirenStateChange": "vehicleSiren",
+            "vehicleHornStateChange": "vehicleHorn",
+        }
+        super(altShared, mapEvents);
     }
 
     emitServer(eventName: string, ...args: any[]): void {

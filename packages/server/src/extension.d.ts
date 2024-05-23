@@ -81,4 +81,9 @@ declare module 'alt-server' {
             options?: RPCCallOptions,
         ): Promise<SharedRPCResult>;
     }
+
+    export interface IServerEvent {
+        playerStartTalking: (target: Player) => void;
+        playerStopTalking: (target: Player) => void;
+    }
 }
