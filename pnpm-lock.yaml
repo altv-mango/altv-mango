@@ -200,15 +200,15 @@ importers:
       '@altv/client':
         specifier: ^0.0.33
         version: 0.0.33
-      '@altv/natives':
-        specifier: ^0.0.8
-        version: 0.0.8
       '@altv/shared':
         specifier: ^0.0.16
         version: 0.0.16
       '@altv/types-client':
         specifier: ^16.2.2
         version: 16.2.2(@altv/types-shared@16.2.1)(@altv/types-worker@16.2.0)
+      '@altv/types-natives':
+        specifier: ^16.2.0
+        version: 16.2.0(@altv/types-client@16.2.2)
       '@altv/types-shared':
         specifier: ^16.2.1
         version: 16.2.1
@@ -657,6 +657,14 @@ packages:
     dependencies:
       '@altv/types-shared': 16.2.1
       '@altv/types-worker': 16.2.0(@altv/types-client@16.2.2)
+    dev: false
+
+  /@altv/types-natives@16.2.0(@altv/types-client@16.2.2):
+    resolution: {integrity: sha512-kZ6Or14I9DLPPbSAEEDxS+Pt+Efv1lsJSCFeYemnmoQEJtVT/XbCjkwYUd9HHzbcxkyAB87DVn1toQrAjYCSxg==}
+    peerDependencies:
+      '@altv/types-client': ^16.2.0
+    dependencies:
+      '@altv/types-client': 16.2.2(@altv/types-shared@16.2.1)(@altv/types-worker@16.2.0)
     dev: false
 
   /@altv/types-shared@16.2.1:

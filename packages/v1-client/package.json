@@ -30,9 +30,9 @@
     },
     "peerDependencies": {
         "@altv/client": "^0.0.33",
-        "@altv/natives": "^0.0.8",
         "@altv/shared": "^0.0.16",
         "@altv/types-client": "^16.2.2",
+        "@altv/types-natives": "^16.2.0",
         "@altv/types-shared": "^16.2.1"
     },
     "publishConfig": {
