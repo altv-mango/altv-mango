@@ -14,21 +14,6 @@ export class ServerEventService extends BaseEventService<ServerEventsV2.CustomSe
         this.$altEvents = multiplayerService.Events;
         this.$internalEventNames = new Set(Object.values(INTERNAL_EVENTS));
     }
-    on<E extends string | number | symbol>(eventName: E, callback: (body: unknown) => void | Promise<void>);
-    on<E extends string>(eventName: Exclude<E, string | number | symbol>, callback: (body: unknown) => void | Promise<void>);
-    on(eventName: unknown, callback: unknown): any {
-        throw new Error('Method not implemented.');
-    }
-    once<E extends string | number | symbol>(eventName: E, callback: (body: unknown) => void | Promise<void>);
-    once<E extends string>(eventName: Exclude<E, string | number | symbol>, callback: (body: unknown) => void | Promise<void>);
-    once(eventName: unknown, callback: unknown): any {
-        throw new Error('Method not implemented.');
-    }
-    emit<E extends string | number | symbol>(eventName: E, body?: unknown): void;
-    emit<E extends string>(eventName: Exclude<E, string | number | symbol>, body?: any): void;
-    emit(eventName: unknown, body?: unknown): void {
-        throw new Error('Method not implemented.');
-    }
 
     public onPlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
