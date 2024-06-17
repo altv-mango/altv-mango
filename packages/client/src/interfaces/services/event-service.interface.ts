@@ -169,12 +169,6 @@ export interface EventService {
     onPlayerStopTalking(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["playerStopTalking"]>): ScriptEventHandler;
     oncePlayerStopTalking<T extends Player>(callback: ClientEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
     oncePlayerStopTalking(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["playerStopTalking"]>): ScriptEventHandler;
-    onPedDeath(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.PedDeathEventParameters>): ScriptEventHandler;
-    onPedDeath(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["pedDeath"]>): ScriptEventHandler;
-    oncePedDeath(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.PedDeathEventParameters>): ScriptEventHandler;
-    oncePedDeath(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["pedDeath"]>): ScriptEventHandler;
-    onPedDamage(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.PedDamageEventParameters>): ScriptEventHandler;
-    onPedDamage(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["pedDamage"]>): ScriptEventHandler;
     onWorldObjectPositionChange(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.WorldObjectPositionChangeEventParameters>): ScriptEventHandler;
     onWorldObjectPositionChange(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["worldObjectPositionChange"]>): ScriptEventHandler;
     onceWorldObjectPositionChange(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.WorldObjectPositionChangeEventParameters>): ScriptEventHandler;

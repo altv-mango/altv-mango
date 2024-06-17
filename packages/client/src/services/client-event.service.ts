@@ -388,18 +388,6 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         return this.$altEvents.once('playerStopTalking', callback);
     }
 
-    public onPedDeath(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDeathEventParameters>  | ClientEventsV2.GenericEventCallback<ClientEventsV1["pedDeath"]>) {
-        return this.$altEvents.on('pedDeath', callback);
-    }
-
-    public oncePedDeath(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDeathEventParameters>  | ClientEventsV2.GenericEventCallback<ClientEventsV1["pedDeath"]>) {
-        return this.$altEvents.once('pedDeath', callback);
-    }
-
-    public onPedDamage(callback: ClientEvents.GenericEventCallback<ClientEvents.PedDamageEventParameters>  | ClientEventsV2.GenericEventCallback<ClientEventsV1["pedDamage"]>) {
-        return this.$altEvents.on('pedDamage', callback);
-    }
-
     public onWorldObjectPositionChange(callback: ClientEvents.GenericEventCallback<ClientEvents.WorldObjectPositionChangeEventParameters> | ClientEventsV2.GenericEventCallback<ClientEventsV1["worldObjectPositionChange"]>) {
         return this.$altEvents.on('worldObjectPositionChange', callback);
     }
