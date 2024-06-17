@@ -504,38 +504,6 @@ export class ServerEventService extends BaseEventService<ServerEventsV2.CustomSe
         return this.$altEvents.once('playerVehicleSeatChange', callback);
     }
 
-    public onPlayerStartTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStartTalking']>,
-    ) {
-        return this.$altEvents.on('playerStartTalking', callback);
-    }
-
-    public oncePlayerStartTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStartTalking']>,
-    ) {
-        return this.$altEvents.once('playerStartTalking', callback);
-    }
-
-    public onPlayerStopTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStopTalking']>,
-    ) {
-        return this.$altEvents.on('playerStopTalking', callback);
-    }
-
-    public oncePlayerStopTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStopTalking']>,
-    ) {
-        return this.$altEvents.once('playerStopTalking', callback);
-    }
-
     public onPedHeal(
         callback:
             | ServerEventsV2.GenericEventCallback<ServerEventsV2.PedHealEventParameters>

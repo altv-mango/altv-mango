@@ -232,14 +232,6 @@ export interface EventService {
     onPlayerVehicleSeatChange(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["playerChangedVehicleSeat"]>): ScriptEventHandler;
     oncePlayerVehicleSeatChange<T extends Player>(callback: ServerEventsV2.GenericPlayerEventCallback<ServerEventsV2.PlayerVehicleSeatChangeEventParameters, T>): ScriptEventHandler;
     oncePlayerVehicleSeatChange(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["playerChangedVehicleSeat"]>): ScriptEventHandler;
-    onPlayerStartTalking<T extends Player>(callback: ServerEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
-    onPlayerStartTalking(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["playerStartTalking"]>): ScriptEventHandler;
-    oncePlayerStartTalking<T extends Player>(callback: ServerEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
-    oncePlayerStartTalking(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["playerStartTalking"]>): ScriptEventHandler;
-    onPlayerStopTalking<T extends Player>(callback: ServerEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
-    onPlayerStopTalking(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["playerStopTalking"]>): ScriptEventHandler;
-    oncePlayerStopTalking<T extends Player>(callback: ServerEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
-    oncePlayerStopTalking(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["playerStopTalking"]>): ScriptEventHandler;
     onPedHeal(callback: ServerEventsV2.GenericEventCallback<ServerEventsV2.PedHealEventParameters>): ScriptEventHandler;
     onPedHeal(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["pedHeal"]>): ScriptEventHandler;
     oncePedHeal(callback: ServerEventsV2.GenericEventCallback<ServerEventsV2.PedHealEventParameters>): ScriptEventHandler;
@@ -382,4 +374,3 @@ export interface EventService {
     onceResourceError(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["resourceError"]>): ScriptEventHandler;
     onEvent(callback: ServerEventsV2.GenericEventCallback<SharedEvents.GenericOnEventParameters>): ScriptEventHandler;
 }
-
