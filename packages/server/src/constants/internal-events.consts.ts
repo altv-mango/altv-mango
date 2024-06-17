@@ -24,8 +24,6 @@ export const INTERNAL_EVENTS = {
     PLAYER_START_VEHICLE_ENTER: 'playerStartVehicleEnter',
     PLAYER_VEHICLE_LEFT: 'playerVehicleLeft',
     PLAYER_VEHICLE_SEAT_CHANGE: 'playerVehicleSeatChange',
-    PLAYER_START_TALKING: 'playerStartTalking',
-    PLAYER_STOP_TALKING: 'playerStopTalking',
     PED_HEAL: 'pedHeal',
     PED_DEATH: 'pedDeath',
     PED_DAMAGE: 'pedDamage',

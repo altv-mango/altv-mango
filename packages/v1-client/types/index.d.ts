@@ -1782,12 +1782,6 @@ declare module '@altv/client' {
         export function onceVoiceConnectionUpdate(
             callback: GenericEventCallback<VoiceConnectionEventParameters>,
         ): altShared.Events.EventHandler;
-        export function onPlayerStartTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
-        export function oncePlayerStartTalking<T extends Player>(
-            callback: GenericPlayerEventCallback<{}, T>,
-        ): altShared.Events.EventHandler;
-        export function onPlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
-        export function oncePlayerStopTalking<T extends Player>(callback: GenericPlayerEventCallback<{}, T>): altShared.Events.EventHandler;
 
         // Ped related events
         export function onPedDeath(callback: GenericEventCallback<PedDeathEventParameters>): altShared.Events.EventHandler;

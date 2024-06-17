@@ -14,6 +14,21 @@ export class ServerEventService extends BaseEventService<ServerEventsV2.CustomSe
         this.$altEvents = multiplayerService.Events;
         this.$internalEventNames = new Set(Object.values(INTERNAL_EVENTS));
     }
+    on<E extends string | number | symbol>(eventName: E, callback: (body: unknown) => void | Promise<void>);
+    on<E extends string>(eventName: Exclude<E, string | number | symbol>, callback: (body: unknown) => void | Promise<void>);
+    on(eventName: unknown, callback: unknown): any {
+        throw new Error('Method not implemented.');
+    }
+    once<E extends string | number | symbol>(eventName: E, callback: (body: unknown) => void | Promise<void>);
+    once<E extends string>(eventName: Exclude<E, string | number | symbol>, callback: (body: unknown) => void | Promise<void>);
+    once(eventName: unknown, callback: unknown): any {
+        throw new Error('Method not implemented.');
+    }
+    emit<E extends string | number | symbol>(eventName: E, body?: unknown): void;
+    emit<E extends string>(eventName: Exclude<E, string | number | symbol>, body?: any): void;
+    emit(eventName: unknown, body?: unknown): void {
+        throw new Error('Method not implemented.');
+    }
 
     public onPlayer<E extends string, U extends Player>(
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
@@ -502,38 +517,6 @@ export class ServerEventService extends BaseEventService<ServerEventsV2.CustomSe
             | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerChangedVehicleSeat']>,
     ) {
         return this.$altEvents.once('playerVehicleSeatChange', callback);
-    }
-
-    public onPlayerStartTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStartTalking']>,
-    ) {
-        return this.$altEvents.on('playerStartTalking', callback);
-    }
-
-    public oncePlayerStartTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStartTalking']>,
-    ) {
-        return this.$altEvents.once('playerStartTalking', callback);
-    }
-
-    public onPlayerStopTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStopTalking']>,
-    ) {
-        return this.$altEvents.on('playerStopTalking', callback);
-    }
-
-    public oncePlayerStopTalking<T extends Player>(
-        callback:
-            | ServerEventsV2.GenericPlayerEventCallback<{}, T>
-            | ServerEventsV2.GenericEventCallback<ServerEventsV1['playerStopTalking']>,
-    ) {
-        return this.$altEvents.once('playerStopTalking', callback);
     }
 
     public onPedHeal(
