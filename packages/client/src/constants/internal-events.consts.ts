@@ -28,8 +28,6 @@ export const INTERNAL_EVENTS = {
     VOICE_CONNECTION_UPDATE: 'voiceConnectionUpdate',
     PLAYER_START_TALKING: 'playerStartTalking',
     PLAYER_STOP_TALKING: 'playerStopTalking',
-    PED_DEATH: 'pedDeath',
-    PED_DAMAGE: 'pedDamage',
     WORLD_OBJECT_POSITION_CHANGE: 'worldObjectPositionChange',
     WORLD_OBJECT_STREAM_IN: 'worldObjectStreamIn',
     WORLD_OBJECT_STREAM_OUT: 'worldObjectStreamOut',
