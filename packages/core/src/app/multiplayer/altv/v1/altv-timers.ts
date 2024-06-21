@@ -35,26 +35,21 @@ export class AltVTimers implements MultiplayerTimers {
     }
 
     private createTimer(
-        set: (...args: any[]) => number,
+        createTimer: (...args: any[]) => number,
         clear: (id: number) => void,
         callback: Function,
-        interval: number,
+        interval: number | undefined,
         once: boolean,
         ...args: unknown[]
     ) {
         const callbackBind = callback.bind(this, ...(Array.isArray(args) ? args : []));
-        const timer = set(callbackBind, interval);
+        console.log(interval);
+        const timer = typeof interval === 'number' ? createTimer(callbackBind, interval) : createTimer(callbackBind);
         const id = this.timerIncrementer++;
-        const altVTimer = new AltVTimer(
-            id,
-            interval,
-            once,
-            callbackBind,
-            () => {
-                clear(timer);
-                this.timers.delete(id);
-            },
-        );
+        const altVTimer = new AltVTimer(id, interval, once, callbackBind, () => {
+            clear(timer);
+            this.timers.delete(id);
+        });
         this.timers.set(id, altVTimer);
         return altVTimer;
     }
@@ -68,11 +63,11 @@ export class AltVTimers implements MultiplayerTimers {
     }
 
     everyTick(callback: Function, ...args: unknown[]) {
-        return this.createTimer(this.alt.everyTick, this.alt.clearEveryTick, callback, 0, false, ...args);
+        return this.createTimer(this.alt.everyTick, this.alt.clearEveryTick, callback, undefined, false, ...args);
     }
 
     nextTick(callback: Function, ...args: unknown[]) {
-        return this.createTimer(this.alt.nextTick, this.alt.clearNextTick, callback, 0, true, ...args);
+        return this.createTimer(this.alt.nextTick, this.alt.clearNextTick, callback, undefined, true, ...args);
     }
 
     time(name?: string) {
