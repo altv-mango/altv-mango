@@ -176,20 +176,7 @@ export function OnPlayerVehicleSeatChange() {
 export function OncePlayerVehicleSeatChange() {
     return OnceInternal(INTERNAL_EVENTS.PLAYER_VEHICLE_SEAT_CHANGE);
 }
-export function OnPlayerStartTalking() {
-    return OnInternal(INTERNAL_EVENTS.PLAYER_START_TALKING);
-}
 
-export function OncePlayerStartTalking() {
-    return OnceInternal(INTERNAL_EVENTS.PLAYER_START_TALKING);
-}
-export function OnPlayerStopTalking() {
-    return OnInternal(INTERNAL_EVENTS.PLAYER_STOP_TALKING);
-}
-
-export function OncePlayerStopTalking() {
-    return OnceInternal(INTERNAL_EVENTS.PLAYER_STOP_TALKING);
-}
 export function OnPedHeal() {
     return OnInternal(INTERNAL_EVENTS.PED_HEAL);
 }

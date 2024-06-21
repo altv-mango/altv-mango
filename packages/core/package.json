@@ -1,6 +1,6 @@
 {
     "name": "@altv-mango/core",
-    "version": "1.5.4",
+    "version": "2.0.2-beta",
     "homepage": "https://altv-mango.vercel.app",
     "repository": {
         "type": "git",
@@ -111,6 +111,9 @@
         "@altv/client": "^0.0.34",
         "@altv/server": "^0.0.40",
         "@altv/shared": "^0.0.16",
+        "@altv/types-client": "^16.2.2",
+        "@altv/types-server": "^16.2.1",
+        "@altv/types-shared": "^16.2.1",
         "croner": "^8.0.2",
         "inversify": "^6.0.2"
     },

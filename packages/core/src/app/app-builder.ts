@@ -13,11 +13,12 @@ import {
     MANGO_RESPONSE_FACTORY,
     EXECUTION_CONTEXT_FACTORY,
     CONTAINER_OPTIONS,
+    MULTIPLAYER_SERVICE,
 } from './constants';
 import type { Newable } from '../types';
 import { inject, Container, injectable, type interfaces } from 'inversify';
 import { App } from './app';
-import type { ErrorFilter, Guard, Interceptor, MangoPlugin } from './interfaces';
+import type { ErrorFilter, Guard, Interceptor, MangoPlugin, MultiplayerService } from './interfaces';
 import type { Pipe } from '../interfaces';
 import {
     ControllerEventHandler,
@@ -39,6 +40,7 @@ import { ReflectorService } from '../services';
 export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interceptor, EF extends ErrorFilter = ErrorFilter> {
     @inject(APP_ENVIROMENT) protected readonly enviroment: string;
     @inject(INTERNAL_APP_CONTAINER) protected readonly internalAppContainer: Container;
+    @inject(MULTIPLAYER_SERVICE) protected readonly multiplayerService: MultiplayerService;
     @inject(PLUGINS) protected readonly plugins: Newable<MangoPlugin>[];
 
     private globalContainerOptions: interfaces.ContainerOptions = {};
@@ -116,6 +118,9 @@ export class AppBuilder<G extends Guard = Guard, I extends Interceptor = Interce
         globalAppContainer.bind(REFLECTOR_SERVICE).toConstantValue(ReflectorService);
         globalAppContainer.bind(ReflectorService).toService(REFLECTOR_SERVICE);
 
+        // Multiplayer service bindings
+        globalAppContainer.bind(MULTIPLAYER_SERVICE).toConstantValue(this.multiplayerService);
+ 
         // App bindings
         this.internalAppContainer.bind(App).toSelf().inSingletonScope();
         this.internalAppContainer.bind(GLOBAL_APP_CONTAINER).toConstantValue(globalAppContainer);

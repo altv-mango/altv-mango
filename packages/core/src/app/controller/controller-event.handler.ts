@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import type { ErrorFilter, Guard, Interceptor, InternalEventService } from '../interfaces';
+import type { ErrorFilter, Guard, Interceptor, InternalEventService, MultiplayerService } from '../interfaces';
 import type { Newable } from '../../types';
-import { APP_ENVIROMENT, EXECUTION_CONTEXT_FACTORY, MANGO_REQUEST_FACTORY } from '../constants';
+import { APP_ENVIROMENT, EXECUTION_CONTEXT_FACTORY, MANGO_REQUEST_FACTORY, MULTIPLAYER_SERVICE } from '../constants';
 import { isFunction, isNil, isObject } from '../../utils';
 import { PipelineHandler } from './pipeline.handler';
 import type { EventMetadata } from '../interfaces';
@@ -18,6 +18,7 @@ import { ControllerFlowHandler } from './controller-flow.handler';
 @injectable()
 export class ControllerEventHandler {
     @inject(APP_ENVIROMENT) private readonly appEnv: AppEnviroment;
+    @inject(MULTIPLAYER_SERVICE) private readonly multiplayerService: MultiplayerService;
     @inject(EVENT_SERVICE) private readonly eventService: InternalEventService;
     @inject(ControllerFlowHandler) private readonly controllerFlowHandler: ControllerFlowHandler;
     @inject(PipelineHandler) private readonly pipelineHandler: PipelineHandler;
@@ -45,8 +46,8 @@ export class ControllerEventHandler {
                 await this.handleEvent(guards, interceptors, pipes, mappedErrorFilters, controller, event, body);
             });
         } else if (event.type === 'onInternal' || event.type === 'onceInternal') {
-            return this.eventService[`$${event.type}`](event.name, async (body) => {
-                const player = isObject(body) && 'player' in body && isObject(body.player) ? <Player>body.player : undefined;
+            return this.eventService[`$${event.type}`](event.name, async (...args) => {
+                const { player, body } = this.multiplayerService.parseInternalArgs<Player>(...args);
                 await this.handleEvent(guards, interceptors, pipes, mappedErrorFilters, controller, event, body, player);
             });
         } else if (event.type === 'onPlayer' || event.type === 'oncePlayer') {

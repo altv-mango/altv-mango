@@ -204,20 +204,7 @@ export function OnPlayerStopTalking() {
 export function OncePlayerStopTalking() {
     return OnceInternal(INTERNAL_EVENTS.PLAYER_STOP_TALKING);
 }
-export function OnPedDeath() {
-    return OnInternal(INTERNAL_EVENTS.PED_DEATH);
-}
 
-export function OncePedDeath() {
-    return OnceInternal(INTERNAL_EVENTS.PED_DEATH);
-}
-export function OnPedDamage() {
-    return OnInternal(INTERNAL_EVENTS.PED_DAMAGE);
-}
-
-export function OncePedDamage() {
-    return OnceInternal(INTERNAL_EVENTS.PED_DAMAGE);
-}
 export function OnWorldObjectPositionChange() {
     return OnInternal(INTERNAL_EVENTS.WORLD_OBJECT_POSITION_CHANGE);
 }

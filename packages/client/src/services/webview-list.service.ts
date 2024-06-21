@@ -1,14 +1,15 @@
-import type { WebView } from '@altv/client';
+
 import { inject, injectable } from 'inversify';
 import { ErrorMessage, LOGGER_SERVICE, isNil, type LoggerService } from '@altv-mango/core';
+import type { MultiplayerWebView } from '../interfaces';
 
 @injectable()
 export class WebViewListService {
     @inject(LOGGER_SERVICE) private readonly $loggerService: LoggerService;
 
-    private readonly $webViews: Map<string | number, WebView> = new Map();
+    private readonly $webViews: Map<string | number, MultiplayerWebView> = new Map();
 
-    public set(id: string | number, webView: WebView) {
+    public set(id: string | number, webView: MultiplayerWebView) {
         this.$webViews.set(id, webView);
     }
 

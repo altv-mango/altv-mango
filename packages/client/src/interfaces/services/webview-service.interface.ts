@@ -1,9 +1,9 @@
-import type { WebView, _WebViewCreateOptionsDrawable, _WebViewCreateOptionsOverlay } from '@altv/client';
+import type { MultiplayerWebView, MultiplayerWebViewCreateOptionsDrawable, MultiplayerWebViewCreateOptionsOverlay } from '../multiplayer';
 
 export interface WebViewService {
-    create(id: string | number, options: _WebViewCreateOptionsDrawable): WebView;
-    create(id: string | number, options: _WebViewCreateOptionsOverlay): WebView;
-    get(id: string | number): WebView | undefined;
-    tryGet(id: string | number): WebView;
+    create(id: string | number, options: MultiplayerWebViewCreateOptionsOverlay): MultiplayerWebView;
+    create(id: string | number, options: MultiplayerWebViewCreateOptionsDrawable): MultiplayerWebView;
+    get(id: string | number): MultiplayerWebView | undefined;
+    tryGet(id: string | number): MultiplayerWebView;
     destroy(id: string | number): void;
 }
