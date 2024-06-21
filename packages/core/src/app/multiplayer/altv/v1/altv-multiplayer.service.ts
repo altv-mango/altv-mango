@@ -2,12 +2,14 @@ import type * as Alt from 'alt-shared';
 import { AltVEventEmmiterV1 } from './altv-event-emmiter';
 import type { EventEmmiter, MultiplayerService, MultiplayerTimers } from '../../../interfaces';
 import { isObject } from '../../../../utils';
+import { AltVTimers } from './altv-timers';
 
 export class AltMultiplayerServceV1 implements MultiplayerService {
     readonly Timers: MultiplayerTimers;
     readonly Events: EventEmmiter;
     constructor(private readonly alt: typeof Alt) {
         this.Events = new AltVEventEmmiterV1(this.alt);
+        this.Timers = new AltVTimers(this.alt);
     }
     parseInternalArgs<U = unknown, T = unknown>(
         ...args: any
