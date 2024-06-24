@@ -159,8 +159,8 @@ export interface EventService {
     onPlayerVehicleSeatChange(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["changedVehicleSeat"]>): ScriptEventHandler;
     oncePlayerVehicleSeatChange<T extends Player>(callback: ClientEventsV2.GenericPlayerEventCallback<ClientEventsV2.PlayerChangeVehicleSeatEventParameters, T>): ScriptEventHandler;
     oncePlayerVehicleSeatChange(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["changedVehicleSeat"]>): ScriptEventHandler;
-    onVoiceConnectionUpdate(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
-    onceVoiceConnectionUpdate(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
+    onVoiceConnection(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
+    onceVoiceConnection(callback: ClientEventsV2.GenericEventCallback<ClientEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
     onPlayerStartTalking<T extends Player>(callback: ClientEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;
     onPlayerStartTalking(callback: ClientEventsV2.GenericEventCallback<ClientEventsV1["playerStartTalking"]>): ScriptEventHandler;
     oncePlayerStartTalking<T extends Player>(callback: ClientEventsV2.GenericPlayerEventCallback<{}, T>): ScriptEventHandler;

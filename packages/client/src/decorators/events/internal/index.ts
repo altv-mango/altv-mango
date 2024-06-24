@@ -183,12 +183,12 @@ export function OnPlayerVehicleSeatChange() {
 export function OncePlayerVehicleSeatChange() {
     return OnceInternal(INTERNAL_EVENTS.PLAYER_VEHICLE_SEAT_CHANGE);
 }
-export function OnVoiceConnectionUpdate() {
-    return OnInternal(INTERNAL_EVENTS.VOICE_CONNECTION_UPDATE);
+export function OnVoiceConnection() {
+    return OnInternal(INTERNAL_EVENTS.VOICE_CONNECTION);
 }
 
-export function OnceVoiceConnectionUpdate() {
-    return OnceInternal(INTERNAL_EVENTS.VOICE_CONNECTION_UPDATE);
+export function OnceVoiceConnection() {
+    return OnceInternal(INTERNAL_EVENTS.VOICE_CONNECTION);
 }
 export function OnPlayerStartTalking() {
     return OnInternal(INTERNAL_EVENTS.PLAYER_START_TALKING);
