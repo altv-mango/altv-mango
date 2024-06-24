@@ -25,7 +25,7 @@ export const INTERNAL_EVENTS = {
     PLAYER_VEHICLE_ENTERED: 'playerVehicleEntered',
     PLAYER_VEHICLE_LEFT: 'playerVehicleLeft',
     PLAYER_VEHICLE_SEAT_CHANGE: 'playerVehicleSeatChange',
-    VOICE_CONNECTION_UPDATE: 'voiceConnectionUpdate',
+    VOICE_CONNECTION: 'voiceConnection',
     PLAYER_START_TALKING: 'playerStartTalking',
     PLAYER_STOP_TALKING: 'playerStopTalking',
     WORLD_OBJECT_POSITION_CHANGE: 'worldObjectPositionChange',

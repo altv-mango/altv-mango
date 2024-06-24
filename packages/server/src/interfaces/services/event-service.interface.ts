@@ -268,10 +268,10 @@ export interface EventService {
     onVehicleHornStateChange(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["vehicleHorn"]>): ScriptEventHandler;
     onceVehicleHornStateChange<T extends Player>(callback: ServerEventsV2.GenericCancellablePlayerEventCallback<ServerEventsV2.VehicleHornStateChangeEventParameters, T>): ScriptEventHandler;
     onceVehicleHornStateChange(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["vehicleHorn"]>): ScriptEventHandler;
-    onVoiceConnectionCreate(callback: ServerEventsV2.GenericEventCallback<ServerEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
-    onVoiceConnectionCreate(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["voiceConnection"]>): ScriptEventHandler;
-    onceVoiceConnectionCreate(callback: ServerEventsV2.GenericEventCallback<ServerEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
-    onceVoiceConnectionCreate(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["voiceConnection"]>): ScriptEventHandler;
+    onVoiceConnection(callback: ServerEventsV2.GenericEventCallback<ServerEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
+    onVoiceConnection(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["voiceConnection"]>): ScriptEventHandler;
+    onceVoiceConnection(callback: ServerEventsV2.GenericEventCallback<ServerEventsV2.VoiceConnectionEventParameters>): ScriptEventHandler;
+    onceVoiceConnection(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["voiceConnection"]>): ScriptEventHandler;
     onClientObjectDelete<T extends Player>(callback: ServerEventsV2.GenericCancellablePlayerEventCallback<{}, T>): ScriptEventHandler;
     onClientObjectDelete(callback: ServerEventsV2.GenericEventCallback<ServerEventsV1["clientDeleteObject"]>): ScriptEventHandler;
     onceClientObjectDelete<T extends Player>(callback: ServerEventsV2.GenericCancellablePlayerEventCallback<{}, T>): ScriptEventHandler;
