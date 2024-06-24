@@ -240,12 +240,12 @@ export function OnVehicleHornStateChange() {
 export function OnceVehicleHornStateChange() {
     return OnceInternal(INTERNAL_EVENTS.VEHICLE_HORN_STATE_CHANGE);
 }
-export function OnVoiceConnectionCreate() {
-    return OnInternal(INTERNAL_EVENTS.VOICE_CONNECTION_CREATE);
+export function OnVoiceConnection() {
+    return OnInternal(INTERNAL_EVENTS.VOICE_CONNECTION);
 }
 
-export function OnceVoiceConnectionCreate() {
-    return OnceInternal(INTERNAL_EVENTS.VOICE_CONNECTION_CREATE);
+export function OnceVoiceConnection() {
+    return OnceInternal(INTERNAL_EVENTS.VOICE_CONNECTION);
 }
 export function OnClientObjectDelete() {
     return OnInternal(INTERNAL_EVENTS.CLIENT_OBJECT_DELETE);
