@@ -18,21 +18,6 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         this.$altEvents = multiplayerService.Events;
         this.$internalEventNames = new Set(Object.values(INTERNAL_EVENTS));
     }
-    on<E extends never>(eventName: E, callback: (body: Parameters<ClientEventsV2.CustomClientEvent[E]>[0]) => void | Promise<void>);
-    on<E extends string>(eventName: Exclude<E, never>, callback: (body: unknown) => void | Promise<void>);
-    on(eventName: unknown, callback: unknown): any {
-        throw new Error('Method not implemented.');
-    }
-    once<E extends never>(eventName: E, callback: (body: Parameters<ClientEventsV2.CustomClientEvent[E]>[0]) => void | Promise<void>);
-    once<E extends string>(eventName: Exclude<E, never>, callback: (body: unknown) => void | Promise<void>);
-    once(eventName: unknown, callback: unknown): any {
-        throw new Error('Method not implemented.');
-    }
-    emit<E extends never>(eventName: E, body?: Parameters<ClientEventsV2.CustomClientEvent[E]>[0] | undefined): void;
-    emit<E extends string>(eventName: Exclude<E, never>, body?: unknown): void;
-    emit(eventName: unknown, body?: unknown): void {
-        throw new Error('Method not implemented.');
-    }
 
     public onServer<E extends string>(
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
