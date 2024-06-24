@@ -364,12 +364,12 @@ export class ClientEventService extends BaseEventService<ClientEvents.CustomClie
         return this.$altEvents.once('playerVehicleSeatChange', callback);
     }
 
-    public onVoiceConnectionUpdate(callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>) {
-        return this.$altEvents.on('voiceConnectionUpdate', callback);
+    public onVoiceConnection(callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>) {
+        return this.$altEvents.on('voiceConnection', callback);
     }
 
-    public onceVoiceConnectionUpdate(callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>) {
-        return this.$altEvents.once('voiceConnectionUpdate', callback);
+    public onceVoiceConnection(callback: ClientEvents.GenericEventCallback<ClientEvents.VoiceConnectionEventParameters>) {
+        return this.$altEvents.once('voiceConnection', callback);
     }
 
     public onPlayerStartTalking<T extends Player>(callback: ClientEvents.GenericPlayerEventCallback<{}, T> | ClientEventsV2.GenericEventCallback<ClientEventsV1["playerStartTalking"]>) {

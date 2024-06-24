@@ -33,7 +33,7 @@ export const INTERNAL_EVENTS = {
     VEHICLE_DAMAGE: 'vehicleDamage',
     VEHICLE_SIREN_STATE_CHANGE: 'vehicleSirenStateChange',
     VEHICLE_HORN_STATE_CHANGE: 'vehicleHornStateChange',
-    VOICE_CONNECTION_CREATE: 'voiceConnectionCreate',
+    VOICE_CONNECTION: 'voiceConnection',
     CLIENT_OBJECT_DELETE: 'clientObjectDelete',
     CLIENT_OBJECT_REQUEST: 'clientObjectRequest',
     BASE_OBJECT_CREATE: 'baseObjectCreate',

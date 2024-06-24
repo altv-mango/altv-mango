@@ -648,20 +648,20 @@ export class ServerEventService extends BaseEventService<ServerEventsV2.CustomSe
         return this.$altEvents.once('vehicleHornStateChange', callback);
     }
 
-    public onVoiceConnectionCreate(
+    public onVoiceConnection(
         callback:
             | ServerEventsV2.GenericEventCallback<ServerEventsV2.VoiceConnectionEventParameters>
             | ServerEventsV2.GenericEventCallback<ServerEventsV1['voiceConnection']>,
     ) {
-        return this.$altEvents.on('voiceConnectionCreate', callback);
+        return this.$altEvents.on('voiceConnection', callback);
     }
 
-    public onceVoiceConnectionCreate(
+    public onceVoiceConnection(
         callback:
             | ServerEventsV2.GenericEventCallback<ServerEventsV2.VoiceConnectionEventParameters>
             | ServerEventsV2.GenericEventCallback<ServerEventsV1['voiceConnection']>,
     ) {
-        return this.$altEvents.once('voiceConnectionCreate', callback);
+        return this.$altEvents.once('voiceConnection', callback);
     }
 
     public onClientObjectDelete<T extends Player>(
