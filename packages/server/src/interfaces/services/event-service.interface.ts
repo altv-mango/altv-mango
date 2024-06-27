@@ -2,6 +2,7 @@ import type { Events as SharedEvents } from '@altv/shared';
 import type { Events as ServerEventsV2, Player } from '@altv/server';
 import type { IServerEvent as ServerEventsV1 } from 'alt-server';
 import type { ScriptEventHandler } from '@altv-mango/core/app';
+import type { MultiplayerPlayer } from '../multiplayer';
 
 export interface EventService {
     on<E extends keyof ServerEventsV2.CustomServerEvent>(
@@ -54,22 +55,22 @@ export interface EventService {
         eventName: Exclude<E, keyof SharedEvents.CustomPlayerToServerEvent>,
         callback: (player: U, body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
-    emitPlayers<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends Player>(
+    emitPlayers<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends MultiplayerPlayer>(
         player: U[],
         eventName: E,
         body?: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0],
     ): void;
-    emitPlayers<E extends string, U extends Player>(
+    emitPlayers<E extends string, U extends MultiplayerPlayer>(
         player: U[],
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         body?: unknown,
     ): void;
-    emitPlayersUnreliable<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends Player>(
+    emitPlayersUnreliable<E extends keyof SharedEvents.CustomServerToPlayerEvent, U extends MultiplayerPlayer>(
         player: U[],
         eventName: E,
         body?: Parameters<SharedEvents.CustomServerToPlayerEvent[E]>[0],
     ): void;
-    emitPlayersUnreliable<E extends string, U extends Player>(
+    emitPlayersUnreliable<E extends string, U extends MultiplayerPlayer>(
         player: U[],
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         body?: unknown,
@@ -105,13 +106,13 @@ export interface EventService {
         callback: (player: U, body: unknown) => void | Promise<void>,
     ): ScriptEventHandler;
 
-    emitWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent, U extends Player>(
+    emitWebViews<E extends keyof SharedEvents.CustomServerToWebViewEvent, U extends MultiplayerPlayer>(
         player: U[],
         id: string | number,
         eventName: E,
         body?: Parameters<SharedEvents.CustomServerToWebViewEvent[E]>[0],
     ): void;
-    emitWebViews<E extends string, U extends Player>(
+    emitWebViews<E extends string, U extends MultiplayerPlayer>(
         player: U[],
         id: string | number,
         eventName: Exclude<E, keyof SharedEvents.CustomServerToWebViewEvent>,

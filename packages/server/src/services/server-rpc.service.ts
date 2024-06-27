@@ -15,9 +15,9 @@ import {
     type ScriptRPCHandler,
     generateRandomId,
 } from '@altv-mango/core';
-import type { RPCService } from '../interfaces';
+import type { MultiplayerPlayer, RPCService } from '../interfaces';
 import type { ServerEventService } from './server-event.service';
-import type { RPC as ServerRPC, Player } from '@altv/server';
+import type { RPC as ServerRPC } from '@altv/server';
 import type { RPC as SharedRPC } from '@altv/shared';
 
 @injectable()
@@ -26,7 +26,7 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
     public readonly $clientHandlers = new Map<string, ScriptRPCHandler>();
     public readonly $webViewHandlers = new Map<string, ScriptRPCHandler>();
 
-    public async callPlayer<E extends string, U extends Player>(
+    public async callPlayer<E extends string, U extends MultiplayerPlayer>(
         player: U,
         rpcName: Exclude<E, keyof SharedRPC.CustomServerToClientRPC>,
         body?: unknown,
@@ -35,7 +35,7 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
         return this.$handleCall(player, rpcName, EventDestination.Client, options, body);
     }
 
-    public onPlayerRequest<E extends string, U extends Player>(
+    public onPlayerRequest<E extends string, U extends MultiplayerPlayer>(
         rpcName: Exclude<E, keyof SharedRPC.CustomClientToServerRPC>,
         handler: (sender: U, body: unknown) => unknown | Promise<unknown>,
     ) {
@@ -60,7 +60,7 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
         return rpcHandler;
     }
 
-    public async callWebView<E extends string, U extends Player>(
+    public async callWebView<E extends string, U extends MultiplayerPlayer>(
         player: U,
         id: string | number,
         rpcName: Exclude<E, keyof SharedRPC.CustomServerToWebViewRPC>,
@@ -70,7 +70,7 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
         return this.$handleCall(player, rpcName, EventDestination.WebView, options, body, id);
     }
 
-    public onWebViewRequest<E extends keyof SharedRPC.CustomWebViewToServerRPC, U extends Player>(
+    public onWebViewRequest<E extends keyof SharedRPC.CustomWebViewToServerRPC, U extends MultiplayerPlayer>(
         id: string | number,
         rpcName: Exclude<E, keyof SharedRPC.CustomWebViewToServerRPC>,
         handler: (
@@ -101,7 +101,7 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
     }
 
     private async $handleCall<TResult>(
-        player: Player,
+        player: MultiplayerPlayer,
         rpcName: string,
         destination: EventDestination, // 'client' | 'webview',
         options?: Partial<RPCCallOptions>,
@@ -125,7 +125,7 @@ export class ServerRPCService extends BaseRPCService<ServerRPC.CustomServerRPC> 
                 }
             });
 
-            const onceHandle = (_player: Player, body: unknown) => {
+            const onceHandle = (_player: MultiplayerPlayer, body: unknown) => {
                 clearTimeout(timeoutId);
                 disconnectHandler.destroy();
                 resolve(<RPCResult<TResult>>body);

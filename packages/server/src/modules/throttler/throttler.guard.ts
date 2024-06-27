@@ -77,6 +77,7 @@ export class ThrottlerGuard implements Guard, OnModuleInit {
 
     protected async handleRequest(context: ExecutionContext, limit: number, ttl: number, throttler: ThrottlerOptions) {
         const player = context.request.player;
+        if(!player) throw new Error(`Player is not in context`);
         const key = this.generateKey(context, throttler.name!);
         const { totalHits, timeToExpire } = await this.storageService.increment(player, key, ttl);
 
