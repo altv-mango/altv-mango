@@ -1,7 +1,7 @@
 import { BaseEventService, MULTIPLAYER_SERVICE } from '@altv-mango/core/app';
 import { inject, injectable } from 'inversify';
 import { INTERNAL_EVENTS } from '../constants';
-import type { EventService, ServerEventEmmiter, ServerMultiplayerService } from '../interfaces';
+import type { EventService, MultiplayerPlayer, ServerEventEmmiter, ServerMultiplayerService } from '../interfaces';
 import type { Events as ServerEventsV2, Player } from '@altv/server';
 import type { IServerEvent as ServerEventsV1 } from 'alt-server';
 import type { Events as SharedEvents } from '@altv/shared';
@@ -59,14 +59,12 @@ export class ServerEventService extends BaseEventService<ServerEventsV2.CustomSe
         }
     }
 
-    public emitPlayersUnreliable<E extends string, U extends Player>(
+    public emitPlayersUnreliable<E extends string, U extends MultiplayerPlayer>(
         players: U[],
         eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>,
         body?: unknown,
     ) {
-        for (const player of players) {
-            player.emitUnreliableRaw(eventName, body);
-        }
+        this.$altEvents.emitUnreliableRaw(players, eventName, body);
     }
 
     public emitAllPlayers<E extends string>(eventName: Exclude<E, keyof SharedEvents.CustomServerToPlayerEvent>, body?: unknown) {

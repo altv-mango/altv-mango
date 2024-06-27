@@ -11,6 +11,13 @@ export class ServerAltVEventEmmiterV2 extends AltVEventEmmiterV2 implements Serv
         super(altShared);
     }
 
+    public emitUnreliableRaw(players: MultiplayerPlayer[], eventName: string, ...args: any[]): void {
+        for (const player of players) {
+            if (!(player instanceof this.altServer.Player)) throw new Error('Player is not alt server player');
+            player.emitUnreliableRaw(eventName, ...args);
+        }
+    }
+
     public emitAllPlayersRaw(eventName: string, ...args: any[]): void {
         this.altServer.Events.emitAllPlayersRaw(eventName, ...args);
     }

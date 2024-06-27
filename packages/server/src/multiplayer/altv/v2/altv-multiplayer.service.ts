@@ -10,6 +10,9 @@ export class ServerAltMultiplayerServceV2 extends AltMultiplayerServceV2 impleme
         super(altShared);
         this.Events = new ServerAltVEventEmmiterV2(altShared, altServer);
     }
+    emitUnreliableRaw(player: unknown, eventName: string, ...args: any[]): void {
+        this.altServer.Events.emitPlayersUnreliable([player], eventName, ...args)
+    }
 
     public getPlayer() {
         return this.altServer.Player;
