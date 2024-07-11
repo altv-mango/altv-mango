@@ -13,7 +13,7 @@ import type {
 const sharedV1 = await import('alt-shared').catch(() => false);
 const multiplayerService: ClientMultiplayerService =
     sharedV1 !== false && typeof sharedV1 !== 'boolean'
-        ? new ClientAltMultiplayerServceV1(sharedV1, await import('alt-client'))
+        ? new ClientAltMultiplayerServceV1(sharedV1.default, (await import('alt-client')).default)
         : new ClientAltMultiplayerServceV2(await import('@altv/shared'), await import('@altv/client'));
 
 class ClientAppBuilder extends AppBuilder<Guard, Interceptor, ErrorFilter> {
