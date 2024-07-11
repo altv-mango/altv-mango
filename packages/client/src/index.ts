@@ -10,7 +10,7 @@ import type {
     MultiplayerWebViewCreateOptionsOverlay,
 } from './interfaces';
 
-let sharedV1 = await import('alt-shared').catch(() => false);
+const sharedV1 = await import('alt-shared').catch(() => false);
 const multiplayerService: ClientMultiplayerService =
     sharedV1 !== false && typeof sharedV1 !== 'boolean'
         ? new ClientAltMultiplayerServceV1(sharedV1.default, (await import('alt-client')).default)
